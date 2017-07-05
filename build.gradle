@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath 'de.undercouch:gradle-download-task:3.2.0'
+    }
+}
+
+plugins {
+    id 'net.ltgt.apt' version '0.9'
+}
+
+group 'epam'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'de.undercouch.download'
+
+ext {
+    mapstructVersion = "1.2.0.Beta1"
+    lombokVersion = "1.16.16"
+}
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+springBoot {
+    executable = true
+}
+
+dependencies {
+    //Java improvement
+    //Mapstruct + lombok
+    compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+    apt "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+    compile 'org.springframework.boot:spring-boot-starter-web:1.5.4.RELEASE',
+            'org.springframework.boot:spring-boot-starter-jetty:1.5.4.RELEASE',
+            'org.springframework.boot:spring-boot-devtools'
+
+    /* spring-boot */
+    compile 'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-aop',
+            'org.springframework.boot:spring-boot-starter-jdbc',
+            'org.springframework.boot:spring-boot-starter-mail'
+
+    //Logger
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+
+    //Database
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.3.7.RELEASE'
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '4.1.2'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    //Email and notification
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.1.RELEASE'
+    compile group: 'javax.mail', name: 'javax.mail-api', version: '1.5.6'
+    compile group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6'
+
+    //Test
+    testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.3.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    //Test
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.2.RELEASE'
+    compile group: 'org.assertj', name: 'assertj-core', version: '3.6.2'
+}
