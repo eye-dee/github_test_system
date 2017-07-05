@@ -31,8 +31,12 @@ public class UserDaoTest {
     public void add() throws Exception {
         final String email = "EMAIL";
         final String githubNick = "github_nick";
+
         assertThat(userDao.add(email, githubNick))
-                .satisfies(
+                .isTrue();
+
+        assertThat(userDao.findByEmail(email))
+                .hasValueSatisfying(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
                             assertThat(u.getGithubNick()).isEqualTo(githubNick);

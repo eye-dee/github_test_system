@@ -30,16 +30,27 @@ public class UserDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public int add(final String email, final String githubNick) {
+    public boolean add(final String email, final String githubNick) {
         return jdbcTemplate.update(
-                "INSERT INTO users(email, github_nick) VALUES (?, ?)",
-                email, githubNick);
+                "INSERT INTO users(email, github_nick) VALUES (?, ?) ",
+                email, githubNick) > 0;
+    }
+
+    public Optional<User> findByEmail(final String email) {
+        return Optional.ofNullable(
+                singleResult(jdbcTemplate.query(
+                        "SELECT * FROM users WHERE email = ?",
+                        new Object[]{email},
+                        USER_ROW_MAPPER
+                        )
+                )
+        );
     }
 
     public Optional<User> findById(final long id) {
         return Optional.ofNullable(
                 singleResult(jdbcTemplate.query(
-                        "",
+                        "SELECT * FROM users WHERE id = ?",
                         new Object[]{id},
                         USER_ROW_MAPPER))
         );

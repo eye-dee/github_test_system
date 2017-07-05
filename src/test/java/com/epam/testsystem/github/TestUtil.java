@@ -24,11 +24,14 @@ public class TestUtil {
     private static SecureRandom random = new SecureRandom();
 
     public User makeUser() {
-        return userDao.add(generateString(), generateString());
+        final String email = generateString();
+        userDao.add(email, generateString());
+        return userDao.findByEmail(email).get();
     }
 
     public User makeUser(final String email, final String githubNick) {
-        return userDao.add(email, githubNick);
+        userDao.add(email, githubNick);
+        return userDao.findByEmail(email).get();
     }
 
     private static String generateString() {
