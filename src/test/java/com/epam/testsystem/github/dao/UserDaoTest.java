@@ -33,17 +33,13 @@ public class UserDaoTest {
         final String githubNick = "github_nick";
 
         assertThat(userDao.add(email, githubNick))
-                .isTrue();
-
-        assertThat(userDao.findByEmail(email))
-                .hasValueSatisfying(
+                .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
                             assertThat(u.getGithubNick()).isEqualTo(githubNick);
                             assertThat(u.getId()).isGreaterThan(0);
                         }
                 );
-
     }
 
     @Test
@@ -58,6 +54,20 @@ public class UserDaoTest {
 
     public void findByIdNotExists() {
         assertThat(userDao.findById(0)).isEmpty();
+    }
+
+    @Test
+    @Transactional
+    @Sql(statements = {
+            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'githubNick')"
+    })
+    public void findByEmail() throws Exception {
+        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        assertThat(userDao.findByEmail("email")).contains(user);
+    }
+
+    public void findByEmailNotExists() {
+        assertThat(userDao.findByEmail("")).isEmpty();
     }
 
 }
