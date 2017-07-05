@@ -30,10 +30,18 @@ public class UserDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public boolean add(final String email, final String githubNick) {
-        return jdbcTemplate.update(
+    public User add(final String email, final String githubNick) {
+        jdbcTemplate.update(
                 "INSERT INTO users(email, github_nick) VALUES (?, ?) ",
-                email, githubNick) > 0;
+                email, githubNick);
+
+        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+
+        return User.builder()
+                .id(id)
+                .email(email)
+                .githubNick(githubNick)
+                .build();
     }
 
     public Optional<User> findByEmail(final String email) {
