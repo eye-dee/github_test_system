@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class HttpResolverService {
 
     public String get(final String url) {
-        // TODO: 05.07.17 return String from url
-        return null;
+        return url;
     }
 }
