@@ -3,9 +3,9 @@ jdk:
   - oraclejdk8
 
 before_install:
-  - mysql -e 'CREATE DATABASE testSystem;'
-  - mysql -e 'CREATE USER 'user' IDENTIFIED BY 'password';'
-  - mysql -e 'GRANT ALL PRIVILEGES ON testSystem.* TO 'user';'
+  - mysql -u root -e 'CREATE DATABASE testSystem;'
+  - mysql -u root -e 'CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';'
+  - mysql -u root -e 'GRANT ALL PRIVILEGES ON testSystem.* TO 'user'@'localhost';'
 
 services:
   - mysql
