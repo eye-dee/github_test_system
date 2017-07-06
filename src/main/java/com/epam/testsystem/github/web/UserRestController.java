@@ -5,6 +5,7 @@ import com.epam.testsystem.github.web.mapper.UserMapper;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import com.epam.testsystem.github.web.model.UserUI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,10 @@ public class UserRestController {
     private final UserMapper userMapper;
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
+    @Transactional
+    public boolean register(
+            @RequestBody NewUserUI newUserUI
+    ) {
     public boolean register(@RequestBody NewUserUI newUserUI) {
         userDao.add(newUserUI.getEmail(), newUserUI.getGithubNick());
         return true;
