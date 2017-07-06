@@ -8,6 +8,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author <a href="mailto:Daria_Makarova@epam.com">Daria Makarova</a>
@@ -26,6 +29,6 @@ public class HttpResolverServiceTest {
 
     @Test
     public void successHttpGetRequest() {
-        httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class);
+        assertThat(httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class), is(notNullValue()));
     }
 }
