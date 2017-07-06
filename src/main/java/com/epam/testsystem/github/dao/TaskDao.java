@@ -24,6 +24,7 @@ public class TaskDao {
     private static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->
             Task.builder()
                     .id(rs.getLong("id"))
+                    .userId(rs.getLong("user_id"))
                     .registerTime(rs.getTimestamp("register_time").toLocalDateTime())
                     .status(TaskStatus.valueOf(rs.getString("status")))
                     .successful(rs.getBoolean("successful"))
