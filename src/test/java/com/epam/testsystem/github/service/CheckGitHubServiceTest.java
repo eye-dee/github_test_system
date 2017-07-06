@@ -1,25 +1,19 @@
-package com.epam.testsystem.github.sevice;
+package com.epam.testsystem.github.service;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.service.CheckGitHubService;
-import com.epam.testsystem.github.service.GitHubStatusResolver;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
