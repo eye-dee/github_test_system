@@ -68,8 +68,10 @@ public class TaskDaoTest {
         final User user = testUtil.makeUser();
         final Task task = taskDao.add(user.getId());
 
+        assertThat(taskDao.findAllInProgress())
+                .hasSize(1)
+                .allMatch(t -> t.getUserId() == user.getId());
 
-        assertThat(taskDao.findAllInProgress()).hasSize(1);
         assertThat(taskDao.setResultById(user.getId(), task.getId(), false)).isTrue();
         assertThat(taskDao.findAllInProgress()).hasSize(0);
     }
