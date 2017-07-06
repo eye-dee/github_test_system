@@ -1,9 +1,9 @@
 package com.epam.testsystem.github.web;
 
 import com.epam.testsystem.github.dao.UserDao;
-import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +21,7 @@ public class UserRestController {
     private final UserDao userDao;
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
+    @Transactional
     public boolean register(
             @RequestBody NewUserUI newUserUI
     ) {
