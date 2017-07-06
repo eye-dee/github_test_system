@@ -2,6 +2,7 @@ package com.epam.testsystem.github.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,23 @@ import java.util.Optional;
  */
 
 @Service
+@RequiredArgsConstructor
 public class GitHubStatusResolver {
     private static final Logger LOGGER = LoggerFactory.getLogger(GitHubStatusResolver.class);
     private static final String PULLS_REQUEST = "https://api.github.com/repos/" +
             "%s/" + //<- user name
             "%s/" + //repository name
             "pulls";
-
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private final HttpResolverService httpResolverService;
 
     public boolean getUserResult(final String userLogin, final String owner, final String repo) {
         final String allRepos = getAllRepos(owner, repo);
         final Optional<String> statusesUrl = getStatusesUrl(allRepos, userLogin);
 
         if (statusesUrl.isPresent()) {
-            final String statuses = getStatusesFromUrl(statusesUrl.get());
+            final String statuses = httpResolverService.sendGETRequest(statusesUrl.get(),String.class);
             return resolveStatus(statuses);
         } else {
             LOGGER.info("User {} didn't make pull", userLogin);
@@ -54,11 +57,6 @@ public class GitHubStatusResolver {
         return status.equals("success");
     }
 
-    private String getStatusesFromUrl(String url) {
-        // TODO: 06.07.17 get statuses
-        return null;
-    }
-
     protected Optional<String> getStatusesUrl(final String json, final String userLogin) {
         try {
             final JsonNode allPullRequests = OBJECT_MAPPER.readTree(json);
@@ -76,9 +74,10 @@ public class GitHubStatusResolver {
         }
     }
 
-    private String getAllRepos(String owner, String repo) {
-        // TODO: 05.07.17 get json response from PULLS_REQUEST
-        return null;
+    private String getAllRepos(final String owner, final String repo) {
+        return httpResolverService.sendGETRequest(
+                String.format(PULLS_REQUEST,owner, repo), String.class
+        );
     }
 
     protected Optional<JsonNode> getUserPullRequest(final JsonNode allPullRequests, final String userLogin) {

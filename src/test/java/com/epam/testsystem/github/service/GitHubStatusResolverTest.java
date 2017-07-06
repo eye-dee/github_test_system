@@ -59,11 +59,6 @@ public class GitHubStatusResolverTest {
     }
 
     @Test
-    public void getUserResult() throws Exception {
-        // TODO: 06.07.17 wait for http service
-    }
-
-    @Test
     public void resolveStatus() throws Exception {
         assertThat(gitHubStatusResolver.resolveStatus(failureStatus)).isFalse();
         assertThat(gitHubStatusResolver.resolveStatus(successStatus)).isTrue();
@@ -78,11 +73,6 @@ public class GitHubStatusResolverTest {
     @Test
     public void isSuccessTrue() throws Exception {
         assertThat(gitHubStatusResolver.isSuccess("success")).isTrue();
-    }
-
-    @Test
-    public void getStatusesUrl() throws Exception {
-        // TODO: 06.07.17 wait for http service
     }
 
     @Test
