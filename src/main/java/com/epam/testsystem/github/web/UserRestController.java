@@ -6,6 +6,7 @@ import com.epam.testsystem.github.web.model.NewUserUI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
     private final UserDao userDao;
 
-    @RequestMapping("register")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public boolean register(
             @RequestBody NewUserUI newUserUI
     ) {

@@ -7,6 +7,7 @@ import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.service.CheckGitHubService;
 import com.epam.testsystem.github.service.GitHubStatusResolver;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,9 +49,22 @@ public class CheckGitHubServiceTest {
     @MockBean
     private GitHubStatusResolver gitHubStatusResolver;
 
+
+
+    private void checkStatusSuccessful(long taskId, TaskStatus statusRequired, boolean successfulRequired) {
+        assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
+                new Object[]{taskId},
+                String.class)).isEqualTo(statusRequired.name());
+
+        assertThat(jdbcTemplate.queryForObject("SELECT successful FROM tasks WHERE id = ?",
+                new Object[]{taskId},
+                Boolean.class)).isEqualTo(successfulRequired);
+    }
+
     @Test
     @Transactional
     public void checkTask() throws Exception {
+
         when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true, false);
 
         final User user = testUtil.makeUser();
@@ -61,21 +75,9 @@ public class CheckGitHubServiceTest {
 
         checkGitHubService.check();
 
-        assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
-                new Object[]{task1.getId()},
-                String.class)).isEqualTo(TaskStatus.CHECKED.name());
+        checkStatusSuccessful(task1.getId(), TaskStatus.CHECKED, true);
+        checkStatusSuccessful(task2.getId(), TaskStatus.CHECKED, false);
 
-        assertThat(jdbcTemplate.queryForObject("SELECT successful FROM tasks WHERE id = ?",
-                new Object[]{task1.getId()},
-                Boolean.class)).isEqualTo(true);
-
-        assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
-                new Object[]{task2.getId()},
-                String.class)).isEqualTo(TaskStatus.CHECKED.name());
-
-        assertThat(jdbcTemplate.queryForObject("SELECT successful FROM tasks WHERE id = ?",
-                new Object[]{task2.getId()},
-                Boolean.class)).isEqualTo(false);
     }
 
     @Test
@@ -90,21 +92,8 @@ public class CheckGitHubServiceTest {
         assertThat(taskDao.findAllInProgress()).hasSize(2);
 
         checkGitHubService.check();
+        checkStatusSuccessful(task1.getId(), TaskStatus.CHECKED, true);
+        checkStatusSuccessful(task2.getId(), TaskStatus.CHECKED, false);
 
-        assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
-                new Object[]{task1.getId()},
-                String.class)).isEqualTo(TaskStatus.CHECKED.name());
-
-        assertThat(jdbcTemplate.queryForObject("SELECT successful FROM tasks WHERE id = ?",
-                new Object[]{task1.getId()},
-                Boolean.class)).isEqualTo(true);
-
-        assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
-                new Object[]{task2.getId()},
-                String.class)).isEqualTo(TaskStatus.CHECKED.name());
-
-        assertThat(jdbcTemplate.queryForObject("SELECT successful FROM tasks WHERE id = ?",
-                new Object[]{task2.getId()},
-                Boolean.class)).isEqualTo(false);
     }
 }

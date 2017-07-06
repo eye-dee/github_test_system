@@ -25,9 +25,9 @@ public class CheckGitHubService {
 
     private static final int SECOND = 1000;
 
-    private static final String owner = "epamtestsystem";
+    private static final String OWNER = "epamtestsystem";
 
-    private static final String repo = "java_knowledge";
+    private static final String REPO = "java_knowledge";
 
     private final GitHubStatusResolver gitHubStatusResolver;
 
@@ -45,11 +45,12 @@ public class CheckGitHubService {
             } else {
                 final User presentedUser = user.get();
                 try {
-                    final boolean userResult = gitHubStatusResolver.getUserResult(presentedUser.getGithubNick(), owner, repo);
+                    final boolean userResult = gitHubStatusResolver.getUserResult(presentedUser.getGithubNick(), OWNER, REPO);
                     taskDao.setResultById(presentedUser.getId(), t.getId(), userResult);
+                    LOGGER.info("Task {} from User {} checked", t.getId(), t.getUserId());
                 } catch (Exception e) {
                     taskDao.setResultById(presentedUser.getId(), t.getId(), false);
-                    LOGGER.info("Result of user crashed with {}", e.getMessage());
+                    LOGGER.info("Task {} from User {} crashed\n {}", t.getId(), t.getUserId(), e.getMessage());
                 }
             }
         }
