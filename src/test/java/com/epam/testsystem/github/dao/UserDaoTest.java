@@ -85,11 +85,11 @@ public class UserDaoTest {
         final User user1 = testUtil.makeUser();
         final User user2 = testUtil.makeUser();
 
-        final Task task11 = testUtil.add(user1.getId());
+        final Task task11 = testUtil.addTask(user1.getId());
 
-        final Task task21 = testUtil.add(user2.getId());
-        final Task task22 = testUtil.add(user2.getId());
-        final Task task23 = testUtil.add(user2.getId());
+        final Task task21 = testUtil.addTask(user2.getId());
+        final Task task22 = testUtil.addTask(user2.getId());
+        final Task task23 = testUtil.addTask(user2.getId());
 
         assertThat(userDao.findAllWithTasks())
                 .hasSize(2)

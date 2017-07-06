@@ -55,6 +55,7 @@ dependencies {
 
     //Logger
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
     
     //apache commons io
     compile group: 'commons-io', name: 'commons-io', version: '2.5'

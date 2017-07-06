@@ -2,6 +2,8 @@ package com.epam.testsystem.github.web;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.model.Task;
+import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -22,7 +24,10 @@ import java.nio.charset.Charset;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -55,19 +60,18 @@ public class UserRestControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
-
     @Test
     @Transactional
     public void register() throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
         final String newUserJson = objectMapper.writeValueAsString(
                 NewUserUI.builder()
-                    .email("email")
-                    .githubNick("githubNick")
-                    .build()
+                        .email("email")
+                        .githubNick("githubNick")
+                        .build()
         );
 
-        this.mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/user/register")
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newUserJson))
@@ -81,5 +85,21 @@ public class UserRestControllerTest {
                             assertThat(user.getGithubNick()).isEqualTo("githubNick");
                         }
                 );
+    }
+
+    @Test
+    @Transactional
+    public void findAll() throws Exception {
+        final User user = testUtil.makeUser();
+        final Task task1 = testUtil.addTask(user.getId());
+        final Task task2 = testUtil.addTask(user.getId());
+
+        mockMvc.perform(get("/user")
+                .accept(contentType)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].email", is(user.getEmail())))
+                .andExpect(jsonPath("$[0].githubNick", is(user.getGithubNick())))
+                .andExpect(jsonPath("$[0].tasks[0].status", is(task1.getStatus().name())))
+                .andExpect(jsonPath("$[0].tasks[1].status", is(task2.getStatus().name())));
     }
 }

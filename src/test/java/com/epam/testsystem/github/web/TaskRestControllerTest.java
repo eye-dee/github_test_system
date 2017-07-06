@@ -53,7 +53,7 @@ public class TaskRestControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class TaskRestControllerTest {
                         .build()
         );
 
-        this.mockMvc.perform(post("/task/new")
+        mockMvc.perform(post("/task/new")
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newTaskJson))

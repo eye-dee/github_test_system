@@ -37,7 +37,7 @@ public class TestUtil {
         return userDao.findByEmail(email).get();
     }
 
-    public Task add(final long userId) {
+    public Task addTask(final long userId) {
         return taskDao.add(userId);
     }
 

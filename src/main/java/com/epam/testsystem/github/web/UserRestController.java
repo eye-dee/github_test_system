@@ -27,15 +27,13 @@ public class UserRestController {
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @Transactional
-    public boolean register(
-            @RequestBody NewUserUI newUserUI
-    ) {
-    public boolean register(@RequestBody NewUserUI newUserUI) {
+    public boolean register(@RequestBody final NewUserUI newUserUI) {
         userDao.add(newUserUI.getEmail(), newUserUI.getGithubNick());
         return true;
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @Transactional
     public List<UserUI> getAll() {
         return userMapper.mapUsers(userDao.findAllWithTasks());
     }
