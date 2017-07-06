@@ -4,13 +4,14 @@ import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
 
 /**
  * github_test
@@ -21,19 +22,10 @@ import java.util.List;
 @Transactional(propagation = Propagation.MANDATORY)
 @RequiredArgsConstructor
 public class TaskDao {
-    private static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->
-            Task.builder()
-                    .id(rs.getLong("id"))
-                    .userId(rs.getLong("user_id"))
-                    .registerTime(rs.getTimestamp("register_time").toLocalDateTime())
-                    .status(TaskStatus.valueOf(rs.getString("status")))
-                    .successful(rs.getBoolean("successful"))
-                    .build();
-
     private final JdbcTemplate jdbcTemplate;
 
     public Task add(final long userId) {
-        final LocalDateTime registerTime = LocalDateTime.now();
+        final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
                 "INSERT INTO tasks(user_id, register_time) " +
                         "VALUES(?, ?)",

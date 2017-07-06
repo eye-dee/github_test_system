@@ -1,6 +1,8 @@
 package com.epam.testsystem.github;
 
+import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -21,6 +23,7 @@ import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST
 @RequiredArgsConstructor
 public class TestUtil {
     private final UserDao userDao;
+    private final TaskDao taskDao;
     private static SecureRandom random = new SecureRandom();
 
     public User makeUser() {
@@ -32,6 +35,10 @@ public class TestUtil {
     public User makeUser(final String email, final String githubNick) {
         userDao.add(email, githubNick);
         return userDao.findByEmail(email).get();
+    }
+
+    public Task add(final long userId) {
+        return taskDao.add(userId);
     }
 
     private static String generateString() {

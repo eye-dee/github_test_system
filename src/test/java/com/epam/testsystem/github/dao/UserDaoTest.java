@@ -1,6 +1,9 @@
 package com.epam.testsystem.github.dao;
 
+import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.model.UserWithTasks;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +31,9 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private TestUtil testUtil;
 
     @Test
     @Transactional
@@ -70,4 +79,29 @@ public class UserDaoTest {
         assertThat(userDao.findByEmail("")).isEmpty();
     }
 
+    @Test
+    @Transactional
+    public void findAllWithTasks() {
+        final User user1 = testUtil.makeUser();
+        final User user2 = testUtil.makeUser();
+
+        final Task task11 = testUtil.add(user1.getId());
+
+        final Task task21 = testUtil.add(user2.getId());
+        final Task task22 = testUtil.add(user2.getId());
+        final Task task23 = testUtil.add(user2.getId());
+
+        assertThat(userDao.findAllWithTasks())
+                .hasSize(2)
+                .containsOnlyOnce(
+                        UserWithTasks.builder()
+                                .user(user1)
+                                .tasks(Collections.singletonList(task11))
+                                .build(),
+                        UserWithTasks.builder()
+                                .user(user2)
+                                .tasks(Arrays.asList(task21, task22, task23))
+                                .build()
+                );
+    }
 }
