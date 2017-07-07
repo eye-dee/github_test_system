@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 @Service
 public class MailService {
-    private static final Logger Log = LoggerFactory.getLogger(MailService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
 
     private final JavaMailSenderImpl mailSender;
 
@@ -34,34 +34,38 @@ public class MailService {
      *
      * @param emailTo     email recipient
      * @param CC          email copy recipients
-     * @param subject     a message short description
+     * @param subject     a message topic
      * @param messageText text with GitHub link to test tasks repository
      */
-    public void sendGitHubTasksRepositoryLink(final String emailTo, final String CC, final String subject, final String messageText) {
-        Log.debug("Async sendGitHubTasksRepositoryLink with emailTo={}, CC={}, subject={}, messageText={}", emailTo, CC, subject, messageText);
-        if (StringUtils.isEmpty(emailTo) || !StringUtils.hasText(emailTo)
-                || StringUtils.isEmpty(messageText) || !StringUtils.hasText(messageText)
-                || StringUtils.isEmpty(subject) || !StringUtils.hasText(subject)) {
-            Log.error("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
-            throw new BusinessLogicException("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}".concat(emailTo));
-        }
+    public void sendGitHubTasksRepositoryLink(final String emailTo, final String CC,
+                                              final String subject, final String messageText) {
+        LOGGER.debug("Async sendGitHubTasksRepositoryLink with emailTo={}, CC={}, subject={}, messageText={}",
+                emailTo, CC, subject, messageText);
+
+        validateDataForEmailSending(emailTo, subject, messageText);
         Pattern emailPattern = Pattern.compile("^[\\w0-9+_.-]+@[\\w0-9.-]+\\.[a-zA-Z]{2,6}");
 
         if (!emailPattern.matcher(emailTo).matches()) {
-            Log.error("emailTo={} has incorrect format", emailTo);
+            LOGGER.error("emailTo={} has incorrect format", emailTo);
             throw new BusinessLogicException("emailTo".concat(emailTo).concat(" has incorrect format"));
-
         }
         sendMessage(emailTo, subject, CC, messageText);
     }
 
+    private void validateDataForEmailSending(String emailTo, String subject, String messageText) {
+        if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(messageText) || !StringUtils.hasText(subject)) {
+            LOGGER.error("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
+            throw new BusinessLogicException("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}".concat(emailTo));
+        }
+    }
+
     private void sendMessage(String emailTo, String subject, String CC, String text) {
-        Log.debug("=== Sending message ===");
+        LOGGER.debug("=== Sending message ===");
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(emailTo);
-            if (!StringUtils.isEmpty(CC) && StringUtils.hasText(CC)) {
+            if (StringUtils.hasText(CC)) {
                 helper.setCc(CC);
             }
             helper.setSubject(subject);
@@ -69,9 +73,9 @@ public class MailService {
 
             mailSender.send(helper.getMimeMessage());
         } catch (Exception e) {
-            Log.error("No mail was sent because of : ", e.getMessage());
+            LOGGER.error("No mail was sent because of : ", e.getMessage());
         }
-        Log.debug("=== Message was sent ===");
+        LOGGER.debug("=== Message was sent ===");
     }
 
 
