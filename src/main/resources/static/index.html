@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+<form method="post">
+    <p><b>GitHub:</b></p>
+    <p><input id="git"></p>
+    <p><b>Email:</b></p>
+    <p><input id="email"></p>
+    <p><input id="startButton" type="submit" value="Start"></p>
+</form>
+
+<div>
+    <a href="/users.html"></a>
+</div>
+
+</body>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+    //TODO move to script file
+    $("#startButton").click(function (e) {
+        const gitNick = $("#git").val();
+        console.log("User " + gitNick + " started")
+        $.ajax({
+            type: "POST",
+            url: "/user/register",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                githubNick: gitNick,
+                email: $("#email").val()
+            }),
+            success: function (result) {
+                console.log("User " + gitNick + " successful");
+            },
+            error: function (result) {
+                console.log("User " + gitNick + " error");
+            }
+        })
+    });
+</script>
+
+
+</html>

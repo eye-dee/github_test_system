@@ -17,7 +17,7 @@
             </appender>
         </sift>
     </appender>
-    <logger name="mirogas" level="INFO" additivity="false">
+    <logger name="github" level="INFO" additivity="false">
         <appender-ref ref="PLATFORM"/>
         <appender-ref ref="ERRORS"/>
     </logger>
