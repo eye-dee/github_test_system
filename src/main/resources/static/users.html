@@ -7,48 +7,51 @@
 <body>
 
 <div id="app">
-	<input type="input" v-model="message">
-    <h1>{{message}}</h1>
-
     <button v-on:click="getUsers">Get All</button>
-
-    <div v-for="user in users">
-        <h1> {{ user }} </h1>
-        <div v-for="task in tasks">
-            <h2> {{ task }}</h2>
+    <li v-for="user in users">
+        <p> email : {{ user.email }} </p>
+        <p> githubNick : {{ user.githubNick }}</p>
+        <p>________________________________________________</p>
+        <div style="margin-left:100px">
+            <lu v-for="task in user.tasks" >
+                <p> {{ task.successful }}</p>
+                <p> {{ task.status }} </p>
+                <p> {{ task.startTime }}</p>
+            </lu>
         </div>
-    </div>
+    </li>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
 <script>
-    new Vue({
+    var app = new Vue({
         el: "#app",
-        data :{
-            messsage: null,
-            users: null
+        data: {
+            message: "asdasdasd",
+            users: []
         },
         methods: {
-            getUsers : function() {
+            getUsers: function () {
+                let self = this;
                 $.ajax({
                     type: "GET",
                     url: "/user",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        users = {
-                            "users" : result
-                        };
+                        self.users = result;
                     },
                     error: function (result) {
-                        alert(result)
+                        this.message = result.toString();
+                        alert(result.toString());
                     }
                 })
             }
         }
     });
+    app.methods.getUsers();
 </script>
 
 </body>
