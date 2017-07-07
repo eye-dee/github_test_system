@@ -44,12 +44,20 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
         Map<User,List<Task>> userListMap = new HashMap<>();
         while (rs.next()) {
             final User user = USER_ROW_MAPPER.mapRow(rs, rs.getRow());
-            final Task task = TASK_ROW_MAPPER.mapRow(rs, rs.getRow());
+
+            final Task task;
+            if (rs.getTimestamp("tasks.register_time") != null) {
+                task = TASK_ROW_MAPPER.mapRow(rs, rs.getRow());
+            } else {
+                task = null;
+            }
 
             final List<Task> userTasks = userListMap.get(user);
             if (userTasks == null) {
                 final List<Task> tasks = new ArrayList<>();
-                tasks.add(task);
+                if (task != null){
+                    tasks.add(task);
+                }
                 userListMap.put(user, tasks);
             } else {
                 userTasks.add(task);
