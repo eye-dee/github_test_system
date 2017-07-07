@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.service;
 
+import com.epam.testsystem.github.exception.BusinessLogicException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -28,12 +29,12 @@ public class HttpResolverService {
             ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
             if (!Objects.equals(out.getStatusCode(), HttpStatus.OK)) {
                 Log.error("Incorrect response status code = {} instead of code = 200", out.getStatusCode().toString());
-                throw new RuntimeException("Incorreсt response status code ".concat(out.getStatusCode().toString()).concat(" instead of code = 200"));
+                throw new BusinessLogicException("Incorreсt response status code ".concat(out.getStatusCode().toString()).concat(" instead of code = 200"));
             }
             return out.getBody();
         } catch (Exception e) {
             Log.error("Can't GET to: {} because of {}", url, e.getMessage());
-            throw new RuntimeException("Can't GET to " + url + "  because of : " + e.getMessage());
+            throw new BusinessLogicException("Can't GET to " + url + "  because of : " + e.getMessage());
         }
     }
 }
