@@ -12,7 +12,5 @@ CREATE TABLE tasks (
   successful    BOOL                                    DEFAULT FALSE,
   status        ENUM ('CREATED', 'PROGRESS', 'CHECKED') DEFAULT 'PROGRESS',
   log           TEXT,
-  pull_id       INT
-  /* add unique identifier of pull
-  */
+  pull_id       INT UNIQUE KEY
 )

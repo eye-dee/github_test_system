@@ -38,15 +38,29 @@ public class TaskDaoTest {
     @Transactional
     public void add() throws Exception {
         final User user = testUtil.makeUser();
-        assertThat(taskDao.add(user.getId(), 1))
+        assertThat(taskDao.addOrUpdate(user.getId(), 0, false, "log"))
             .satisfies(
                     task -> {
                         assertThat(task.getId()).isGreaterThan(0);
                         assertThat(task.getRegisterTime()).isBeforeOrEqualTo(LocalDateTime.now());
                         assertThat(task.getUserId()).isEqualTo(user.getId());
                         assertThat(task.getStatus()).isEqualTo(TaskStatus.PROGRESS);
+                        assertThat(task.getLog()).isEqualTo("log");
+                        assertThat(task.isSuccessful()).isFalse();
                     }
             );
+    }
+
+    @Test
+    @Transactional
+    public void update() throws Exception {
+        final User user = testUtil.makeUser();
+
+        final long id = taskDao.addOrUpdate(user.getId(), 0, false, "oldLog").getId();
+
+        assertThat(taskDao.addOrUpdate(user.getId(), 0, false, "newLog").getId())
+                .isEqualTo(id);
+        assertThat(taskDao.findAllInProgress()).isEmpty();
     }
 
     @Test
@@ -67,7 +81,7 @@ public class TaskDaoTest {
     @Transactional
     public void setResultById() throws Exception {
         final User user = testUtil.makeUser();
-        final Task task = taskDao.add(user.getId(), 1);
+        final Task task = taskDao.addOrUpdate(user.getId(), 0, false, "");
 
         assertThat(taskDao.findAllInProgress())
                 .hasSize(1)

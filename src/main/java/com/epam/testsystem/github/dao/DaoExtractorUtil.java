@@ -37,6 +37,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
                     .status(TaskStatus.valueOf(rs.getString("tasks.status")))
                     .successful(rs.getBoolean("tasks.successful"))
+                    .log(rs.getString("tasks.log"))
                     .build();
 
     @Override
