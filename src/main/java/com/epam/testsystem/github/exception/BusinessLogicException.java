@@ -6,11 +6,11 @@ package com.epam.testsystem.github.exception;
  * @since 0.1
  */
 public class BusinessLogicException extends ServerException {
-    public BusinessLogicException(String message) {
+    public BusinessLogicException(final String message) {
         super(message);
     }
 
-    public BusinessLogicException(String message, Throwable e) {
+    public BusinessLogicException(final String message, final Throwable e) {
         super(message, e);
     }
 }

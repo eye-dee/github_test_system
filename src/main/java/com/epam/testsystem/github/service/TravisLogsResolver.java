@@ -16,7 +16,7 @@ public class TravisLogsResolver {
             "log";
     private final HttpResolverService httpResolverService;
 
-    public String getLogs(long buildId) {
+    public String getLogs(final long buildId) {
         return httpResolverService.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
     }
 }
