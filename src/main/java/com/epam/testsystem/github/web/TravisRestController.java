@@ -49,11 +49,11 @@ public class TravisRestController {
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
-                final Task add = taskDao.add(userId);
+                final Task add = taskDao.add(userId, 0);
                 taskDao.setResultById(userId,add.getId(),status, "");
             } else {
                 final User user = userDao.add(email, githubNick);
-                final Task task = taskDao.add(user.getId());
+                final Task task = taskDao.add(user.getId(), 0);
                 taskDao.setResultById(user.getId(),task.getId(),status, "");
             }
 

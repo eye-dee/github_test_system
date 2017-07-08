@@ -31,7 +31,7 @@ public class TaskRestController {
     public boolean addNewTask(@RequestBody final NewTaskUI newTaskUI) {
         final Optional<User> optionalUser = userDao.findByEmail(newTaskUI.getEmail());
         if (optionalUser.isPresent()) {
-            taskDao.add(optionalUser.get().getId());
+            taskDao.add(optionalUser.get().getId(), 0);
             // TODO: 06.07.17 send message to mail
             return true;
         } else {

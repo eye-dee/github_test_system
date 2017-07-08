@@ -91,8 +91,8 @@ public class UserRestControllerTest {
     @Transactional
     public void findAll() throws Exception {
         final User user = testUtil.makeUser();
-        final Task task1 = testUtil.addTask(user.getId());
-        final Task task2 = testUtil.addTask(user.getId());
+        final Task task1 = testUtil.addTask(user.getId(), 0);
+        final Task task2 = testUtil.addTask(user.getId(), 0);
 
         mockMvc.perform(get("/user")
                 .accept(contentType)

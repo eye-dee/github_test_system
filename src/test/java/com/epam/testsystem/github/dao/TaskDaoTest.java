@@ -28,8 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class TaskDaoTest {
 
-    // TODO: 08.07.17 fix tests 
-
     @Autowired
     private TestUtil testUtil;
 
@@ -40,7 +38,7 @@ public class TaskDaoTest {
     @Transactional
     public void add() throws Exception {
         final User user = testUtil.makeUser();
-        assertThat(taskDao.add(user.getId()))
+        assertThat(taskDao.add(user.getId(), 1))
             .satisfies(
                     task -> {
                         assertThat(task.getId()).isGreaterThan(0);
@@ -69,7 +67,7 @@ public class TaskDaoTest {
     @Transactional
     public void setResultById() throws Exception {
         final User user = testUtil.makeUser();
-        final Task task = taskDao.add(user.getId());
+        final Task task = taskDao.add(user.getId(), 1);
 
         assertThat(taskDao.findAllInProgress())
                 .hasSize(1)

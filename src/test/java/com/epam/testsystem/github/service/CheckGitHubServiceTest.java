@@ -62,8 +62,8 @@ public class CheckGitHubServiceTest {
         when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true, false);
 
         final User user = testUtil.makeUser();
-        final Task task1 = taskDao.add(user.getId());
-        final Task task2 = taskDao.add(user.getId());
+        final Task task1 = taskDao.add(user.getId(), 0);
+        final Task task2 = taskDao.add(user.getId(), 0);
 
         assertThat(taskDao.findAllInProgress()).hasSize(2);
 
@@ -80,8 +80,8 @@ public class CheckGitHubServiceTest {
         when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true).thenThrow(new RuntimeException("test"));
 
         final User user = testUtil.makeUser();
-        final Task task1 = taskDao.add(user.getId());
-        final Task task2 = taskDao.add(user.getId());
+        final Task task1 = taskDao.add(user.getId(), 0);
+        final Task task2 = taskDao.add(user.getId(), 0);
 
         assertThat(taskDao.findAllInProgress()).hasSize(2);
 

@@ -39,7 +39,7 @@ public class CheckGitHubService {
             try {
                 final boolean userResult = gitHubStatusResolver.getUserResult(user.getGithubNick(), OWNER, REPO);
                 taskDao.setResultById(user.getId(), t.getId(), userResult, "");
-                LOGGER.info("Task {} from User {} checked", t.getId(), t.getUserId());
+                LOGGER.error("Task {} from User {} checked", t.getId(), t.getUserId());
             } catch (Exception e) {
                 taskDao.setResultById(user.getId(), t.getId(), false, "");
                 LOGGER.info("Task {} from User {} crashed\n {}", t.getId(), t.getUserId(), e.getMessage());

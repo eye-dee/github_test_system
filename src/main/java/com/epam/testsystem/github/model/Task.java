@@ -19,6 +19,5 @@ public class Task {
     private boolean successful;
     private TaskStatus status;
     private String log;
-
-    // TODO: 08.07.17 add fields
+    private long pullId;
 }

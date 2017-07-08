@@ -24,13 +24,12 @@ import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
 public class TaskDao {
     private final JdbcTemplate jdbcTemplate;
 
-    // TODO: 08.07.17 add(userId, pullId)
-    public Task add(final long userId) {
+    public Task add(final long userId, final long pullId) {
         final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
-                "INSERT INTO tasks(user_id, register_time) " +
-                        "VALUES(?, ?)",
-                userId, registerTime);
+                "INSERT INTO tasks(user_id, register_time, pull_id) " +
+                        "VALUES(?, ?, ?)",
+                userId, registerTime, pullId);
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -52,7 +51,8 @@ public class TaskDao {
         );
     }
 
-    public boolean setResultById(final long userId, final long id, final boolean successful, final String log) {
+    public boolean setResultById(final long userId, final long id, final boolean successful,
+                                 final String log) {
         return jdbcTemplate.update(
                 "UPDATE tasks SET successful = ?, status = ?, log = ? WHERE user_id = ? AND id = ?",
                 successful, TaskStatus.CHECKED.name(), log, userId, id

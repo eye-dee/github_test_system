@@ -11,7 +11,8 @@ CREATE TABLE tasks (
   register_time TIMESTAMP,
   successful    BOOL                                    DEFAULT FALSE,
   status        ENUM ('CREATED', 'PROGRESS', 'CHECKED') DEFAULT 'PROGRESS',
-  log           TEXT
+  log           TEXT,
+  pull_id       INT
   /* add unique identifier of pull
   */
 )
