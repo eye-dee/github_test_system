@@ -2,7 +2,6 @@ package com.epam.testsystem.github.web.mapper;
 
 import com.epam.testsystem.github.TimeConstant;
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
 import org.junit.Test;
@@ -34,7 +33,6 @@ public class UserMapperTest {
 
     private static Task buildSomeTask() {
         return Task.builder().id(1).userId(2)
-                .status(TaskStatus.CHECKED).successful(false)
                 .registerTime(LocalDateTime.now())
                 .build();
     }
@@ -52,7 +50,6 @@ public class UserMapperTest {
         assertThat(userMapper.mapTask(task))
                 .satisfies(
                         t -> {
-                            assertThat(t.getStatus()).isEqualTo(task.getStatus().name());
                             assertThat(t.getStartTime()).isEqualTo(task.getRegisterTime().format(TimeConstant.DATE_TIME_FORMATTER));
                         }
                 );

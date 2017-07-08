@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,11 +100,11 @@ public class UserDaoTest {
                         UserWithTasks.builder()
                                 .user(user1)
                                 .tasks(Collections.singletonList(task11))
-                                .build()
-                        /*UserWithTasks.builder()
+                                .build(),
+                        UserWithTasks.builder()
                                 .user(user2)
                                 .tasks(Arrays.asList(task21, task22, task23))
-                                .build()*/
+                                .build()
                 );
     }
 }

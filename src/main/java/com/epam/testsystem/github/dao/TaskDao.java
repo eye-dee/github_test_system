@@ -1,7 +1,6 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,9 +32,9 @@ public class TaskDao {
                 "INSERT INTO tasks(user_id, register_time, pull_id, successful, log) " +
                         "VALUES(?, ?, ?, ?, ?) " +
                         "ON DUPLICATE KEY UPDATE " +
-                        "id = LAST_INSERT_ID(id), successful = ?, status = ?, log = ?",
+                        "id = LAST_INSERT_ID(id), successful = ?, log = ?",
                 userId, registerTime, pullId, successful, log,
-                successful, TaskStatus.CHECKED.name(), log);
+                successful, log);
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -46,14 +45,13 @@ public class TaskDao {
                 .successful(false)
                 .log(log)
                 .pullId(pullId)
-                .status(TaskStatus.PROGRESS)
                 .build();
     }
 
-    public List<Task> findAllInProgress() {
+    public List<Task> findAllByUserId(final long userId) {
         return jdbcTemplate.query(
-                "SELECT * FROM tasks WHERE status = ?",
-                new Object[]{TaskStatus.PROGRESS.name()},
+                "SELECT * FROM tasks WHERE user_id = ?",
+                new Object[]{userId},
                 TASK_ROW_MAPPER
         );
     }
@@ -63,8 +61,8 @@ public class TaskDao {
                                  final boolean successful,
                                  final String log) {
         return jdbcTemplate.update(
-                "UPDATE tasks SET successful = ?, status = ?, log = ? WHERE user_id = ? AND id = ?",
-                successful, TaskStatus.CHECKED.name(), log, userId, id
+                "UPDATE tasks SET successful = ?, log = ? WHERE user_id = ? AND id = ?",
+                successful, log, userId, id
         ) > 0;
     }
 }

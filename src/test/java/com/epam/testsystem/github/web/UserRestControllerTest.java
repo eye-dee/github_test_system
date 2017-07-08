@@ -98,8 +98,6 @@ public class UserRestControllerTest {
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email", is(user.getEmail())))
-                .andExpect(jsonPath("$[0].githubNick", is(user.getGithubNick())))
-                .andExpect(jsonPath("$[0].tasks[0].status", is(task1.getStatus().name())))
-                .andExpect(jsonPath("$[0].tasks[1].status", is(task2.getStatus().name())));
+                .andExpect(jsonPath("$[0].githubNick", is(user.getGithubNick())));
     }
 }

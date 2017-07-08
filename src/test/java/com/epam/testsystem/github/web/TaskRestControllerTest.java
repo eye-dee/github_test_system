@@ -75,7 +75,7 @@ public class TaskRestControllerTest {
                 .content(newTaskJson))
                 .andExpect(status().isOk());
 
-        assertThat(taskDao.findAllInProgress())
+        assertThat(taskDao.findAllByUserId(user.getId()))
                 .hasSize(1);
     }
 }

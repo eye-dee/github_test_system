@@ -10,7 +10,6 @@ CREATE TABLE tasks (
   user_id       INT REFERENCES users (id),
   register_time TIMESTAMP,
   successful    BOOL                                    DEFAULT FALSE,
-  status        ENUM ('CREATED', 'PROGRESS', 'CHECKED') DEFAULT 'PROGRESS',
   log           TEXT,
   pull_id       INT UNIQUE KEY
 )
