@@ -2,6 +2,7 @@ package com.epam.testsystem.github.service;
 
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class CheckGitHubService {
     @Scheduled(fixedDelay = 5 * SECOND)
     @Transactional
     public void check() {
-        taskDao.findAllInProgress().forEach(t -> {
+        for (Task t : taskDao.findAllInProgress()) {
             final User user = userDao.findById(t.getUserId()).get(); //NPE safety garanty by db
             try {
                 final boolean userResult = gitHubStatusResolver.getUserResult(user.getGithubNick(), OWNER, REPO);
@@ -44,6 +45,6 @@ public class CheckGitHubService {
                 taskDao.setResultById(user.getId(), t.getId(), false, "");
                 LOGGER.info("Task {} from User {} crashed\n {}", t.getId(), t.getUserId(), e.getMessage());
             }
-        });
+        }
     }
 }
