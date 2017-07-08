@@ -41,7 +41,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
 
     @Override
     public List<UserWithTasks> extractData(final ResultSet rs) throws SQLException, DataAccessException {
-        Map<User,List<Task>> userListMap = new HashMap<>();
+        final Map<User,List<Task>> userListMap = new HashMap<>();
         while (rs.next()) {
             final User user = USER_ROW_MAPPER.mapRow(rs, rs.getRow());
 
