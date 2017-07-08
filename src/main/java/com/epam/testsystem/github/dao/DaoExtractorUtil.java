@@ -1,7 +1,6 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
 import org.springframework.dao.DataAccessException;
@@ -35,13 +34,14 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .id(rs.getLong("tasks.id"))
                     .userId(rs.getLong("tasks.user_id"))
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
-                    .status(TaskStatus.valueOf(rs.getString("tasks.status")))
                     .successful(rs.getBoolean("tasks.successful"))
+                    .log(rs.getString("tasks.log"))
+                    .pullId(rs.getLong("tasks.pull_id"))
                     .build();
 
     @Override
     public List<UserWithTasks> extractData(final ResultSet rs) throws SQLException, DataAccessException {
-        Map<User,List<Task>> userListMap = new HashMap<>();
+        final Map<User,List<Task>> userListMap = new HashMap<>();
         while (rs.next()) {
             final User user = USER_ROW_MAPPER.mapRow(rs, rs.getRow());
 

@@ -24,6 +24,7 @@ import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST
 public class TestUtil {
     private final UserDao userDao;
     private final TaskDao taskDao;
+    private long defaultPullId;
     private static SecureRandom random = new SecureRandom();
 
     public User makeUser() {
@@ -38,7 +39,11 @@ public class TestUtil {
     }
 
     public Task addTask(final long userId) {
-        return taskDao.add(userId);
+        return taskDao.addOrUpdate(userId, defaultPullId++, false, "log");
+    }
+
+    public Task addTask(final long userId, final long pullId, final boolean successful, final String log) {
+        return taskDao.addOrUpdate(userId, pullId, successful, log);
     }
 
     private static String generateString() {

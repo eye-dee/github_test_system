@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskUI {
-    private String status;
     private boolean successful;
     private String startTime;
 }

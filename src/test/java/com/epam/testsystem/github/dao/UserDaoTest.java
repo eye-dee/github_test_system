@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,6 +91,8 @@ public class UserDaoTest {
         final Task task21 = testUtil.addTask(user2.getId());
         final Task task22 = testUtil.addTask(user2.getId());
         final Task task23 = testUtil.addTask(user2.getId());
+
+        final List<UserWithTasks> tmp = userDao.findAllWithTasks();
 
         assertThat(userDao.findAllWithTasks())
                 .hasSize(2)

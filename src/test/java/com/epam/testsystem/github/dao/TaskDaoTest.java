@@ -2,7 +2,6 @@ package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class TaskDaoTest {
+
     @Autowired
     private TestUtil testUtil;
 
@@ -37,49 +37,62 @@ public class TaskDaoTest {
     @Transactional
     public void add() throws Exception {
         final User user = testUtil.makeUser();
-        assertThat(taskDao.add(user.getId()))
+        assertThat(taskDao.addOrUpdate(user.getId(), 0, false, "log"))
             .satisfies(
                     task -> {
                         assertThat(task.getId()).isGreaterThan(0);
                         assertThat(task.getRegisterTime()).isBeforeOrEqualTo(LocalDateTime.now());
                         assertThat(task.getUserId()).isEqualTo(user.getId());
-                        assertThat(task.getStatus()).isEqualTo(TaskStatus.PROGRESS);
+                        assertThat(task.getLog()).isEqualTo("log");
+                        assertThat(task.isSuccessful()).isFalse();
                     }
             );
     }
 
     @Test
     @Transactional
+    public void update() throws Exception {
+        final User user = testUtil.makeUser();
+
+        final long id = taskDao.addOrUpdate(user.getId(), 0, false, "oldLog").getId();
+
+        assertThat(taskDao.addOrUpdate(user.getId(), 0, false, "newLog").getId())
+                .isEqualTo(id);
+        assertThat(taskDao.findAllByUserId(user.getId())).hasSize(1);
+        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo("newLog");
+
+    }
+
+    @Test
+    @Transactional
     @Sql(statements = {
             "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'github_nick')",
-            "INSERT INTO tasks(user_id, register_time, status) VALUES(1, CURRENT_TIMESTAMP, 'PROGRESS')",
-            "INSERT INTO tasks(user_id, register_time, status) VALUES(1, CURRENT_TIMESTAMP, 'PROGRESS')",
-            "INSERT INTO tasks(user_id, register_time, status) VALUES(1, CURRENT_TIMESTAMP, 'CHECKED')"
+            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
+            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
+            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)"
     })
     public void findAllInProgress() throws Exception {
-        assertThat(taskDao.findAllInProgress())
-                .hasSize(2)
-                .allMatch(task -> task.getStatus() == TaskStatus.PROGRESS);
+        assertThat(taskDao.findAllByUserId(1))
+                .hasSize(3);
     }
 
     @Test
     @Transactional
     public void setResultById() throws Exception {
         final User user = testUtil.makeUser();
-        final Task task = taskDao.add(user.getId());
+        final Task task = taskDao.addOrUpdate(user.getId(), 0, false, "");
 
-        assertThat(taskDao.findAllInProgress())
+        assertThat(taskDao.findAllByUserId(user.getId()))
                 .hasSize(1)
                 .allMatch(t -> t.getUserId() == user.getId());
 
-        assertThat(taskDao.setResultById(user.getId(), task.getId(), false)).isTrue();
-        assertThat(taskDao.findAllInProgress()).hasSize(0);
+        assertThat(taskDao.setResultById(user.getId(), task.getId(), false, "log")).isTrue();
+        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo("log");
     }
 
     @Test
     @Transactional
     public void setResultByIdNotExists() throws Exception {
-        assertThat(taskDao.setResultById(0, 0, false)).isFalse();
+        assertThat(taskDao.setResultById(0, 0, false, "")).isFalse();
     }
-
 }

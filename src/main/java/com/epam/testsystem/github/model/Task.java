@@ -17,5 +17,6 @@ public class Task {
     private long userId;
     private LocalDateTime registerTime;
     private boolean successful;
-    private TaskStatus status;
+    private String log;
+    private long pullId;
 }
