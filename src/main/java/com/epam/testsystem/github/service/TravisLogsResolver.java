@@ -1,9 +1,7 @@
 package com.epam.testsystem.github.service;
 
-import org.jsoup.Jsoup;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 /**
  * github_test
@@ -11,16 +9,14 @@ import java.io.IOException;
  */
 
 @Service
+@RequiredArgsConstructor
 public class TravisLogsResolver {
-    private static String REQUEST = "https://travis-ci.org/epamtestsystem/java_knowledge/builds/%s";
-    
+    private static final String REQUEST = "https://api.travis-ci.org/jobs/" +
+            "%d/" + //<- job_id (calculate as build_id + 1)
+            "log";
+    private final HttpResolverService httpResolverService;
+
     public String getLogs(long buildId) {
-        // TODO: 08.07.17 get plain text
-        try {
-            Jsoup.connect(String.format(REQUEST, buildId)).get();
-        } catch (IOException e) {
-            // TODO: 08.07.17 handle 
-        }
-        return null;
+        return httpResolverService.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
     }
 }
