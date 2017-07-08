@@ -11,4 +11,7 @@ CREATE TABLE tasks (
   register_time TIMESTAMP,
   successful    BOOL                                    DEFAULT FALSE,
   status        ENUM ('CREATED', 'PROGRESS', 'CHECKED') DEFAULT 'PROGRESS'
+  /* add unique identifier of pull
+  * add big text object for store logs
+  */
 )

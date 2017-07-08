@@ -27,6 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class TaskDaoTest {
+
+    // TODO: 08.07.17 fix tests 
+
     @Autowired
     private TestUtil testUtil;
 

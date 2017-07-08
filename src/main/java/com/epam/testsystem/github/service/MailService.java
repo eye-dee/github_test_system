@@ -1,16 +1,15 @@
 package com.epam.testsystem.github.service;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.mail.internet.MimeMessage;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -19,15 +18,11 @@ import java.util.regex.Pattern;
  * @since 0.1
  */
 @Service
+@RequiredArgsConstructor
 public class MailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
 
     private final JavaMailSenderImpl mailSender;
-
-    @Autowired
-    public MailService(JavaMailSenderImpl mailSender) {
-        this.mailSender = Objects.requireNonNull(mailSender);
-    }
 
     /**
      * Send an email message with GitHub test tasks repository link

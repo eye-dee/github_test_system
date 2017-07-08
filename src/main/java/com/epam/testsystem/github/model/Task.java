@@ -18,4 +18,6 @@ public class Task {
     private LocalDateTime registerTime;
     private boolean successful;
     private TaskStatus status;
+
+    // TODO: 08.07.17 add fields
 }
