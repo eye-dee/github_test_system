@@ -50,6 +50,7 @@ public class UserMapperTest {
         assertThat(userMapper.mapTask(task))
                 .satisfies(
                         t -> {
+                            assertThat(t.isSuccessful()).isEqualTo(task.isSuccessful());
                             assertThat(t.getStartTime()).isEqualTo(task.getRegisterTime().format(TimeConstant.DATE_TIME_FORMATTER));
                         }
                 );

@@ -2,8 +2,8 @@ package com.epam.testsystem.github.web;
 
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
-import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.TravisLogsResolver;
 import com.epam.testsystem.github.web.model.NewPullPayload;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +32,7 @@ public class TravisRestController {
 
     private final UserDao userDao;
     private final TaskDao taskDao;
+    private final TravisLogsResolver travisLogsResolver;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping(method = RequestMethod.POST)
@@ -44,19 +45,18 @@ public class TravisRestController {
             final String email = pullPayloadJson.get("author_email").asText();
 
             final boolean status = pullPayloadJson.get("status").asInt() == 0;
+            final long pullId = pullPayloadJson.get("pull_request_number").asLong();
+            final long buildId = pullPayloadJson.get("id").asLong();
+            final String logs = travisLogsResolver.getLogs(buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
-                // TODO: 08.07.17 pullid, successful, log fix
-                final Task add = taskDao.addOrUpdate(userId, 0, false, "");
-                taskDao.setResultById(userId,add.getId(),status, "");
+                taskDao.addOrUpdate(userId, pullId, status, logs);
             } else {
                 final User user = userDao.add(email, githubNick);
-                // TODO: 08.07.17 pullid, successful, log fix
-                final Task task = taskDao.addOrUpdate(user.getId(), 0, false, "");
-                taskDao.setResultById(user.getId(),task.getId(),status, "");
+                taskDao.addOrUpdate(user.getId(), pullId, status, logs);
             }
 
         } catch (final IOException e) {
