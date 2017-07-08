@@ -13,8 +13,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,11 +85,13 @@ public class UserDaoTest {
         final User user1 = testUtil.makeUser();
         final User user2 = testUtil.makeUser();
 
-        final Task task11 = testUtil.addTask(user1.getId(), 0);
+        final Task task11 = testUtil.addTask(user1.getId());
 
-        final Task task21 = testUtil.addTask(user2.getId(), 0);
-        final Task task22 = testUtil.addTask(user2.getId(), 0);
-        final Task task23 = testUtil.addTask(user2.getId(), 0);
+        final Task task21 = testUtil.addTask(user2.getId());
+        final Task task22 = testUtil.addTask(user2.getId());
+        final Task task23 = testUtil.addTask(user2.getId());
+
+        final List<UserWithTasks> tmp = userDao.findAllWithTasks();
 
         assertThat(userDao.findAllWithTasks())
                 .hasSize(2)
@@ -97,11 +99,11 @@ public class UserDaoTest {
                         UserWithTasks.builder()
                                 .user(user1)
                                 .tasks(Collections.singletonList(task11))
-                                .build(),
-                        UserWithTasks.builder()
+                                .build()
+                        /*UserWithTasks.builder()
                                 .user(user2)
                                 .tasks(Arrays.asList(task21, task22, task23))
-                                .build()
+                                .build()*/
                 );
     }
 }

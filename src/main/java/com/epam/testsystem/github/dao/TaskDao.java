@@ -45,6 +45,7 @@ public class TaskDao {
                 .registerTime(registerTime)
                 .successful(false)
                 .log(log)
+                .pullId(pullId)
                 .status(TaskStatus.PROGRESS)
                 .build();
     }

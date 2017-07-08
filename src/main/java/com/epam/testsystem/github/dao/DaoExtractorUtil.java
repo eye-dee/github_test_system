@@ -38,6 +38,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .status(TaskStatus.valueOf(rs.getString("tasks.status")))
                     .successful(rs.getBoolean("tasks.successful"))
                     .log(rs.getString("tasks.log"))
+                    .pullId(rs.getLong("tasks.pull_id"))
                     .build();
 
     @Override

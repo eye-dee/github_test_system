@@ -43,8 +43,6 @@ public class CheckGitHubServiceTest {
     @MockBean
     private GitHubStatusResolver gitHubStatusResolver;
 
-
-
     private void checkStatusSuccessful(long taskId, TaskStatus statusRequired, boolean successfulRequired) {
         assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
                 new Object[]{taskId},
@@ -58,12 +56,11 @@ public class CheckGitHubServiceTest {
     @Test
     @Transactional
     public void checkTask() throws Exception {
-
         when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true, false);
-
         final User user = testUtil.makeUser();
-        final Task task1 = taskDao.add(user.getId(), 0);
-        final Task task2 = taskDao.add(user.getId(), 0);
+
+        final Task task1 = taskDao.addOrUpdate(user.getId(), 0, false, "");
+        final Task task2 = taskDao.addOrUpdate(user.getId(), 1, false, "");
 
         assertThat(taskDao.findAllInProgress()).hasSize(2);
 
@@ -71,7 +68,6 @@ public class CheckGitHubServiceTest {
 
         checkStatusSuccessful(task1.getId(), TaskStatus.CHECKED, true);
         checkStatusSuccessful(task2.getId(), TaskStatus.CHECKED, false);
-
     }
 
     @Test
@@ -80,8 +76,8 @@ public class CheckGitHubServiceTest {
         when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true).thenThrow(new RuntimeException("test"));
 
         final User user = testUtil.makeUser();
-        final Task task1 = taskDao.add(user.getId(), 0);
-        final Task task2 = taskDao.add(user.getId(), 0);
+        final Task task1 = taskDao.addOrUpdate(user.getId(), 0, false, "");
+        final Task task2 = taskDao.addOrUpdate(user.getId(), 1, false, "");
 
         assertThat(taskDao.findAllInProgress()).hasSize(2);
 
