@@ -75,14 +75,13 @@ public class TaskDaoTest {
                 .hasSize(1)
                 .allMatch(t -> t.getUserId() == user.getId());
 
-        assertThat(taskDao.setResultById(user.getId(), task.getId(), false)).isTrue();
+        assertThat(taskDao.setResultById(user.getId(), task.getId(), false, task.getLog())).isTrue();
         assertThat(taskDao.findAllInProgress()).hasSize(0);
     }
 
     @Test
     @Transactional
     public void setResultByIdNotExists() throws Exception {
-        assertThat(taskDao.setResultById(0, 0, false)).isFalse();
+        assertThat(taskDao.setResultById(0, 0, false, "")).isFalse();
     }
-
 }

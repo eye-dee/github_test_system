@@ -52,11 +52,10 @@ public class TaskDao {
         );
     }
 
-    // TODO: 08.07.17 store logs
-    public boolean setResultById(final long userId, final long id, final boolean successful) {
+    public boolean setResultById(final long userId, final long id, final boolean successful, final String log) {
         return jdbcTemplate.update(
-                "UPDATE tasks SET successful = ?, status = ? WHERE user_id = ? AND id = ?",
-                successful, TaskStatus.CHECKED.name(), userId, id
+                "UPDATE tasks SET successful = ?, status = ?, log = ? WHERE user_id = ? AND id = ?",
+                successful, TaskStatus.CHECKED.name(), log, userId, id
         ) > 0;
     }
 }
