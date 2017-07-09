@@ -23,32 +23,32 @@ public class MailServiceTest {
     private static final String INCORRECT_EMAIL_RECIPIENT = "hgchshgchs.com";
 
     @Autowired
-    private MailService mailService;
+    private MailService mailServiceImpl;
 
     @Test(expected = BusinessLogicException.class)
     public void failedToSendEmailWithGitHubTasksLinkAndNoRecipient() {
-        mailService.sendGitHubTasksRepositoryLink("", null, "some test subject", "some test text");
+        mailServiceImpl.sendGitHubTasksRepositoryLink("", null, "some test subject", "some test text");
     }
 
     @Test(expected = BusinessLogicException.class)
     public void failedToSendEmailWithGitHubTasksLinkAndNoSubject() {
-        mailService.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, null, "some test text");
+        mailServiceImpl.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, null, "some test text");
     }
 
     @Test(expected = BusinessLogicException.class)
     public void failedToSendEmailWithGitHubTasksLinkAndNoTextBody() {
-        mailService.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, "some subject", "             ");
+        mailServiceImpl.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, "some subject", "             ");
     }
 
     //TODO Maybe add test method without actually sending message to the fake email address
     @Test
     public void sendMailWithoutException() {
-        mailService.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
+        mailServiceImpl.sendGitHubTasksRepositoryLink(CORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
     }
 
     @Test(expected = BusinessLogicException.class)
     public void sendMailWithIncorrectEmailFormat() {
-        mailService.sendGitHubTasksRepositoryLink(INCORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
+        mailServiceImpl.sendGitHubTasksRepositoryLink(INCORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
     }
 
 

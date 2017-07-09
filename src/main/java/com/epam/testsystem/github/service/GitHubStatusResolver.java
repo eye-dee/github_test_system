@@ -25,14 +25,14 @@ public class GitHubStatusResolver {
             "pulls";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private final HttpResolverService httpResolverService;
+    private final HttpResolverService httpResolverServiceImpl;
 
     public boolean getUserResult(final String userLogin, final String owner, final String repo) {
         final String allRepos = getAllRepos(owner, repo);
         final Optional<String> statusesUrl = getStatusesUrl(allRepos, userLogin);
 
         if (statusesUrl.isPresent()) {
-            final String statuses = httpResolverService.sendGETRequest(statusesUrl.get(),String.class);
+            final String statuses = httpResolverServiceImpl.sendGETRequest(statusesUrl.get(),String.class);
             return resolveStatus(statuses);
         } else {
             LOGGER.info("User {} didn't make pull", userLogin);
@@ -75,7 +75,7 @@ public class GitHubStatusResolver {
     }
 
     private String getAllRepos(final String owner, final String repo) {
-        return httpResolverService.sendGETRequest(
+        return httpResolverServiceImpl.sendGETRequest(
                 String.format(PULLS_REQUEST,owner, repo), String.class
         );
     }
