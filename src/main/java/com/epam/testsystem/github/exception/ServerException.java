@@ -6,11 +6,11 @@ package com.epam.testsystem.github.exception;
  * @since 0.1
  */
 public class ServerException extends RuntimeException {
-    public ServerException(String message) {
+    public ServerException(final String message) {
         super(message);
     }
 
-    public ServerException(String message, Throwable e) {
+    public ServerException(final String message, final Throwable e) {
         super(message, e);
     }
 

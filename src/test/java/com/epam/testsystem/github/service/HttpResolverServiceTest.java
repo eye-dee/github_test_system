@@ -1,16 +1,29 @@
 package com.epam.testsystem.github.service;
 
+import com.epam.testsystem.github.exception.BusinessLogicException;
+import com.epam.testsystem.github.service.http.HttpResolverService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author <a href="mailto:Daria_Makarova@epam.com">Daria Makarova</a>
@@ -27,8 +40,32 @@ public class HttpResolverServiceTest {
     @Autowired
     private HttpResolverService httpResolverService;
 
+    @MockBean
+    private RestTemplate restTemplate;
+    private ResponseEntity mockResponse;
+
+    @Before
+    public void setUp() {
+        mockResponse = mock(ResponseEntity.class);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), eq(HttpEntity.EMPTY), eq(String.class)))
+                .thenReturn(mockResponse);
+    }
+
     @Test
     public void successHttpGetRequest() {
-        assertThat(httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class), is(notNullValue()));
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponse.getBody()).thenReturn("body");
+
+        assertThat(httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class), is("body"));
+    }
+
+    @Test
+    public void exceptionHttpGetRequest() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+
+        assertThatThrownBy(() ->
+                httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class)
+        ).isInstanceOf(BusinessLogicException.class);
     }
 }

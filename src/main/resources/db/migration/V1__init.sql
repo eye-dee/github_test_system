@@ -6,10 +6,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tasks (
-  id            INT PRIMARY KEY                         AUTO_INCREMENT,
+  id            INT PRIMARY KEY AUTO_INCREMENT,
   user_id       INT REFERENCES users (id),
   register_time TIMESTAMP,
-  successful    BOOL                                    DEFAULT FALSE,
+  successful    BOOL            DEFAULT FALSE,
   log           TEXT,
   pull_id       INT UNIQUE KEY
 );

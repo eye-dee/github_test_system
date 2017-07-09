@@ -17,4 +17,5 @@ import lombok.NoArgsConstructor;
 public class TaskUI {
     private boolean successful;
     private String startTime;
+    private String log;
 }
