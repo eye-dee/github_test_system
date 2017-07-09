@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.service.http;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -18,12 +19,14 @@ import java.util.Objects;
  */
 
 @Service
+@RequiredArgsConstructor
 public class HttpResolverServiceImpl implements HttpResolverService {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpResolverService.class);
 
+    private final RestTemplate restTemplate;
+
     public <T> T sendGETRequest(final String url, final Class<T> type) {
         LOGGER.debug("GET with url={}", url);
-        final RestTemplate restTemplate = new RestTemplate();
         final HttpEntity entity = HttpEntity.EMPTY;
         try {
             final ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
