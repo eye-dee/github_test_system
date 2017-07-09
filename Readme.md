@@ -1,6 +1,6 @@
-#MySQL
+# MySQL
 
-##Set up MySQL
+## Set up MySQL
 1) Create Database testSystem;
 2) CREATE USER 'user' IDENTIFIED BY 'password';
 3) GRANT ALL PRIVILEGES ON testSystem . * TO 'user';

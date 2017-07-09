@@ -12,4 +12,4 @@ CREATE TABLE tasks (
   successful    BOOL            DEFAULT FALSE,
   log           TEXT,
   pull_id       INT UNIQUE KEY
-)
+);
