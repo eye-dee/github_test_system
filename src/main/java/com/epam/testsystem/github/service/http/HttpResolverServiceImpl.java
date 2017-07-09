@@ -1,6 +1,7 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.http;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -18,23 +19,27 @@ import java.util.Objects;
  */
 
 @Service
-public class HttpResolverService {
+@RequiredArgsConstructor
+public class HttpResolverServiceImpl implements HttpResolverService {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpResolverService.class);
 
-    public <T> T sendGETRequest(final String url, Class<T> type) {
+    private final RestTemplate restTemplate;
+
+    public <T> T sendGETRequest(final String url, final Class<T> type) {
         LOGGER.debug("GET with url={}", url);
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity entity = HttpEntity.EMPTY;
+        final HttpEntity entity = HttpEntity.EMPTY;
         try {
-            ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
+            final ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
             if (!Objects.equals(out.getStatusCode(), HttpStatus.OK)) {
                 LOGGER.error("Incorrect response status code = {} instead of code = 200", out.getStatusCode().toString());
                 throw new BusinessLogicException("Incorreсt response status code ".concat(out.getStatusCode().toString()).concat(" instead of code = 200"));
             }
             return out.getBody();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("Can't GET to: {} because of {}", url, e.getMessage());
             throw new BusinessLogicException("Can't GET to " + url + "  because of : " + e.getMessage());
         }
     }
+
+
 }

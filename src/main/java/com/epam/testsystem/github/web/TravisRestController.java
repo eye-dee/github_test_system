@@ -3,7 +3,7 @@ package com.epam.testsystem.github.web;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.service.TravisLogsResolver;
+import com.epam.testsystem.github.service.travis.TravisLogsResolver;
 import com.epam.testsystem.github.web.model.NewPullPayload;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +38,7 @@ public class TravisRestController {
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
     public void newPull(@RequestBody final NewPullPayload newPullPayload) {
+        LOGGER.info("Triggered by webhook");
         try {
             final JsonNode pullPayloadJson = objectMapper.readTree(newPullPayload.getPayload());
 
@@ -47,6 +48,12 @@ public class TravisRestController {
             final boolean status = pullPayloadJson.get("status").asInt() == 0;
             final long pullId = pullPayloadJson.get("pull_request_number").asLong();
             final long buildId = pullPayloadJson.get("id").asLong();
+
+            LOGGER.info("user {} with email {} has status {} in pull request number {} with build id {}",
+                    githubNick, email, status, pullId, buildId
+            );
+
+            LOGGER.info("try to get logs from travis");
             final String logs = travisLogsResolver.getLogs(buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
@@ -55,6 +62,7 @@ public class TravisRestController {
                 final long userId = userOptional.get().getId();
                 taskDao.addOrUpdate(userId, pullId, status, logs);
             } else {
+                LOGGER.info("add new user {} with email {}", githubNick, email);
                 final User user = userDao.add(email, githubNick);
                 taskDao.addOrUpdate(user.getId(), pullId, status, logs);
             }

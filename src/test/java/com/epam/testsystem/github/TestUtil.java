@@ -25,7 +25,7 @@ public class TestUtil {
     private final UserDao userDao;
     private final TaskDao taskDao;
     private long defaultPullId;
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
     public User makeUser() {
         final String email = generateString();

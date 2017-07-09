@@ -1,5 +1,6 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.travis;
 
+import com.epam.testsystem.github.service.http.HttpResolverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class TravisLogsResolver {
             "log";
     private final HttpResolverService httpResolverService;
 
-    public String getLogs(long buildId) {
+    public String getLogs(final long buildId) {
         return httpResolverService.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
     }
 }

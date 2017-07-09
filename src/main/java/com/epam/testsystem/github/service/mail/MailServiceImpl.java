@@ -1,10 +1,10 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.mail;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
  */
 @Service
 @RequiredArgsConstructor
-public class MailService {
+public class MailServiceImpl implements MailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
 
-    private final JavaMailSenderImpl mailSender;
+    private final JavaMailSender mailSender;
 
     /**
      * Send an email message with GitHub test tasks repository link
@@ -32,33 +32,33 @@ public class MailService {
      * @param subject     a message topic
      * @param messageText text with GitHub link to test tasks repository
      */
-    public void sendGitHubTasksRepositoryLink(final String emailTo, final String CC,
+    public void sendMessage(final String emailTo, final String CC,
                                               final String subject, final String messageText) {
         LOGGER.debug("Async sendGitHubTasksRepositoryLink with emailTo={}, CC={}, subject={}, messageText={}",
                 emailTo, CC, subject, messageText);
 
         validateDataForEmailSending(emailTo, subject, messageText);
-        Pattern emailPattern = Pattern.compile("^[\\w0-9+_.-]+@[\\w0-9.-]+\\.[a-zA-Z]{2,6}");
+        final Pattern emailPattern = Pattern.compile("^[\\w0-9+_.-]+@[\\w0-9.-]+\\.[a-zA-Z]{2,6}");
 
         if (!emailPattern.matcher(emailTo).matches()) {
             LOGGER.error("emailTo={} has incorrect format", emailTo);
             throw new BusinessLogicException("emailTo".concat(emailTo).concat(" has incorrect format"));
         }
-        sendMessage(emailTo, subject, CC, messageText);
+        send(emailTo, subject, CC, messageText);
     }
 
-    private void validateDataForEmailSending(String emailTo, String subject, String messageText) {
+    private void validateDataForEmailSending(final String emailTo, final String subject, final String messageText) {
         if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(messageText) || !StringUtils.hasText(subject)) {
             LOGGER.error("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
             throw new BusinessLogicException("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}".concat(emailTo));
         }
     }
 
-    private void sendMessage(String emailTo, String subject, String CC, String text) {
+    private void send(final String emailTo, final String subject, final String CC, final String text) {
         LOGGER.debug("=== Sending message ===");
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        final MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(emailTo);
             if (StringUtils.hasText(CC)) {
                 helper.setCc(CC);
@@ -67,11 +67,10 @@ public class MailService {
             helper.setText(text);
 
             mailSender.send(helper.getMimeMessage());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("No mail was sent because of : ", e.getMessage());
         }
         LOGGER.debug("=== Message was sent ===");
     }
-
 
 }
