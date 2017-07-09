@@ -1,6 +1,8 @@
 package com.epam.testsystem.github.service;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.service.mail.MailServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

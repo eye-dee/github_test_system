@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.service;
 
+import com.epam.testsystem.github.service.http.HttpResolverService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

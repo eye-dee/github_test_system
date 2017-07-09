@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.http;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
 import org.slf4j.Logger;

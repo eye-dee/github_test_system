@@ -3,7 +3,7 @@ package com.epam.testsystem.github.web;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.service.TravisLogsResolver;
+import com.epam.testsystem.github.service.travis.TravisLogsResolver;
 import com.epam.testsystem.github.web.model.NewPullPayload;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

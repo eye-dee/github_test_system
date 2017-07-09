@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.http;
 
 /**
  * github_test
