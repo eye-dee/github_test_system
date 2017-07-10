@@ -1,7 +1,6 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.http;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
-import com.epam.testsystem.github.service.http.HttpResolverService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
