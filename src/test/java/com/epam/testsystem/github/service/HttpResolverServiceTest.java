@@ -1,21 +1,29 @@
 package com.epam.testsystem.github.service;
 
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import com.epam.testsystem.github.service.http.HttpResolverService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.client.RestTemplate;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author <a href="mailto:Daria_Makarova@epam.com">Daria Makarova</a>
@@ -28,37 +36,36 @@ import static org.hamcrest.Matchers.notNullValue;
 public class HttpResolverServiceTest {
 
     private static final String GITHUB_STATUSES_URL = "https://api.github.com/repos/epamtestsystem/java_knowledge/statuses/2358303f938827fae7a4dfd4e882bc2886feb50c";
-    private static final String TRAVIS_CI_API_URL_FOR_OPEN_SOURCE = "https://api.travis-ci.org";
-    private static final String TRAVIS_CI_API_URL_FOR_GET_ALL_BUILDS = "/repos/epamtestsystem/java_knowledge/builds";
-    private static final String TRAVIS_CI_API_HEADER_ACCEPT = "application/vnd.travis-ci.2+json";
-    private static final String GITHUB_ACCOUNT_USERNAME = "epamtestsystem";
-    private static final String CORRECT_GITHUB_ACCOUNT_PASSWORD = "password12345";
-    private static final String INCORRECT_GITHUB_ACCOUNT_PASSWORD = "hgfhaggfayg7648";
 
     @Autowired
-    private HttpResolverService httpResolverServiceImpl;
+    private HttpResolverService httpResolverService;
 
-    @Test
-    public void successHttpGetRequestWithCredentialsToGitHubAPI() {
-        String authEncoded = Base64.getEncoder().encodeToString((GITHUB_ACCOUNT_USERNAME.concat(":").concat(CORRECT_GITHUB_ACCOUNT_PASSWORD)).getBytes());
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Basic " + (authEncoded));
-        assertThat(httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL, headers, String.class), is(notNullValue()));
-    }
+    @MockBean
+    private RestTemplate restTemplate;
+    private ResponseEntity mockResponse;
 
-    @Test(expected = BusinessLogicException.class)
-    public void failedHttpGetRequestWithCredentialsToGitHubAPI() {
-        String authEncoded = Base64.getEncoder().encodeToString((GITHUB_ACCOUNT_USERNAME.concat(":").concat(INCORRECT_GITHUB_ACCOUNT_PASSWORD)).getBytes());
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Basic " + (authEncoded));
-        httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL, headers, String.class);
+    @Before
+    public void setUp() {
+        mockResponse = mock(ResponseEntity.class);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), eq(HttpEntity.EMPTY), eq(String.class)))
+                .thenReturn(mockResponse);
     }
 
     @Test
-    public void successHttpGetRequestToTravisAPIForBuilds() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", TRAVIS_CI_API_HEADER_ACCEPT);
-        assertThat(httpResolverServiceImpl.sendGETRequest(TRAVIS_CI_API_URL_FOR_OPEN_SOURCE.concat(TRAVIS_CI_API_URL_FOR_GET_ALL_BUILDS), String.class), is(notNullValue()));
+    public void successHttpGetRequest() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponse.getBody()).thenReturn("body");
+
+        assertThat(httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class), is("body"));
     }
 
+    @Test
+    public void exceptionHttpGetRequest() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+
+        assertThatThrownBy(() ->
+                httpResolverService.sendGETRequest(GITHUB_STATUSES_URL, String.class)
+        ).isInstanceOf(BusinessLogicException.class);
+    }
 }
