@@ -100,6 +100,8 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$[0].email", is(user.getEmail())))
                 .andExpect(jsonPath("$[0].githubNick", is(user.getGithubNick())))
                 .andExpect(jsonPath("$[0].tasks[0].successful", is(task1.isSuccessful())))
-                .andExpect(jsonPath("$[0].tasks[1].successful", is(task2.isSuccessful())));
+                .andExpect(jsonPath("$[0].tasks[0].log", is(task1.getLog())))
+                .andExpect(jsonPath("$[0].tasks[1].successful", is(task2.isSuccessful())))
+                .andExpect(jsonPath("$[0].tasks[1].log", is(task1.getLog())));
     }
 }

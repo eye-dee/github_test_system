@@ -59,7 +59,6 @@ dependencies {
 
     //Logger
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
-    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
 
     //apache commons io
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
@@ -74,6 +73,10 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.1.2.RELEASE'
 
+    //Security
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '4.2.2.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.5.2.RELEASE'
+
     //Email and notification
     compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.1.RELEASE'
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.5.6'
@@ -82,7 +85,7 @@ dependencies {
     //Test
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.3.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    //Test
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.2.RELEASE'
     compile group: 'org.assertj', name: 'assertj-core', version: '3.6.2'
 }
