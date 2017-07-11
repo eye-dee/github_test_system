@@ -1,5 +1,6 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.travis;
 
+import com.epam.testsystem.github.service.http.HttpResolverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

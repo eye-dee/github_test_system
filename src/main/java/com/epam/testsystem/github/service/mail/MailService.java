@@ -5,8 +5,7 @@ package com.epam.testsystem.github.service.mail;
  * Created on 09.07.17.
  */
 public interface MailService {
-    void sendMessage(
-            String emailTo, String CC, String subject, String messageText
-    );
+
+    void sendMessage(String emailTo, String CC, String subject, String messageText);
 
 }

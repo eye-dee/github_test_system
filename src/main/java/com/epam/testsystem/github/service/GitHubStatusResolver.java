@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.service;
 
+import com.epam.testsystem.github.service.http.HttpResolverService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class GitHubStatusResolver {
         final Optional<String> statusesUrl = getStatusesUrl(allRepos, userLogin);
 
         if (statusesUrl.isPresent()) {
-            final String statuses = httpResolverServiceImpl.sendGETRequest(statusesUrl.get(),String.class);
+            final String statuses = httpResolverServiceImpl.sendGETRequest(statusesUrl.get(), String.class);
             return resolveStatus(statuses);
         } else {
             LOGGER.info("User {} didn't make pull", userLogin);
@@ -76,7 +77,7 @@ public class GitHubStatusResolver {
 
     private String getAllRepos(final String owner, final String repo) {
         return httpResolverServiceImpl.sendGETRequest(
-                String.format(PULLS_REQUEST,owner, repo), String.class
+                String.format(PULLS_REQUEST, owner, repo), String.class
         );
     }
 
