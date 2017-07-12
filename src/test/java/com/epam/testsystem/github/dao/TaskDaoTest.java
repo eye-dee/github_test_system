@@ -66,20 +66,20 @@ public class TaskDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'github_nick')",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'github_nick', 'password')",
+            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)",
+            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)",
+            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)"
     })
     public void findAllInProgress() throws Exception {
-        assertThat(taskDao.findAllByUserId(1))
+        assertThat(taskDao.findAllByUserId(1000))
                 .hasSize(3);
     }
 
     @Test
     @Transactional
     public void setResultById() throws Exception {
-        final User user = testUtil.makeUser();
+        final User user = testUtil.getMainUser();
         final Task task = taskDao.addOrUpdate(user.getId(), 0, false, "");
 
         assertThat(taskDao.findAllByUserId(user.getId()))

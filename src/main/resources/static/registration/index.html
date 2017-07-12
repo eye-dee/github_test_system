@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+<div style="float:left; width: 20%">
+    <form>
+        <p><b>GitHub:</b></p>
+        <p><input id="git"></p>
+        <p><b>Email:</b></p>
+        <p><input id="email"></p>
+        <p><b>Password:</b></p>
+        <p><input id="password" type="password"></p>
+        <p><b>Register</b></p>
+        <p><input id="reg" type="submit" value="register"></p>
+    </form>
+</div>
+
+</body>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script>
+    $("#reg").click(() => {
+        const gitNick = $("#git").val();
+        const email = $("#email").val();
+        const password = $("#password").val();
+
+        console.log("User " + gitNick + " started");
+        $.ajax({
+            type: "POST",
+            url: "/registration/user",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                githubNick: gitNick,
+                email: email,
+                password : password
+            }),
+            success: function (result) {
+                console.log("User " + result.toString() + " successful");
+            },
+            error: function (result) {
+                console.log("User " + result.toString() + " error");
+            }
+        });
+    });
+</script>
+
+</html>

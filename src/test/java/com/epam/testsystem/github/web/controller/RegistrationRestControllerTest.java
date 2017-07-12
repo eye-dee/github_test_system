@@ -1,16 +1,17 @@
-package com.epam.testsystem.github.web;
+package com.epam.testsystem.github.web.controller;
 
+import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
-import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.web.model.NewUserUI;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -19,9 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
 import java.nio.charset.Charset;
-import java.util.Optional;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,25 +29,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * github_test
- * Created on 08.07.17.
+ * Create on 7/12/2017.
  */
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles(SPRING_PROFILE_TEST)
-public class TravisRestControllerTest {
+public class RegistrationRestControllerTest {
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private TestUtil testUtil;
+
+    @MockBean
+    private MailService mailService;
 
     @Autowired
     private UserDao userDao;
@@ -57,29 +57,35 @@ public class TravisRestControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     @Test
     @Transactional
-    public void newPull() throws Exception {
-        final String newPullJson = FileUtils.readFileToString(
-                new File("src/test/resources/travis_payload.json"), "UTF-8");
+    public void register() throws Exception {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String newUserJson = objectMapper.writeValueAsString(
+                NewUserUI.builder()
+                        .email("email")
+                        .githubNick("githubNick")
+                        .password("password")
+                        .build()
+        );
 
-        mockMvc.perform(post("/travisci")
+        mockMvc.perform(post("/registration/user")
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(newPullJson))
+                .content(newUserJson))
                 .andExpect(status().isOk());
 
-        final Optional<User> userOptional = userDao.findByEmail("daniel.buch@gmail.com");
-        assertThat(userOptional).isPresent();
-
-        assertThat(jdbcTemplate.queryForObject(
-                "Select COUNT(*) FROM  tasks WHERE user_id = ?",
-                new Object[]{userOptional.get().getId()},
-                Integer.class
-        )).isEqualTo(1);
+        assertThat(userDao.findByEmail("email"))
+                .hasValueSatisfying(
+                        user -> {
+                            assertThat(user.getId()).isGreaterThan(0);
+                            assertThat(user.getEmail()).isEqualTo("email");
+                            assertThat(user.getGithubNick()).isEqualTo("githubNick");
+                            assertThat(user.getPassword()).isNotEmpty();
+                        }
+                );
     }
-
 }

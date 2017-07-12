@@ -7,6 +7,7 @@ import com.epam.testsystem.github.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -27,14 +28,22 @@ public class TestUtil {
     private long defaultPullId;
     private static final SecureRandom random = new SecureRandom();
 
+    private User mainUser = null;
+
+    @Transactional
     public User makeUser() {
         final String email = generateString();
-        userDao.add(email, generateString());
-        return userDao.findByEmail(email).get();
+        final User user = userDao.add(email, generateString(), generateString());
+
+        if (mainUser == null) {
+            mainUser = user;
+        }
+
+        return user;
     }
 
     public User makeUser(final String email, final String githubNick) {
-        userDao.add(email, githubNick);
+        userDao.add(email, githubNick, generateString());
         return userDao.findByEmail(email).get();
     }
 
@@ -48,5 +57,9 @@ public class TestUtil {
 
     private static String generateString() {
         return new BigInteger(130, random).toString(32);
+    }
+
+    public User getMainUser() {
+        return mainUser;
     }
 }

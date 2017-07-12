@@ -41,12 +41,14 @@ public class UserDaoTest {
     public void add() throws Exception {
         final String email = "EMAIL";
         final String githubNick = "github_nick";
+        final String password = "password";
 
-        assertThat(userDao.add(email, githubNick))
+        assertThat(userDao.add(email, githubNick, password))
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
                             assertThat(u.getGithubNick()).isEqualTo(githubNick);
+                            assertThat(u.getPassword()).isEqualTo(password);
                             assertThat(u.getId()).isGreaterThan(0);
                         }
                 );
@@ -55,10 +57,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'githubNick')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
     })
     public void findById() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findById(user.getId())).contains(user);
     }
 
@@ -69,10 +71,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'githubNick')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
     })
     public void findByEmail() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findByEmail("email")).contains(user);
     }
 
@@ -83,7 +85,7 @@ public class UserDaoTest {
     @Test
     @Transactional
     public void findAllWithTasks() {
-        final User user1 = testUtil.makeUser();
+        final User user1 = testUtil.getMainUser();
         final User user2 = testUtil.makeUser();
 
         final Task task11 = testUtil.addTask(user1.getId());

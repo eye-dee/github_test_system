@@ -13,4 +13,5 @@ import lombok.Data;
 public class NewUserUI {
     private String githubNick;
     private String email;
+    private String password;
 }
