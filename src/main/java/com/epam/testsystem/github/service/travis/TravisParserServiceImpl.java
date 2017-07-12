@@ -3,6 +3,7 @@ package com.epam.testsystem.github.service.travis;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.mail.MailService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Optional;
 
 /**
@@ -23,11 +26,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TravisParserServiceImpl implements TravisParserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TravisParserService.class);
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private final TravisLogsResolver travisLogsResolver;
     private final TaskDao taskDao;
     private final UserDao userDao;
+    private final MailService mailService;
 
     @Override
     @Transactional
@@ -54,10 +59,16 @@ public class TravisParserServiceImpl implements TravisParserService {
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
                 taskDao.addOrUpdate(userId, pullId, status, logs);
+                mailService.sendMessage(email,"", "Github TestSystem",
+                        "We are received your solution");
             } else {
                 LOGGER.info("add new user {} with email {}", githubNick, email);
-                final User user = userDao.add(email, githubNick, "password");
+                final String password = generatePassword();
+                final User user = userDao.add(email, githubNick, password);
                 taskDao.addOrUpdate(user.getId(), pullId, status, logs);
+                mailService.sendMessage(email,"", "Github TestSystem",
+                        "You are not register yet on our system, but we get your solution" +
+                                " You can access by password " + password);
             }
 
             return true;
@@ -65,5 +76,9 @@ public class TravisParserServiceImpl implements TravisParserService {
             LOGGER.error("Can't parse json\nWith error {}", e.getMessage());
             return false;
         }
+    }
+
+    private String generatePassword() {
+        return new BigInteger(43, RANDOM).toString(32);
     }
 }
