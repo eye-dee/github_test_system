@@ -1,7 +1,9 @@
 package com.epam.testsystem.github;
 
+import com.epam.testsystem.github.dao.RepoDao;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +25,16 @@ import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST
 @Profile(value = SPRING_PROFILE_TEST)
 @RequiredArgsConstructor
 public class TestUtil {
+    private static final SecureRandom random = new SecureRandom();
     private final UserDao userDao;
     private final TaskDao taskDao;
+    private final RepoDao repoDao;
     private long defaultPullId;
-    private static final SecureRandom random = new SecureRandom();
-
     private User mainUser = null;
+
+    public static String generateString() {
+        return new BigInteger(130, random).toString(32);
+    }
 
     @Transactional
     public User makeUser() {
@@ -47,16 +53,20 @@ public class TestUtil {
         return userDao.findByEmail(email).get();
     }
 
+    public Repo addRepo() {
+        return repoDao.add(generateString(),generateString());
+    }
+
+    public Repo addRepo(final String name, final String owner) {
+        return repoDao.add(name, owner);
+    }
+
     public Task addTask(final long userId) {
         return taskDao.addOrUpdate(userId, defaultPullId++, false, "log");
     }
 
     public Task addTask(final long userId, final long pullId, final boolean successful, final String log) {
         return taskDao.addOrUpdate(userId, pullId, successful, log);
-    }
-
-    private static String generateString() {
-        return new BigInteger(130, random).toString(32);
     }
 
     public User getMainUser() {

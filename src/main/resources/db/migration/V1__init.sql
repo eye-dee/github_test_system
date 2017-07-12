@@ -6,6 +6,12 @@ CREATE TABLE users (
   UNIQUE (email)
 );
 
+CREATE TABLE repos (
+  id    INT PRIMARY KEY AUTO_INCREMENT,
+  name  VARCHAR(100) NOT NULL,
+  owner VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE tasks (
   id            INT PRIMARY KEY AUTO_INCREMENT,
   user_id       INT REFERENCES users (id),
