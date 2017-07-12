@@ -15,9 +15,9 @@ public class TravisLogsResolver {
     private static final String REQUEST = "https://api.travis-ci.org/jobs/" +
             "%d/" + //<- job_id (calculate as build_id + 1)
             "log";
-    private final HttpResolverService httpResolverService;
+    private final HttpResolverService httpResolverServiceImpl;
 
-    public String getLogs(final long buildId) {
-        return httpResolverService.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
+    public String getLogs(long buildId) {
+        return httpResolverServiceImpl.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
     }
 }
