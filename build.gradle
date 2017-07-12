@@ -79,6 +79,9 @@ dependencies {
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.5.6'
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6'
 
+    //jsoup
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
+
     //Test
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.3.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.12'

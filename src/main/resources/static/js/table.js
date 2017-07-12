@@ -1,3 +1,5 @@
+var tasks = [];
+
 $("#getAll").click(() => {
     $.ajax({
         type: "GET",
@@ -5,14 +7,15 @@ $("#getAll").click(() => {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            let tasks = [];
+            tasks = [];
             for (let i = 0; i < result.length; i++) {
                 if (result[i].tasks.length === 0) {
                     tasks.push({
                             email: result[i].email,
                             git: result[i].githubNick,
                             time: null,
-                            successful: null
+                            successful: null,
+                            log: null
                         }
                     )
                 }
@@ -21,7 +24,8 @@ $("#getAll").click(() => {
                         email: result[i].email,
                         git: result[i].githubNick,
                         time: result[i].tasks[j].startTime,
-                        successful: result[i].tasks[j].successful
+                        successful: result[i].tasks[j].successful,
+                        log: result[i].tasks[j].log
                     };
                     tasks.push(task);
                 }
@@ -43,19 +47,25 @@ function setTable(data) {
         movableRows: true,
         tooltips: true,
         columns: [
-            {title: "Email", field: "email", sorter: "string"},
+            {title: "Email", field: "email", sorter: "string", formatter:"email"},
             {title: "Git", field: "git", sorter: "string"},
             {title: "Start time", field: "time", width: 130, sorter: "date", align: "center"},
             {
                 title: "Status", field: "successful", width: 80, align: "center",
                 formatter: "tick", sorter: "boolean"
-            }
-
+            },
+            {title: "Log", field: "log"}
         ]
     });
     $("#example-table").tabulator("setData", data);
 }
 
-$(window).resize(function () {
+$(window).resize(() => {
     $("#example-table").tabulator("redraw");
 });
+
+/*$("#example-table").tabulator({
+    rowSelected:function(row){
+       alert('penis');
+    },
+});*/
