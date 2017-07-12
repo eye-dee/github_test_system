@@ -38,12 +38,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
         http.authorizeRequests()
                 .antMatchers(
                         "/static/**",
-                        "/registration/**"
+                        "/registration/**",
+                        "/login.html"
                 ).permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
                 .loginPage("/login.html")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .permitAll().defaultSuccessUrl("/");
 
         http.logout()

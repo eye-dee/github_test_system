@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/2.11.0/tabulator.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div style="float:left; width: 20%">
+    <form>
+        <p><b>GitHub:</b></p>
+        <p><input id="git"></p>
+        <p><b>Email:</b></p>
+        <p><input id="email"></p>
+        <p><b>Password:</b></p>
+        <p><input id="password" type="password"></p>
+        <p><b>Register</b></p>
+        <p><input id="reg" type="submit" value="register"></p>
+    </form>
+</div>
+
+</body>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+        integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/2.11.0/tabulator.min.js"></script>
+
+<script>
+    $("#reg").click(() => {
+        const gitNick = $("#git").val();
+        const email = $("#email").val();
+        const password = $("#password").val();
+
+        console.log("User " + gitNick + " started")
+        $.ajax({
+            type: "POST",
+            url: "/registration/user",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                githubNick: gitNick,
+                email: email,
+                password : password
+            }),
+            success: function (result) {
+                console.log("User " + result.toString() + " successful");
+            },
+            error: function (result) {
+                console.log("User " + result.toString() + " error");
+            }
+        });
+    });
+</script>
+
+</html>

@@ -29,12 +29,12 @@ public class TestUtil {
 
     public User makeUser() {
         final String email = generateString();
-        userDao.add(email, generateString());
+        userDao.add(email, generateString(), generateString());
         return userDao.findByEmail(email).get();
     }
 
     public User makeUser(final String email, final String githubNick) {
-        userDao.add(email, githubNick);
+        userDao.add(email, githubNick, generateString());
         return userDao.findByEmail(email).get();
     }
 

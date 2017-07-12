@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.web;
+package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.service.travis.TravisParserService;
 import com.epam.testsystem.github.web.model.NewPullPayload;

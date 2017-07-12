@@ -41,12 +41,14 @@ public class UserDaoTest {
     public void add() throws Exception {
         final String email = "EMAIL";
         final String githubNick = "github_nick";
+        final String password = "password";
 
-        assertThat(userDao.add(email, githubNick))
+        assertThat(userDao.add(email, githubNick, password))
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
                             assertThat(u.getGithubNick()).isEqualTo(githubNick);
+                            assertThat(u.getPassword()).isEqualTo(password);
                             assertThat(u.getId()).isGreaterThan(0);
                         }
                 );

@@ -8,7 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,11 +25,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserDao userDao;
 
     @Override
     public User register(String email, String githubNick, String password) {
-        return userDao.add(email, githubNick);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        return userDao.add(email, githubNick, encodedPassword);
     }
 
     @Override
@@ -40,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final Optional<User> userOpt = userDao.findByEmail(email);
         if (userOpt.isPresent()) {

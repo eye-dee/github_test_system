@@ -2,6 +2,7 @@ CREATE TABLE users (
   id          INT PRIMARY KEY AUTO_INCREMENT,
   email       VARCHAR(100) NOT NULL,
   github_nick VARCHAR(100) NOT NULL,
+  password    VARCHAR(100) NOT NULL,
   UNIQUE (email)
 );
 

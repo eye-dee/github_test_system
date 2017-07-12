@@ -56,7 +56,7 @@ public class TravisParserServiceImpl implements TravisParserService {
                 taskDao.addOrUpdate(userId, pullId, status, logs);
             } else {
                 LOGGER.info("add new user {} with email {}", githubNick, email);
-                final User user = userDao.add(email, githubNick);
+                final User user = userDao.add(email, githubNick, "password");
                 taskDao.addOrUpdate(user.getId(), pullId, status, logs);
             }
 
