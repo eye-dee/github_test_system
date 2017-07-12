@@ -2,7 +2,6 @@ package com.epam.testsystem.github.service.user;
 
 import com.epam.testsystem.github.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -18,6 +17,4 @@ public interface UserService extends UserDetailsService {
     Optional<User> findByEmail(String email);
 
     User getCurrentUser();
-
-
 }
