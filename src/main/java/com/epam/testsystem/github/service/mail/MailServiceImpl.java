@@ -20,45 +20,31 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
     private final JavaMailSender mailSender;
 
     /**
-     * Send an email message with GitHub test tasks repository link
+     * Send an email message
      *
-     * @param emailTo     email recipient
-     * @param CC          email copy recipients
-     * @param subject     a message topic
-     * @param messageText text with GitHub link to test tasks repository
+     * @param emailTo email recipient
+     * @param CC      email copy recipients
+     * @param subject a message topic
+     * @param text    text with GitHub link to test tasks repository
      */
-    public void sendMessage(final String emailTo, final String CC,
-                                              final String subject, final String messageText) {
-        LOGGER.debug("Async sendGitHubTasksRepositoryLink with emailTo={}, CC={}, subject={}, messageText={}",
-                emailTo, CC, subject, messageText);
+    public void sendMessage(String emailTo, String CC, String subject, String text) {
+        LOGGER.debug("=== Sending message === with emailTo={}, CC={}, subject={}, text={}",
+                emailTo, CC, subject, text);
 
-        validateDataForEmailSending(emailTo, subject, messageText);
-        final Pattern emailPattern = Pattern.compile("^[\\w0-9+_.-]+@[\\w0-9.-]+\\.[a-zA-Z]{2,6}");
-
+        validateDataForEmailSending(emailTo, subject, text);
+        Pattern emailPattern = Pattern.compile("^[\\w0-9+_.-]+@[\\w0-9.-]+\\.[a-zA-Z]{2,6}");
         if (!emailPattern.matcher(emailTo).matches()) {
             LOGGER.error("emailTo={} has incorrect format", emailTo);
             throw new BusinessLogicException("emailTo".concat(emailTo).concat(" has incorrect format"));
         }
-        send(emailTo, subject, CC, messageText);
-    }
-
-    private void validateDataForEmailSending(final String emailTo, final String subject, final String messageText) {
-        if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(messageText) || !StringUtils.hasText(subject)) {
-            LOGGER.error("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
-            throw new BusinessLogicException("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}".concat(emailTo));
-        }
-    }
-
-    private void send(final String emailTo, final String subject, final String CC, final String text) {
-        LOGGER.debug("=== Sending message ===");
-        final MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
-            final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(emailTo);
             if (StringUtils.hasText(CC)) {
                 helper.setCc(CC);
@@ -67,10 +53,16 @@ public class MailServiceImpl implements MailService {
             helper.setText(text);
 
             mailSender.send(helper.getMimeMessage());
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOGGER.error("No mail was sent because of : ", e.getMessage());
         }
         LOGGER.debug("=== Message was sent ===");
     }
 
+    private void validateDataForEmailSending(String emailTo, String subject, String messageText) {
+        if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(messageText) || !StringUtils.hasText(subject)) {
+            LOGGER.error("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
+            throw new BusinessLogicException("Destination email or message text or subject is null or empty. No mail with GitHub test tasks link was sent to email={}".concat(emailTo));
+        }
+    }
 }

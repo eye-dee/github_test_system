@@ -20,6 +20,5 @@
     <logger name="com.epam.testsystem.github" level="INFO" additivity="false">
         <appender-ref ref="MAIN"/>
         <appender-ref ref="PLATFORM"/>
-        <appender-ref ref="ERRORS"/>
     </logger>
 </included>
