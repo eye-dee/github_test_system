@@ -37,6 +37,7 @@ public class UserDao {
                 .id(id)
                 .email(email)
                 .githubNick(githubNick)
+                .password(password)
                 .build();
     }
 

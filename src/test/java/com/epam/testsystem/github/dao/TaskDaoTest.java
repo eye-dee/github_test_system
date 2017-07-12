@@ -66,7 +66,7 @@ public class TaskDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'github_nick')",
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1, 'email', 'github_nick', 'password')",
             "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
             "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)",
             "INSERT INTO tasks(user_id, register_time) VALUES(1, CURRENT_TIMESTAMP)"

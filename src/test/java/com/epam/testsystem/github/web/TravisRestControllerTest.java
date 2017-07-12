@@ -2,7 +2,6 @@ package com.epam.testsystem.github.web;
 
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.web.model.NewPullPayload;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -67,12 +66,10 @@ public class TravisRestControllerTest {
         final String newPullJson = FileUtils.readFileToString(
                 new File("src/test/resources/travis_payload.json"), "UTF-8");
 
-        final String newPullPayloadJson = objectMapper.writeValueAsString(new NewPullPayload(newPullJson));
-
         mockMvc.perform(post("/travisci")
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(newPullPayloadJson))
+                .content(newPullJson))
                 .andExpect(status().isOk());
 
         final Optional<User> userOptional = userDao.findByEmail("daniel.buch@gmail.com");
