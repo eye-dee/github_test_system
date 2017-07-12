@@ -57,10 +57,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'githubNick')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1, 'email', 'githubNick', 'password')"
     })
     public void findById() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        final User user = User.builder().id(1).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findById(user.getId())).contains(user);
     }
 
@@ -71,10 +71,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick) VALUES(1, 'email', 'githubNick')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1, 'email', 'githubNick', 'password')"
     })
     public void findByEmail() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        final User user = User.builder().id(1).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findByEmail("email")).contains(user);
     }
 
