@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.service.gitlab;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GitlabLogsResolver {
+
+    // TODO: 12.07.17 set it to application.properties
+    @Value("${gitlab.private_token}")
+    private String privateToken;
 
     // TODO: 12.07.17 You need to get logs by build id
     // Find out about log parser libraries. Slava told about that.
