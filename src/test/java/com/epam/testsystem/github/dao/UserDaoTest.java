@@ -57,10 +57,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick, password) VALUES(1, 'email', 'githubNick', 'password')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
     })
     public void findById() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").password("password").build();
+        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findById(user.getId())).contains(user);
     }
 
@@ -71,10 +71,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick, password) VALUES(1, 'email', 'githubNick', 'password')"
+            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
     })
     public void findByEmail() throws Exception {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").password("password").build();
+        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
         assertThat(userDao.findByEmail("email")).contains(user);
     }
 
@@ -85,7 +85,7 @@ public class UserDaoTest {
     @Test
     @Transactional
     public void findAllWithTasks() {
-        final User user1 = testUtil.makeUser();
+        final User user1 = testUtil.getMainUser();
         final User user2 = testUtil.makeUser();
 
         final Task task11 = testUtil.addTask(user1.getId());

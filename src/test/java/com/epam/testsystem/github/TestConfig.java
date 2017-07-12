@@ -1,10 +1,14 @@
 package com.epam.testsystem.github;
 
+import com.epam.testsystem.github.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_DEV;
 import static org.mockito.Mockito.mock;
@@ -16,12 +20,19 @@ import static org.mockito.Mockito.mock;
 
 @Configuration
 public class TestConfig {
+    @Autowired
+    private TestUtil testUtil;
 
     @Bean
     public FlywayMigrationStrategy cleanMigrationStrategy() {
         return flyway -> {
             flyway.clean();
             flyway.migrate();
+
+            final User user = testUtil.makeUser();
+            if (user != null) {
+                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getAuthorities()));
+            }
         };
     }
 
