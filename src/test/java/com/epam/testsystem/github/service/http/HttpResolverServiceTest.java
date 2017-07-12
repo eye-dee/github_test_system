@@ -74,6 +74,24 @@ public class HttpResolverServiceTest {
     }
 
     @Test
+    public void successHttpGetRequestWithCredentials() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponse.getBody()).thenReturn("body");
+
+        httpResolverServiceImpl.setCredentials("name", "password");
+        assertThat(httpResolverServiceImpl.sendGETRequestWithCredentials(GITHUB_STATUSES_URL, String.class), is("body"));
+    }
+
+    @Test
+    public void exceptionHttpGetRequestWithCredentials() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+
+        assertThatThrownBy(() ->
+                httpResolverServiceImpl.sendGETRequestWithCredentials(GITHUB_STATUSES_URL, String.class)
+        ).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
     public void successHttpGetRequestWithHeaders() {
         when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
         when(mockResponse.getBody()).thenReturn("body");
@@ -81,7 +99,7 @@ public class HttpResolverServiceTest {
         Map<String, String> headersMap = new HashMap<String, String>() {{
             put("Accept", MediaType.APPLICATION_JSON_VALUE);
         }};
-        assertThat(httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL, "correct", "correct",
+        assertThat(httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL,
                 headersMap, String.class), is("body"));
     }
 
@@ -90,7 +108,29 @@ public class HttpResolverServiceTest {
         when(mockResponse.getStatusCode()).thenReturn(HttpStatus.FORBIDDEN);
 
         assertThatThrownBy(() ->
-                httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL, "incorrect", "incorrect",
+                httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL, null, String.class)
+        ).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    public void successHttpGetRequestWithHeadersAndCredentials() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponse.getBody()).thenReturn("body");
+
+        httpResolverServiceImpl.setCredentials("correct", "correct");
+        Map<String, String> headersMap = new HashMap<String, String>() {{
+            put("Accept", MediaType.APPLICATION_JSON_VALUE);
+        }};
+        assertThat(httpResolverServiceImpl.sendGETRequestWithHeadersAndCredentials(GITHUB_STATUSES_URL,
+                headersMap, String.class), is("body"));
+    }
+
+    @Test
+    public void exceptionHttpGetRequestWithHeadersAndCredentials() {
+        when(mockResponse.getStatusCode()).thenReturn(HttpStatus.FORBIDDEN);
+
+        assertThatThrownBy(() ->
+                httpResolverServiceImpl.sendGETRequestWithHeadersAndCredentials(GITHUB_STATUSES_URL,
                         null, String.class)
         ).isInstanceOf(BusinessLogicException.class);
     }
