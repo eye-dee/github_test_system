@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
@@ -116,7 +117,9 @@ public class HttpResolverServiceTest {
         when(mockResponse.getBody()).thenReturn("body");
 
         httpResolverServiceImpl.setCredentials("correct", "correct");
-        Map<String, String> headersMap = Collections.singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE);
+        Map<String, String> headersMap = new HashMap<String, String>() {{
+            put("Accept", MediaType.APPLICATION_JSON_VALUE);
+        }};
         assertThat(httpResolverServiceImpl.sendGETRequestWithHeadersAndCredentials(GITHUB_STATUSES_URL,
                 headersMap, String.class), is("body"));
     }
