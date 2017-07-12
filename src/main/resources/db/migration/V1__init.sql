@@ -13,9 +13,3 @@ CREATE TABLE tasks (
   log           TEXT,
   pull_id       INT UNIQUE KEY
 );
-
-INSERT INTO users(email, .users.github_nick) VALUES('anton.nazarof@mail.ru', 'MortyMerr');
-INSERT INTO tasks(user_id, register_time, log, pull_id, successful) VALUES (1, NOW(), 'log', 2, TRUE);
-
-# Drop DATABASE testSystem;
-# CREATE DATABASE testSystem;
