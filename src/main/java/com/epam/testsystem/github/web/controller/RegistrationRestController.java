@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.web.controller;
 
+import com.epam.testsystem.github.service.mail.MailService;
 import com.epam.testsystem.github.service.user.UserService;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RegistrationRestController {
     private final UserService userService;
+    private final MailService mailService;
 
     @RequestMapping(value = "user", method = RequestMethod.POST)
     @Transactional
     public boolean register(@RequestBody final NewUserUI newUserUI) {
-        return successfulRegistration(newUserUI);
+        final boolean registration = successfulRegistration(newUserUI);
+
+        mailService.sendMessage(newUserUI.getEmail(),"","Registration",
+                "Your registration has done successful\n" +
+                        "email = " + newUserUI.getEmail() + "\n" +
+                        "password = " + newUserUI.getPassword() + "\n"
+        );
+
+        return registration;
     }
 
     private boolean successfulRegistration(NewUserUI newUserUI) {

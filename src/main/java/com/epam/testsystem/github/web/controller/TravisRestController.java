@@ -1,7 +1,6 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.service.travis.TravisParserService;
-import com.epam.testsystem.github.web.model.NewPullPayload;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +23,9 @@ public class TravisRestController {
     private final TravisParserService travisParserService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public boolean newPull(@RequestBody final NewPullPayload newPullPayload) {
+    public boolean newPull(@RequestBody final String payload) {
         LOGGER.info("Triggered by webhook");
 
-        return travisParserService.parse(newPullPayload.getPayload());
+        return travisParserService.parse(payload);
     }
 }
