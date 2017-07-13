@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.web;
+package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
