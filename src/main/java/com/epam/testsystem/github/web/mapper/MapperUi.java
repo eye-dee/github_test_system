@@ -16,10 +16,12 @@ import java.util.List;
  */
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface MapperUi {
 
     @Mapping(target = "startTime", source = "registerTime", dateFormat = TimeConstant.FORMAT)
     TaskUI mapTask(Task task);
+
+    List<TaskUI> mapTasks(List<Task> tasks);
 
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "githubNick",source = "user.githubNick")
