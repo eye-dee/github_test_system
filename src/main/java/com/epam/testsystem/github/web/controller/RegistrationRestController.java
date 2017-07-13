@@ -1,7 +1,9 @@
 package com.epam.testsystem.github.web.controller;
 
+import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.service.mail.MailService;
 import com.epam.testsystem.github.service.user.UserService;
+import com.epam.testsystem.github.util.MailInfo;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +28,14 @@ public class RegistrationRestController {
     @Transactional
     public boolean register(@RequestBody final NewUserUI newUserUI) {
         final boolean registration = successfulRegistration(newUserUI);
+        MailInfo mailInfo = MailInfo.builder()
+                .userName(newUserUI.getGithubNick())
+                .email(newUserUI.getEmail())
+                .password(newUserUI.getPassword())
+                .build();
 
-        mailService.sendMessage(newUserUI.getEmail(),"","Registration",
-                "Your registration has done successful\n" +
-                        "email = " + newUserUI.getEmail() + "\n" +
-                        "password = " + newUserUI.getPassword() + "\n"
-        );
+        mailService.sendMessage(newUserUI.getEmail(), "", "Registration",
+                EmailTemplateType.REGISTRATION_CONFIRMATION, mailInfo);
 
         return registration;
     }

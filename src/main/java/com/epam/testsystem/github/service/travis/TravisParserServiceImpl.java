@@ -2,9 +2,11 @@ package com.epam.testsystem.github.service.travis;
 
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.service.logs.TravisLogsResolver;
 import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.util.MailInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -58,17 +60,18 @@ public class TravisParserServiceImpl implements TravisParserService {
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
+                final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGithubNick()).build();
                 taskDao.addOrUpdate(userId, pullId, status, logs);
-                mailService.sendMessage(email,"", "Github TestSystem",
-                        "We are received your solution");
+                mailService.sendMessage(email, "", "Github TestSystem",
+                        EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
             } else {
                 LOGGER.info("add new user {} with email {}", githubNick, email);
                 final String password = generatePassword();
                 final User user = userDao.add(email, githubNick, password);
+                final MailInfo mailInfo = MailInfo.builder().userName(githubNick).password(password).build();
                 taskDao.addOrUpdate(user.getId(), pullId, status, logs);
-                mailService.sendMessage(email,"", "Github TestSystem",
-                        "You are not register yet on our system, but we get your solution" +
-                                " You can access by password " + password);
+                mailService.sendMessage(email, "", "Github TestSystem",
+                        EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
             }
 
             return true;

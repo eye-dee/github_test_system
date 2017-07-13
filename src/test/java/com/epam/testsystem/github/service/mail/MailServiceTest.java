@@ -1,6 +1,11 @@
 package com.epam.testsystem.github.service.mail;
 
+import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.exception.BusinessLogicException;
+import com.epam.testsystem.github.util.MailInfo;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,42 +37,64 @@ public class MailServiceTest {
 
     private MailService mailService;
     private JavaMailSender javaMailSender;
+    private Configuration freemarkerConfig;
 
     @Before
     public void setUp() {
         javaMailSender = mock(JavaMailSender.class);
-        mailService = new MailServiceImpl(javaMailSender);
+        freemarkerConfig = mock(Configuration.class);
+        mailService = new MailServiceImpl(javaMailSender, freemarkerConfig);
     }
 
     @Test(expected = BusinessLogicException.class)
-    public void failedToSendEmailWithGitHubTasksLinkAndNoRecipient() {
-        mailService.sendMessage("", null, "some test subject", "some test text");
+    public void failedToSendEmailWithTasksRepositoryLinkAndNoRecipient() {
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").build();
+        mailService.sendMessage("", null, "some test subject", EmailTemplateType.REPOSITORY_LINK, mailInfo);
     }
 
     @Test(expected = BusinessLogicException.class)
-    public void failedToSendEmailWithGitHubTasksLinkAndNoSubject() {
-        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, null, "some test text");
+    public void failedToSendEmailWithTasksRepositoryLinkAndNoSubject() {
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").build();
+        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, null, EmailTemplateType.REPOSITORY_LINK, mailInfo);
     }
 
     @Test(expected = BusinessLogicException.class)
-    public void failedToSendEmailWithGitHubTasksLinkAndNoTextBody() {
-        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", "             ");
+    public void failedToSendEmailWithTasksRepositoryLinkAndNoEmailTemplate() {
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").build();
+        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", null, mailInfo);
+    }
+
+    @Test(expected = BusinessLogicException.class)
+    public void failedToSendEmailWithTasksRepositoryLinkAndNoMailInfo() {
+        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", null, null);
     }
 
     @Test
+    @SneakyThrows
     public void sendMailWithoutException() {
         final MimeMessage mimeMessage = mock(MimeMessage.class);
+        final Template template = mock(Template.class);
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
+        when(freemarkerConfig.getTemplate(EmailTemplateType.REPOSITORY_LINK.getEmailTemplateByName())).thenReturn(template);
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").build();
 
-        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
+        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", EmailTemplateType.REPOSITORY_LINK, mailInfo);
 
         verify(javaMailSender, times(1)).send((MimeMessage) any());
     }
 
     @Test(expected = BusinessLogicException.class)
-    public void sendMailWithIncorrectEmailFormat() {
-        mailService.sendMessage(INCORRECT_EMAIL_RECIPIENT, null, "some subject", "Please follow the instructions below : ");
+    public void failedToSendMailWithIncorrectEmailFormat() {
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").email("email").password("password").build();
+
+        mailService.sendMessage(INCORRECT_EMAIL_RECIPIENT, null, "some subject", EmailTemplateType.REPOSITORY_LINK, mailInfo);
     }
 
+    @Test(expected = BusinessLogicException.class)
+    public void failedToSendMailWithLackOfMailInfo() {
+        final MailInfo mailInfo = MailInfo.builder().userName("userName").build();
+
+        mailService.sendMessage(CORRECT_EMAIL_RECIPIENT, null, "some subject", EmailTemplateType.REGISTRATION_CONFIRMATION, mailInfo);
+    }
 
 }
