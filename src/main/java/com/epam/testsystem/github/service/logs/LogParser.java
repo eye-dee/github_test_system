@@ -19,7 +19,7 @@ public class LogParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogParser.class);
 
     private List<String> getLineWith(final String log, final String word) {
-        Matcher            m       = Pattern.compile(String.format("(?m)%s.*", word)).matcher(log);
+        Matcher m = Pattern.compile(String.format("(?m)%s.*", word)).matcher(log);
         final List<String> founded = new ArrayList<>();
         while (m.find()) {
             founded.add(m.group(0));
@@ -33,9 +33,9 @@ public class LogParser {
     }
 
     public GradleLog getStructedLog(final String log) {
-        String[]  splitted    = log.split("\n");
+        String[] splitted = log.split("\n");
         GradleLog structedLog = new GradleLog();
-        String    lastCycle   = "";
+        String lastCycle = "";
 
         for (String aSplitted : splitted) {
             if (aSplitted.contains("git clone")) {

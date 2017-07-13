@@ -9,12 +9,7 @@ import java.util.Map;
 
 @Data
 public class GradleLog {
-    private Map<String, List<String>> cycles;
-    private List<String> clones;
+    private Map<String, List<String>> cycles = new HashMap<>();
+    private List<String> clones = new ArrayList<>();
     private String buildResult;
-
-    public GradleLog(){
-        cycles = new HashMap<>();
-        clones = new ArrayList<>();
-    }
 }

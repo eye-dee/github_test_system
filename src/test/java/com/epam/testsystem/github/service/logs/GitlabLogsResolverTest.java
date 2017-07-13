@@ -26,10 +26,10 @@ public class GitlabLogsResolverTest {
     @Test
     public void getLogs() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
-        final String excepcted = FileUtils.readFileToString(
+        final String expected = FileUtils.readFileToString(
                 new File(classLoader.getResource("test_log_failed").getFile()),
                 "UTF-8");
         final String logs = gitlabLogsResolver.getLogs(BUILD_ID);
-        assertEquals(logs, excepcted);
+        assertEquals(logs, expected);
     }
 }
