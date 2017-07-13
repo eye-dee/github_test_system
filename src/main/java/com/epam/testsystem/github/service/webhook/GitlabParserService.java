@@ -42,8 +42,8 @@ public class GitlabParserService implements WebhookParserService {
         try {
             final JsonNode pullPayloadJson = objectMapper.readTree(payload);
 
-            final String githubNick = pullPayloadJson.get("user").get("name").asText();
-            final String email = pullPayloadJson.get("user").get("email").asText();
+            final String githubNick = pullPayloadJson.get("commit").get("author_name").asText();
+            final String email = pullPayloadJson.get("commit").get("author_email").asText();
 
             final boolean status = pullPayloadJson.get("build_status").asText().equals("success");
             final long repoId = pullPayloadJson.get("project_id").asLong();
@@ -53,7 +53,7 @@ public class GitlabParserService implements WebhookParserService {
                     githubNick, email, status, repoId, buildId
             );
 
-            LOGGER.info("try to get logs from travis");
+            LOGGER.info("try to get logs from gitlab");
             final String logs = gitlabLogsResolver.getLogs(buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
