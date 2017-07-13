@@ -22,11 +22,13 @@ import java.nio.charset.Charset;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
- * Created by antonnazarov on 13.07.17.
+ * github_test
+ * Create on 13.07.17.
  */
 
 @RunWith(SpringRunner.class)
@@ -65,12 +67,15 @@ public class RepoRestControllerTest {
         mockMvc.perform(get("/repo/" + repo1.getId())
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].log", is(task1.getLog())))
-                .andExpect(jsonPath("$[1].log", is(task2.getLog())));
+                .andExpect(jsonPath("$[0].successful", is(task1.isSuccessful())))
+                .andExpect(jsonPath("$[1].successful", is(task2.isSuccessful())))
+                .andExpect(jsonPath("$[0].log", notNullValue()))
+                .andExpect(jsonPath("$[1].log", notNullValue()));
 
         mockMvc.perform(get("/repo/" + repo2.getId())
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].log", is(task3.getLog())));
+                .andExpect(jsonPath("$[0].successful", is(task3.isSuccessful())))
+                .andExpect(jsonPath("$[0].log", notNullValue()));
     }
 }

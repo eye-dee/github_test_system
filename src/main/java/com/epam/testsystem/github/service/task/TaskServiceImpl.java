@@ -53,7 +53,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
+    public List<Task> findAllByUserIdRepoId(final long userId, final long repoId) {
+        return taskDao.findAllByUserIdRepoId(userId, repoId);
+    }
+
+    @Override
+    @Transactional
     public boolean setResultById(long userId, long id, boolean successful, String log) {
+        LOGGER.info("Set result for user {} and id {}", userId, id);
         return taskDao.setResultById(userId, id, successful, log);
     }
+
 }
