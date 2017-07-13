@@ -54,7 +54,7 @@ public class TravisParserService implements WebhookParserService {
             );
 
             LOGGER.info("try to get logs from travis");
-            final String logs = travisLogsResolver.getLogs(buildId);
+            final String logs = travisLogsResolver.getLogs(githubNick, buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
 

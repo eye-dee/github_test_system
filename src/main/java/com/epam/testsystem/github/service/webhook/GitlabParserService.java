@@ -54,7 +54,7 @@ public class GitlabParserService implements WebhookParserService {
             );
 
             LOGGER.info("try to get logs from gitlab");
-            final String logs = gitlabLogsResolver.getLogs(buildId);
+            final String logs = gitlabLogsResolver.getLogs(githubNick, buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
 

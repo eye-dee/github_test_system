@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TravisLogsResolver implements LogResolver{
+public class TravisLogsResolver implements LogResolver {
     private static final String REQUEST = "https://api.travis-ci.org/jobs/" +
             "%d/" + //<- job_id (calculate as build_id + 1)
             "log";
     private final HttpResolverService httpResolverService;
 
-    public String getLogs(final long buildId) {
+    public String getLogs(final String user, final long buildId) {
         return httpResolverService.sendGETRequest(String.format(REQUEST, buildId + 1), String.class);
     }
 }
