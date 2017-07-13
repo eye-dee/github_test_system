@@ -98,6 +98,29 @@ public class TaskDaoTest {
 
     @Test
     @Transactional
+    public void findAllByUserIdRepoId() {
+        final User user1 = testUtil.makeUser();
+        final User user2 = testUtil.makeUser();
+        final Repo repo1 = testUtil.addRepo();
+        final Repo repo2 = testUtil.addRepo();
+        taskDao.addOrUpdate(user1.getId(), repo1.getId(), false, "");
+        taskDao.addOrUpdate(user1.getId(), repo1.getId(), false, "");
+
+        taskDao.addOrUpdate(user1.getId(), repo2.getId(), false, "");
+
+        taskDao.addOrUpdate(user2.getId(), repo1.getId(), false, "");
+
+        assertThat(taskDao.findAllByUserIdRepoId(user1.getId(), repo1.getId())).hasSize(2);
+
+        assertThat(taskDao.findAllByUserIdRepoId(user1.getId(), repo2.getId())).hasSize(1);
+
+        assertThat(taskDao.findAllByUserIdRepoId(user2.getId(), repo1.getId())).hasSize(1);
+
+        assertThat(taskDao.findAllByUserIdRepoId(user2.getId(), repo2.getId())).hasSize(0);
+    }
+
+    @Test
+    @Transactional
     public void setResultByIdNotExists() throws Exception {
         assertThat(taskDao.setResultById(0, 0, false, "")).isFalse();
     }
