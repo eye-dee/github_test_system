@@ -57,6 +57,14 @@ public class TaskDao {
         );
     }
 
+    public List<Task> findAllByUserIdRepoId(final long userId, final long repoId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?",
+                new Object[]{userId, repoId},
+                TASK_ROW_MAPPER
+        );
+    }
+
     public boolean setResultById(final long userId,
                                  final long id,
                                  final boolean successful,

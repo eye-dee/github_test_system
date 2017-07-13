@@ -27,9 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles(SPRING_PROFILE_TEST)
-public class UserMapperTest {
+public class MapperUiTest {
     @Autowired
-    private UserMapper userMapper;
+    private MapperUi mapperUi;
 
     private static Task buildSomeTask() {
         return Task.builder().id(1).userId(2)
@@ -47,7 +47,7 @@ public class UserMapperTest {
     public void mapTask() throws Exception {
         final Task task = buildSomeTask();
 
-        assertThat(userMapper.mapTask(task))
+        assertThat(mapperUi.mapTask(task))
                 .satisfies(
                         t -> {
                             assertThat(t.isSuccessful()).isEqualTo(task.isSuccessful());
@@ -61,7 +61,7 @@ public class UserMapperTest {
         final UserWithTasks userWithTasks = buildSomeUserWithTasks();
         final User user = userWithTasks.getUser();
 
-        assertThat(userMapper.mapUser(userWithTasks))
+        assertThat(mapperUi.mapUser(userWithTasks))
                 .satisfies(
                         userUI -> {
                             assertThat(userUI.getEmail()).isEqualTo(user.getEmail());
@@ -75,7 +75,7 @@ public class UserMapperTest {
     public void mapUsers() {
         final List<UserWithTasks> userWithTasksList = Arrays.asList(buildSomeUserWithTasks(), buildSomeUserWithTasks());
 
-        assertThat(userMapper.mapUsers(userWithTasksList))
+        assertThat(mapperUi.mapUsers(userWithTasksList))
                 .hasSize(2);
     }
 }
