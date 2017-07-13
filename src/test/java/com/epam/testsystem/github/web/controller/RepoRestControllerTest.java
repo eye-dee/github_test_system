@@ -62,7 +62,7 @@ public class RepoRestControllerTest {
         final Task task3 = testUtil.addTask(user.getId(), repo2.getId(), false, "log3");
 
 
-        mockMvc.perform(get("/repo/%d" + repo1.getId())
+        mockMvc.perform(get("/repo/" + repo1.getId())
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].log", is(task1.getLog())))
