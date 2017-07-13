@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service.logs;
+package com.epam.testsystem.github.service.log;
 
 import com.epam.testsystem.github.service.http.HttpResolverService;
 import lombok.RequiredArgsConstructor;

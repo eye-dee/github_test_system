@@ -1,5 +1,6 @@
-package com.epam.testsystem.github.service.logs;
+package com.epam.testsystem.github.service.log;
 
+import com.epam.testsystem.github.service.log.GitlabLogsResolver;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

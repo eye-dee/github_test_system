@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.service.travis;
 
 
-import com.epam.testsystem.github.service.logs.TravisLogsResolver;
+import com.epam.testsystem.github.service.log.TravisLogsResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

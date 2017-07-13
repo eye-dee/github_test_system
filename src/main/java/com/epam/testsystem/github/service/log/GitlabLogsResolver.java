@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service.logs;
+package com.epam.testsystem.github.service.log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
