@@ -30,7 +30,7 @@ public class GitlabLogsResolverTest {
                 new File(classLoader.getResource("test_log_failed").getFile()),
                 "UTF-8");
 
-        final String logs = gitlabLogsResolver.getLogs(BUILD_ID);
+        final String logs = gitlabLogsResolver.getLogs("Igor_Drozdov1", BUILD_ID);
         assertEquals(logs, expected.replace("\r", ""));
     }
 }
