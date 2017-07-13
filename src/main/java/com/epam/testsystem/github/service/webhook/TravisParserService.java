@@ -61,7 +61,7 @@ public class TravisParserService implements WebhookParserService {
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
                 final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGithubNick()).build();
-                taskDao.addOrUpdate(userId, pullId, status, logs);
+                taskDao.addOrUpdate(userId, repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
             } else {
@@ -69,7 +69,7 @@ public class TravisParserService implements WebhookParserService {
                 final String password = generatePassword();
                 final User user = userDao.add(email, githubNick, password);
                 final MailInfo mailInfo = MailInfo.builder().userName(githubNick).password(password).build();
-                taskDao.addOrUpdate(user.getId(), pullId, status, logs);
+                taskDao.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
             }

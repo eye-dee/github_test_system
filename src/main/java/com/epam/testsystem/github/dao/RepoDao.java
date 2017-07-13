@@ -31,12 +31,10 @@ public class RepoDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public Repo add(final String name, final String owner) {
+    public Repo add(final long id, final String name, final String owner) {
         jdbcTemplate.update(
-                "INSERT INTO repos(name, owner) VALUES(?, ?)",
-                name, owner);
-
-        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+                "INSERT INTO repos(id, name, owner) VALUES(?, ?, ?)",
+                id, name, owner);
 
         return Repo.builder()
                 .id(id)

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 
@@ -25,14 +26,17 @@ import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST
 @Profile(value = SPRING_PROFILE_TEST)
 @RequiredArgsConstructor
 public class TestUtil {
-    private static final SecureRandom random = new SecureRandom();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final Random RANDOM = new Random();
     private final UserDao userDao;
     private final TaskDao taskDao;
     private final RepoDao repoDao;
     private User mainUser = null;
 
+    private long defaultRepoId;
+
     public static String generateString() {
-        return new BigInteger(130, random).toString(32);
+        return new BigInteger(130, SECURE_RANDOM).toString(32);
     }
 
     @Transactional
@@ -53,19 +57,19 @@ public class TestUtil {
     }
 
     public Repo addRepo() {
-        return repoDao.add(generateString(),generateString());
+        return repoDao.add(RANDOM.nextInt(), generateString(), generateString());
     }
 
     public Repo addRepo(final String name, final String owner) {
-        return repoDao.add(name, owner);
+        return repoDao.add(RANDOM.nextInt(), name, owner);
     }
 
     public Task addTask(final long userId) {
-        return taskDao.addOrUpdate(userId, false, "log");
+        return taskDao.addOrUpdate(userId, ++defaultRepoId, false, "log");
     }
 
-    public Task addTask(final long userId, final boolean successful, final String log) {
-        return taskDao.addOrUpdate(userId, successful, log);
+    public Task addTask(final long userId, final long repoId, final boolean successful, final String log) {
+        return taskDao.addOrUpdate(userId, repoId, successful, log);
     }
 
     public User getMainUser() {

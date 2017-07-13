@@ -93,5 +93,14 @@ public class WebhookRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newPullJson))
                 .andExpect(status().isOk());
+
+        final Optional<User> userOptional = userDao.findByEmail("user@gitlab.com");
+        assertThat(userOptional).isPresent();
+
+        assertThat(jdbcTemplate.queryForObject(
+                "Select COUNT(*) FROM  tasks WHERE user_id = ?",
+                new Object[]{userOptional.get().getId()},
+                Integer.class
+        )).isEqualTo(1);
     }
 }

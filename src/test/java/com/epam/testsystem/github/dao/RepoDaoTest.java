@@ -31,13 +31,14 @@ public class RepoDaoTest {
     @Test
     @Transactional
     public void add() throws Exception {
+        int id = 1;
         final String name = "name";
         final String owner = "owner";
 
-        assertThat(repoDao.add(name, owner))
+        assertThat(repoDao.add(id, name, owner))
                 .satisfies(
                         repo -> {
-                            assertThat(repo.getId()).isGreaterThan(0);
+                            assertThat(repo.getId()).isEqualTo(id);
                             assertThat(repo.getName()).isEqualTo(name);
                             assertThat(repo.getOwner()).isEqualTo(owner);
                         }

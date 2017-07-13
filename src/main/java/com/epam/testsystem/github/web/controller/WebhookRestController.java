@@ -21,6 +21,7 @@ public class WebhookRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhookRestController.class);
 
     private final WebhookParserService travisParserService;
+    private final WebhookParserService gitlabParserService;
 
 
     @RequestMapping(value = "travisci", method = RequestMethod.POST)
@@ -34,6 +35,6 @@ public class WebhookRestController {
     public boolean newPullGitlab(@RequestBody final String payload) {
         LOGGER.info("Triggered webhook from gitlab");
 
-        return true;
+        return gitlabParserService.parse(payload);
     }
 }
