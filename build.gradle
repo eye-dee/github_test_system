@@ -40,6 +40,7 @@ dependencies {
     //Java improvement
     //Mapstruct + lombok
     compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     apt "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
@@ -51,7 +52,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-starter-aop',
             'org.springframework.boot:spring-boot-starter-jdbc',
-            'org.springframework.boot:spring-boot-starter-mail'
+            'org.springframework.boot:spring-boot-starter-mail',
+            'org.springframework.boot:spring-boot-starter-freemarker'
 
     /*Swagger-ui*/
     compile "io.springfox:springfox-swagger2:2.0.2",
