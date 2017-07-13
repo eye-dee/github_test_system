@@ -1,6 +1,6 @@
 package com.epam.testsystem.github.web.controller;
 
-import com.epam.testsystem.github.service.travis.TravisParserService;
+import com.epam.testsystem.github.service.webhook.WebhookParserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebhookRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhookRestController.class);
 
-    private final TravisParserService travisParserService;
+    private final WebhookParserService travisParserService;
 
 
     @RequestMapping(value = "travisci", method = RequestMethod.POST)

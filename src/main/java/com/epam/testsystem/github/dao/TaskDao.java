@@ -24,16 +24,16 @@ public class TaskDao {
     private final JdbcTemplate jdbcTemplate;
 
     public Task addOrUpdate(final long userId,
-                            final long pullId,
+                            final long repoId,
                             final boolean successful,
                             final String log) {
         final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
-                "INSERT INTO tasks(user_id, register_time, pull_id, successful, log) " +
+                "INSERT INTO tasks(user_id, repo_id, register_time, successful, log) " +
                         "VALUES(?, ?, ?, ?, ?) " +
                         "ON DUPLICATE KEY UPDATE " +
                         "id = LAST_INSERT_ID(id), successful = ?, log = ?",
-                userId, registerTime, pullId, successful, log,
+                userId, repoId, registerTime, successful, log,
                 successful, log);
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
@@ -43,8 +43,8 @@ public class TaskDao {
                 .userId(userId)
                 .registerTime(registerTime)
                 .successful(false)
+                .repoId(repoId)
                 .log(log)
-                .pullId(pullId)
                 .build();
     }
 

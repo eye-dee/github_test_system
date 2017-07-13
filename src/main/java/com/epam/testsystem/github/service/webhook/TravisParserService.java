@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service.travis;
+package com.epam.testsystem.github.service.webhook;
 
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
@@ -25,8 +25,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TravisParserServiceImpl implements TravisParserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TravisParserService.class);
+public class TravisParserService implements WebhookParserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebhookParserService.class);
     private static final SecureRandom RANDOM = new SecureRandom();
     private final TravisLogsResolver travisLogsResolver;
     private final TaskDao taskDao;
@@ -44,11 +44,11 @@ public class TravisParserServiceImpl implements TravisParserService {
             final String email = pullPayloadJson.get("author_email").asText();
 
             final boolean status = pullPayloadJson.get("status").asInt() == 0;
-            final long pullId = pullPayloadJson.get("pull_request_number").asLong();
+            final long repoId = pullPayloadJson.get("repository").get("id").asLong();
             final long buildId = pullPayloadJson.get("id").asLong();
 
             LOGGER.info("user {} with email {} has status {} in pull request number {} with build id {}",
-                    githubNick, email, status, pullId, buildId
+                    githubNick, email, status, repoId, buildId
             );
 
             LOGGER.info("try to get logs from travis");
@@ -58,14 +58,14 @@ public class TravisParserServiceImpl implements TravisParserService {
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
-                taskDao.addOrUpdate(userId, pullId, status, logs);
+                taskDao.addOrUpdate(userId, repoId, status, logs);
                 mailService.sendMessage(email,"", "Github TestSystem",
                         "We are received your solution");
             } else {
                 LOGGER.info("add new user {} with email {}", githubNick, email);
                 final String password = generatePassword();
                 final User user = userDao.add(email, githubNick, password);
-                taskDao.addOrUpdate(user.getId(), pullId, status, logs);
+                taskDao.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email,"", "Github TestSystem",
                         "You are not register yet on our system, but we get your solution" +
                                 " You can access by password " + password);

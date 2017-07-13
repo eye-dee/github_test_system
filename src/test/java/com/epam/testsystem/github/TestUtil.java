@@ -29,7 +29,6 @@ public class TestUtil {
     private final UserDao userDao;
     private final TaskDao taskDao;
     private final RepoDao repoDao;
-    private long defaultPullId;
     private User mainUser = null;
 
     public static String generateString() {
@@ -62,11 +61,11 @@ public class TestUtil {
     }
 
     public Task addTask(final long userId) {
-        return taskDao.addOrUpdate(userId, defaultPullId++, false, "log");
+        return taskDao.addOrUpdate(userId, false, "log");
     }
 
-    public Task addTask(final long userId, final long pullId, final boolean successful, final String log) {
-        return taskDao.addOrUpdate(userId, pullId, successful, log);
+    public Task addTask(final long userId, final boolean successful, final String log) {
+        return taskDao.addOrUpdate(userId, successful, log);
     }
 
     public User getMainUser() {

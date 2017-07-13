@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class Task {
     private long id;
     private long userId;
+    private long repoId;
     private LocalDateTime registerTime;
     private boolean successful;
     private String log;
-    private long pullId;
 }

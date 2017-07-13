@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE repos (
-  id    INT PRIMARY KEY AUTO_INCREMENT,
+  id    INT PRIMARY KEY,
   name  VARCHAR(100) NOT NULL,
   owner VARCHAR(100) NOT NULL
 );
@@ -15,8 +15,8 @@ CREATE TABLE repos (
 CREATE TABLE tasks (
   id            INT PRIMARY KEY AUTO_INCREMENT,
   user_id       INT REFERENCES users (id),
+  repo_id       INT REFERENCES repos (id),
   register_time TIMESTAMP,
   successful    BOOL            DEFAULT FALSE,
-  log           TEXT,
-  pull_id       INT UNIQUE KEY
+  log           TEXT
 );
