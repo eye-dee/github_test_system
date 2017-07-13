@@ -18,5 +18,5 @@ public class Task {
     private long repoId;
     private LocalDateTime registerTime;
     private boolean successful;
-    private String log;
+    private GradleLog log;
 }

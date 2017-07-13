@@ -11,5 +11,5 @@ import java.util.Map;
 public class GradleLog {
     private Map<String, List<String>> cycles = new HashMap<>();
     private List<String> clones = new ArrayList<>();
-    private String buildResult;
+    private String buildResult = "";
 }

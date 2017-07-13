@@ -1,11 +1,11 @@
 package com.epam.testsystem.github.service.webhook;
 
-import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.service.log.LogResolver;
 import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.service.task.TaskService;
 import com.epam.testsystem.github.util.MailInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +31,7 @@ public class GitlabParserService implements WebhookParserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhookParserService.class);
     private static final SecureRandom RANDOM = new SecureRandom();
     private final LogResolver gitlabLogsResolver;
-    private final TaskDao taskDao;
+    private final TaskService taskService;
     private final UserDao userDao;
     private final MailService mailService;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -61,7 +61,7 @@ public class GitlabParserService implements WebhookParserService {
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
                 final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGithubNick()).build();
-                taskDao.addOrUpdate(userId, repoId, status, logs);
+                taskService.addOrUpdate(userId, repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
             } else {
@@ -69,7 +69,7 @@ public class GitlabParserService implements WebhookParserService {
                 final String password = generatePassword();
                 final User user = userDao.add(email, githubNick, password);
                 final MailInfo mailInfo = MailInfo.builder().userName(githubNick).password(password).build();
-                taskDao.addOrUpdate(user.getId(), repoId, status, logs);
+                taskService.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
             }

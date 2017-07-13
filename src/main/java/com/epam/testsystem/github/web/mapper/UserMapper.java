@@ -17,7 +17,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-
     @Mapping(target = "startTime", source = "registerTime", dateFormat = TimeConstant.FORMAT)
     TaskUI mapTask(Task task);
 
