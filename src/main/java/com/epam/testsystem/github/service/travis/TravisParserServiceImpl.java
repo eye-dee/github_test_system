@@ -3,6 +3,7 @@ package com.epam.testsystem.github.service.travis;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.logs.TravisLogsResolver;
 import com.epam.testsystem.github.service.mail.MailService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,12 +28,11 @@ import java.util.Optional;
 public class TravisParserServiceImpl implements TravisParserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TravisParserService.class);
     private static final SecureRandom RANDOM = new SecureRandom();
-
-    private ObjectMapper objectMapper = new ObjectMapper();
     private final TravisLogsResolver travisLogsResolver;
     private final TaskDao taskDao;
     private final UserDao userDao;
     private final MailService mailService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     @Transactional
