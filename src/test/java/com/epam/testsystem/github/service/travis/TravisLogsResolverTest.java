@@ -24,7 +24,7 @@ public class TravisLogsResolverTest {
 
     @Test
     public void getBuildLog() {
-        final String logs = travisLogsResolver.getLogs(BUILD_ID);
+        final String logs = travisLogsResolver.getLogs("", BUILD_ID);
         assertThat(logs.substring(0, 15))
                 .isEqualTo("travis_fold:start:worker_info".substring(0, 15));
         assertThat(logs.indexOf("The command \"./gradlew build\" exited with 1."))

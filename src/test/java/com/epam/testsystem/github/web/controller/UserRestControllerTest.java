@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.web;
+package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.model.Task;

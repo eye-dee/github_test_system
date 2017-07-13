@@ -6,13 +6,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 /**
- * Created by antonnazarov on 12.07.17.
+ * github_test
+ * Create on 12.07.17.
  */
 
 @Service
 public class LogParser {
     public GradleLog getStructedLog(final String log) {
-        String[] splitted = log.split("\n");
+        String[] splitted = log.replace("\r","").split("\n");
         GradleLog structedLog = new GradleLog();
         String lastCycle = "";
 

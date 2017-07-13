@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.service.travis;
 
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.service.webhook.WebhookParserService;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class TravisParserServiceTest {
     private static final String AUTHOR_EMAIL = "daniel.buch@gmail.com";
 
     @Autowired
-    private TravisParserService travisParserService;
+    private WebhookParserService travisParserService;
 
     @Autowired
     private UserDao userDao;

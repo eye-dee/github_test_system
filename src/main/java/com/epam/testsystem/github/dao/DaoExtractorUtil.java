@@ -34,10 +34,10 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
             Task.builder()
                     .id(rs.getLong("tasks.id"))
                     .userId(rs.getLong("tasks.user_id"))
+                    .repoId(rs.getLong("tasks.repo_id"))
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
                     .successful(rs.getBoolean("tasks.successful"))
                     .log(rs.getString("tasks.log"))
-                    .pullId(rs.getLong("tasks.pull_id"))
                     .build();
 
     @Override

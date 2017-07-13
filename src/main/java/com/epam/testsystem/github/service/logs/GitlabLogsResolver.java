@@ -16,19 +16,21 @@ import java.io.IOException;
  */
 
 @Service
-public class GitlabLogsResolver implements LogResolver{
+public class GitlabLogsResolver implements LogResolver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitlabLogsResolver.class);
     private final String url =
-            "https://git.epam.com/Igor_Drozdov1/gitlab-test-system/builds/" +
+            "https://git.epam.com/" +
+                    "%s" + //<- user
+                    "/gitlab-test-system/builds/" +
                     "%d/" + //<- build_id
                     "?private_token=%s";
     @Value("${gitlab.private_token}")
     private String privateToken;
 
-    public String getLogs(final long buildId) {
+    public String getLogs(final String user, final long buildId) {
         try {
-            final Document doc    = Jsoup.connect(String.format(url, buildId, privateToken)).get();
+            final Document doc = Jsoup.connect(String.format(url, user, buildId, privateToken)).get();
             final Elements select = doc.select("pre.trace");
             return select.text();
         } catch (IOException e) {

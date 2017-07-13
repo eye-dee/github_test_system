@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service.travis;
+package com.epam.testsystem.github.service.webhook;
 
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
@@ -27,8 +27,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TravisParserServiceImpl implements TravisParserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TravisParserService.class);
+public class TravisParserService implements WebhookParserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebhookParserService.class);
     private static final SecureRandom RANDOM = new SecureRandom();
     private final TravisLogsResolver travisLogsResolver;
     private final TaskDao taskDao;
@@ -46,22 +46,22 @@ public class TravisParserServiceImpl implements TravisParserService {
             final String email = pullPayloadJson.get("author_email").asText();
 
             final boolean status = pullPayloadJson.get("status").asInt() == 0;
-            final long pullId = pullPayloadJson.get("pull_request_number").asLong();
+            final long repoId = pullPayloadJson.get("repository").get("id").asLong();
             final long buildId = pullPayloadJson.get("id").asLong();
 
             LOGGER.info("user {} with email {} has status {} in pull request number {} with build id {}",
-                    githubNick, email, status, pullId, buildId
+                    githubNick, email, status, repoId, buildId
             );
 
             LOGGER.info("try to get logs from travis");
-            final String logs = travisLogsResolver.getLogs(buildId);
+            final String logs = travisLogsResolver.getLogs(githubNick, buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
                 final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGithubNick()).build();
-                taskDao.addOrUpdate(userId, pullId, status, logs);
+                taskDao.addOrUpdate(userId, repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
             } else {
@@ -69,7 +69,7 @@ public class TravisParserServiceImpl implements TravisParserService {
                 final String password = generatePassword();
                 final User user = userDao.add(email, githubNick, password);
                 final MailInfo mailInfo = MailInfo.builder().userName(githubNick).password(password).build();
-                taskDao.addOrUpdate(user.getId(), pullId, status, logs);
+                taskDao.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
             }

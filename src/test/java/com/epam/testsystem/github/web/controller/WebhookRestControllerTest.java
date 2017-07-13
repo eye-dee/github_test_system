@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.web;
+package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles(SPRING_PROFILE_TEST)
-public class TravisRestControllerTest {
+public class WebhookRestControllerTest {
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -62,11 +62,11 @@ public class TravisRestControllerTest {
 
     @Test
     @Transactional
-    public void newPull() throws Exception {
+    public void newPullTravis() throws Exception {
         final String newPullJson = FileUtils.readFileToString(
                 new File("src/test/resources/travis_payload.json"), "UTF-8");
 
-        mockMvc.perform(post("/travisci")
+        mockMvc.perform(post("/webhook/travisci")
                 .accept(contentType)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newPullJson))
@@ -82,4 +82,25 @@ public class TravisRestControllerTest {
         )).isEqualTo(1);
     }
 
+    @Test
+    @Transactional
+    public void newPullGitlab() throws Exception {
+        final String newPullJson = FileUtils.readFileToString(
+                new File("src/test/resources/gitlab_payload.json"), "UTF-8");
+
+        mockMvc.perform(post("/webhook/gitlabci")
+                .accept(contentType)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newPullJson))
+                .andExpect(status().isOk());
+
+        final Optional<User> userOptional = userDao.findByEmail("user@gitlab.com");
+        assertThat(userOptional).isPresent();
+
+        assertThat(jdbcTemplate.queryForObject(
+                "Select COUNT(*) FROM  tasks WHERE user_id = ?",
+                new Object[]{userOptional.get().getId()},
+                Integer.class
+        )).isEqualTo(1);
+    }
 }

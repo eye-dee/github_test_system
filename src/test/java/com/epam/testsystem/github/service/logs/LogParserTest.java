@@ -11,12 +11,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,13 +37,16 @@ public class LogParserTest {
         final String test_log = readRsFile("test_log_failed");
 
         final GradleLog parsedLog = logParser.getStructedLog(test_log);
-        assertEquals(parsedLog.getClones(),
-                Collections.singletonList("$ git clone https://gitlab.com/MortyMerr/private_tests.git $TEST_DIR/tests"));
+
+        assertThat(parsedLog.getClones())
+            .allMatch(str -> str.startsWith("$ git clone https://gitlab.com/MortyMerr/private_tests.git $TEST_DIR/tests"));
+
         final Map<String, List<String>> cycles = parsedLog.getCycles();
-        assert(cycles.get("jar").isEmpty());
-        assert(cycles.get("classes").isEmpty());
-        assertEquals(parsedLog.getBuildResult(), "BUILD FAILED");
-        assert(cycles.get("test").get(1).contains("findMax FAILED"));
+        assertThat(cycles.get("jar")).hasSize(0);
+        assertThat(cycles.get("classes")).hasSize(0);
+
+        assertThat(parsedLog.getBuildResult()).startsWith("BUILD FAILED");
+        assertThat(cycles.get("test").get(1).contains("findMax FAILED")).isTrue();
     }
 
     @Test
@@ -52,7 +54,7 @@ public class LogParserTest {
         final String test_log = readRsFile("test_log_success");
 
         final GradleLog parsedLog = logParser.getStructedLog(test_log);
-        assertEquals(parsedLog.getBuildResult(), "BUILD SUCCESSFUL");
-        assert(parsedLog.getCycles().get("test").isEmpty());
+        assertThat(parsedLog.getBuildResult()).startsWith("BUILD SUCCESSFUL");
+        assertThat(parsedLog.getCycles().get("test")).isEmpty();
     }
 }
