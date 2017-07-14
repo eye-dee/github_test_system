@@ -36,11 +36,10 @@ $("#getAll").click(() => {
         }
     })
 });
-
 function setTable(data) {
     $("#example-table").tabulator({
         rowClick: function (e, id, dataa, row) {
-            $("#log").text(JSON.stringify(dataa.log.cycles, null, ' '));
+            $("#log").text(JSON.stringify(dataa.log, null, ' '));
         },
         fitColumns: true,
         movableCols: true,
