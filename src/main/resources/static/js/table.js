@@ -36,11 +36,6 @@ $("#getAll").click(() => {
         }
     })
 });
-
-var printIcon = function (cell, formatterParams) { //plain text value
-    return "<i>penis</i>";
-};
-
 function setTable(data) {
     $("#example-table").tabulator({
         rowClick: function (e, id, dataa, row) {
@@ -51,11 +46,6 @@ function setTable(data) {
         movableRows: true,
         tooltips: true,
         columns: [
-            {
-                formatter: printIcon, width: 40, align: "center", cellClick: function (e, cell) {
-                alert("Printing row data for")
-            }
-            },
             {title: "Email", field: "email", sorter: "string"},
             {title: "Git", field: "git", sorter: "string"},
             {title: "Start time", field: "time", width: 130, sorter: "date", align: "center"},
