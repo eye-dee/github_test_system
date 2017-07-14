@@ -4,7 +4,7 @@ import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.service.log.LogResolver;
-import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.service.notification.mail.MailService;
 import com.epam.testsystem.github.service.task.TaskService;
 import com.epam.testsystem.github.util.MailInfo;
 import com.fasterxml.jackson.databind.JsonNode;

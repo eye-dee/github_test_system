@@ -93,4 +93,6 @@ dependencies {
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
 
+    //VK SDK
+    compile 'com.vk.api:sdk:0.5.6'
 }

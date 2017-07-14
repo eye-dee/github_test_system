@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.enums.EmailTemplateType;
-import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.service.notification.mail.MailService;
 import com.epam.testsystem.github.service.user.UserService;
 import com.epam.testsystem.github.util.MailInfo;
 import com.epam.testsystem.github.web.model.NewUserUI;

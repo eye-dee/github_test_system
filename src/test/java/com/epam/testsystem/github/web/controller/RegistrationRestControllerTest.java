@@ -2,7 +2,7 @@ package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
-import com.epam.testsystem.github.service.mail.MailService;
+import com.epam.testsystem.github.service.notification.mail.MailService;
 import com.epam.testsystem.github.web.model.NewUserUI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;

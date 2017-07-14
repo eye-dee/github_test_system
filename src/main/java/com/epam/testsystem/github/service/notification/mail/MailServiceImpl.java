@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service.mail;
+package com.epam.testsystem.github.service.notification.mail;
 
 import com.epam.testsystem.github.enums.EmailTemplateType;
 import com.epam.testsystem.github.exception.BusinessLogicException;
