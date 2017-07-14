@@ -18,5 +18,5 @@ CREATE TABLE tasks (
   repo_id       INT REFERENCES repos (id),
   register_time TIMESTAMP,
   successful    BOOL            DEFAULT FALSE,
-  log           TEXT
+  log           JSON
 );

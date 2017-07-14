@@ -57,6 +57,17 @@ public class TaskDao {
         );
     }
 
+    public List<Task> findAllByUserId(final long userId, final String cycleName) {
+        return jdbcTemplate.query(
+                "SELECT id, user_id, repo_id, register_time, successful, log->'$." +
+                        cycleName +
+                        "' AS 'tasks.log'" +
+                        " FROM tasks WHERE user_id = ?",
+                new Object[]{userId},
+                TASK_ROW_MAPPER
+        );
+    }
+
     public List<Task> findAllByUserIdRepoId(final long userId, final long repoId) {
         return jdbcTemplate.query(
                 "SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?",
