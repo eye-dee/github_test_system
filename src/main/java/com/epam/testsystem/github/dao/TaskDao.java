@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
+import static com.epam.testsystem.github.dao.DaoExtractorUtil.getGradleLog;
 
 /**
  * github_test
@@ -44,7 +45,7 @@ public class TaskDao {
                 .registerTime(registerTime)
                 .successful(false)
                 .repoId(repoId)
-                .log(log)
+                .log(getGradleLog(log))
                 .build();
     }
 

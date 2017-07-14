@@ -3,6 +3,8 @@ package com.epam.testsystem.github.web.controller;
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import java.nio.charset.Charset;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -34,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class UserRestControllerTest {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -64,8 +68,8 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$[0].email", is(user.getEmail())))
                 .andExpect(jsonPath("$[0].githubNick", is(user.getGithubNick())))
                 .andExpect(jsonPath("$[0].tasks[0].successful", is(task1.isSuccessful())))
-                .andExpect(jsonPath("$[0].tasks[0].log", is(task1.getLog())))
+                .andExpect(jsonPath("$[0].tasks[0].log", notNullValue()))
                 .andExpect(jsonPath("$[0].tasks[1].successful", is(task2.isSuccessful())))
-                .andExpect(jsonPath("$[0].tasks[1].log", is(task1.getLog())));
+                .andExpect(jsonPath("$[0].tasks[1].log", notNullValue()));
     }
 }

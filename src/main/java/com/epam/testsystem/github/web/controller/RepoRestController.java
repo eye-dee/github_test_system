@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.web.controller;
 
-import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.task.TaskService;
 import com.epam.testsystem.github.service.user.UserService;
 import com.epam.testsystem.github.web.mapper.MapperUi;
 import com.epam.testsystem.github.web.model.TaskUI;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RepoRestController {
     private final UserService userService;
-    private final TaskDao taskDao;
+    private final TaskService taskService;
     private final MapperUi mapperUi;
 
     @RequestMapping(value = "{repoId}", method = RequestMethod.GET)
@@ -33,6 +33,6 @@ public class RepoRestController {
         if (currentUser == null) {
             return new ArrayList<>();
         }
-        return mapperUi.mapTasks(taskDao.findAllByUserIdRepoId(currentUser.getId(), repoId));
+        return mapperUi.mapTasks(taskService.findAllByUserIdRepoId(currentUser.getId(), repoId));
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.model.GradleLog;
 import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
@@ -46,7 +47,7 @@ public class TaskDaoTest {
                             assertThat(task.getId()).isGreaterThan(0);
                             assertThat(task.getRegisterTime()).isBeforeOrEqualTo(LocalDateTime.now());
                             assertThat(task.getUserId()).isEqualTo(user.getId());
-                            assertThat(task.getLog()).isEqualTo("log");
+                            assertThat(task.getLog()).isEqualTo(new GradleLog());
                             assertThat(task.isSuccessful()).isFalse();
                         }
                 );
@@ -72,9 +73,9 @@ public class TaskDaoTest {
     @Transactional
     @Sql(statements = {
             "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'github_nick', 'password')",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)",
-            "INSERT INTO tasks(user_id, register_time) VALUES(1000, CURRENT_TIMESTAMP)"
+            "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, 'log')",
+            "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, 'log')",
+            "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, 'log')"
     })
     public void findAllInProgress() throws Exception {
         assertThat(taskDao.findAllByUserId(1000))
@@ -93,7 +94,7 @@ public class TaskDaoTest {
                 .allMatch(t -> t.getUserId() == user.getId());
 
         assertThat(taskDao.setResultById(user.getId(), task.getId(), false, "log")).isTrue();
-        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo("log");
+        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo(new GradleLog());
     }
 
     @Test

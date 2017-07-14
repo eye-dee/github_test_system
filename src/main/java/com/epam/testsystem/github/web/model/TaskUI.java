@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.web.model;
 
+import com.epam.testsystem.github.model.GradleLog;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,5 @@ import lombok.NoArgsConstructor;
 public class TaskUI {
     private boolean successful;
     private String startTime;
-    private String log;
+    private GradleLog log;
 }
