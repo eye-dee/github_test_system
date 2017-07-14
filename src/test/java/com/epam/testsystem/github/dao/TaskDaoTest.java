@@ -49,7 +49,7 @@ public class TaskDaoTest {
                             assertThat(task.getId()).isGreaterThan(0);
                             assertThat(task.getRegisterTime()).isBeforeOrEqualTo(LocalDateTime.now());
                             assertThat(task.getUserId()).isEqualTo(user.getId());
-                            assertThat(task.getLog()).isEqualTo(new GradleLog());
+                            assertThat(task.getLog()).isEqualTo("{}");
                             assertThat(task.isSuccessful()).isFalse();
                         }
                 );
@@ -112,7 +112,7 @@ public class TaskDaoTest {
                 .allMatch(t -> t.getUserId() == user.getId());
 
         assertThat(taskDao.setResultById(user.getId(), task.getId(), false, "{}")).isTrue();
-        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo(new GradleLog());
+        assertThat(taskDao.findAllByUserId(user.getId()).get(0).getLog()).isEqualTo("{}");
     }
 
     @Test
