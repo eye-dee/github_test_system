@@ -1,0 +1,27 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    username: user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximumPoolSize: 10
+      minimumIdle: 5
+  profiles:
+    active: dev
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: epamtestsystem@gmail.com
+    password: password12345
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+gitlab:
+  private_token: xNNi8mBG_rxUJxsUehUt
