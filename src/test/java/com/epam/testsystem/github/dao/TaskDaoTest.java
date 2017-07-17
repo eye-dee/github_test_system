@@ -130,11 +130,8 @@ public class TaskDaoTest {
         taskDao.addOrUpdate(user2.getId(), repo1.getId(), false, "{}");
 
         assertThat(taskDao.findAllByUserIdRepoId(user1.getId(), repo1.getId())).hasSize(2);
-
         assertThat(taskDao.findAllByUserIdRepoId(user1.getId(), repo2.getId())).hasSize(1);
-
         assertThat(taskDao.findAllByUserIdRepoId(user2.getId(), repo1.getId())).hasSize(1);
-
         assertThat(taskDao.findAllByUserIdRepoId(user2.getId(), repo2.getId())).hasSize(0);
     }
 
