@@ -34,7 +34,14 @@ public class RepoRestController {
     private final TaskService taskService;
     private final MapperUi mapperUi;
 
-
+    /**
+     * Return tasks in response depends on request parameters
+     *
+     * @param repoId                 repository id
+     * @param maxTasksInResultReturn max amount of tasks which expected in response
+     * @param onlySuccessful         if expected only tasks with successful passing status
+     * @param onlyUnsuccessful       if expected only tasks with unsuccessful passing status
+     */
     @RequestMapping(value = "{repoId}", method = RequestMethod.GET)
     public List<TaskUI> getTasks(@Min(value = 1, message = "Incorrect repoId value") @PathVariable(value = "repoId") final long repoId,
                                  @RequestParam(required = false, defaultValue = "300") Integer maxTasksInResultReturn,
