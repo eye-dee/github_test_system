@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * github_test
  * Created on 05.07.17.
  */
-
 @SpringBootApplication
 @EnableScheduling
 @EnableAutoConfiguration
