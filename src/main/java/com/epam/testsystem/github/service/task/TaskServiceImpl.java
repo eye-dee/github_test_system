@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.service.task;
 
 import com.epam.testsystem.github.dao.TaskDao;
+import com.epam.testsystem.github.exception.BusinessLogicException;
 import com.epam.testsystem.github.model.GradleLog;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.service.log.LogParser;
@@ -24,6 +25,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskService.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final int MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE = 5_000;
 
     private final TaskDao taskDao;
     private final LogParser logParser;
@@ -53,15 +55,24 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public List<Task> findAllByUserIdRepoId(final long userId, final long repoId) {
-        return taskDao.findAllByUserIdRepoId(userId, repoId);
-    }
-
-    @Override
-    @Transactional
     public boolean setResultById(long userId, long id, boolean successful, String log) {
         LOGGER.info("Set result for user {} and id {}", userId, id);
         return taskDao.setResultById(userId, id, successful, log);
     }
 
+    @Override
+    @Transactional
+    public List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, Integer maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful) {
+        LOGGER.info("findByUserIdRepoIdWithAppliedFilters with userId={}, repoId={},  maxTasksInResultReturn={}, onlySuccessful={}, onlyUnsuccessful={}",
+                userId, repoId, maxTasksInResultReturn, onlySuccessful, onlyUnsuccessful);
+
+        if (maxTasksInResultReturn <= 0 || maxTasksInResultReturn > MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE) {
+            LOGGER.error("maxTasksInResultReturn should be grater than 0 and less than {}", MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE);
+            throw new BusinessLogicException(new StringBuilder("maxTasksInResultReturn should be grater than 0 and less than ")
+                    .append(MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE).toString());
+        }
+        return (onlySuccessful && onlyUnsuccessful)
+                ? taskDao.findByUserIdRepoIdWithAppliedFilters(userId, repoId, maxTasksInResultReturn, false, false)
+                : taskDao.findByUserIdRepoIdWithAppliedFilters(userId, repoId, maxTasksInResultReturn, onlySuccessful, onlyUnsuccessful);
+    }
 }

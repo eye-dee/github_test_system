@@ -24,7 +24,7 @@ public interface MapperUi {
     List<TaskUI> mapTasks(List<Task> tasks);
 
     @Mapping(target = "email", source = "user.email")
-    @Mapping(target = "githubNick",source = "user.githubNick")
+    @Mapping(target = "githubNick", source = "user.githubNick")
     UserUI mapUser(UserWithTasks userWithTasks);
 
     List<UserUI> mapUsers(List<UserWithTasks> userWithTasksList);

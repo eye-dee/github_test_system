@@ -46,7 +46,7 @@ public class TestUtil {
     }
 
     public Repo addRepo() {
-        return repoDao.add(RANDOM.nextInt(), generateString(), generateString());
+        return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), generateString(), generateString());
     }
 
     public Repo addRepo(final long repoId) {
@@ -54,7 +54,7 @@ public class TestUtil {
     }
 
     public Repo addRepo(final String name, final String owner) {
-        return repoDao.add(RANDOM.nextInt(), name, owner);
+        return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), name, owner);
     }
 
     public Task addTask(final long repoId, final long userId) {

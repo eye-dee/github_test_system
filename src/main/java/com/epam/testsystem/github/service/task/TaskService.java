@@ -13,7 +13,7 @@ public interface TaskService {
 
     List<Task> findAllByUserId(final long userId);
 
-    List<Task> findAllByUserIdRepoId(final long userId, final long repoId);
-
     boolean setResultById(final long userId, final long id, final boolean successful, final String log);
+
+    List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, Integer maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful);
 }
