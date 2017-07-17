@@ -3,8 +3,8 @@ server:
 
 spring:
   datasource:
-    username: user
-    password: password
+    username: developer
+    password: developer2017
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
