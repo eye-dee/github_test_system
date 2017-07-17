@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VkConfig {
 
-    @Value("$(vk.group.id)")
-    private int groupId;
-    @Value("$(vk.group.access_token)")
+    @Value("${vk.group.id}")
+    private Integer groupId;
+    @Value("${vk.group.access_token}")
     private String accessToken;
 
     @Bean

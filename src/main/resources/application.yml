@@ -25,3 +25,8 @@ spring:
             enable: true
 gitlab:
   private_token: xNNi8mBG_rxUJxsUehUt
+
+vk:
+  group:
+    id: 150227212
+    access_token: 53f3aad05d484220277c72413807c33b88846e35ca2585079d572a6ad064fc0d2a0b875a5646ced937258
