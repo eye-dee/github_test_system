@@ -36,6 +36,13 @@ springBoot {
     executable = true
 }
 
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
+}
+
 dependencies {
     //Java improvement
     //Mapstruct + lombok
