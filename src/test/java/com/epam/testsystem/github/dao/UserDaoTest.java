@@ -86,7 +86,7 @@ public class UserDaoTest {
     @Test
     @Transactional
     public void findAllWithTasks() {
-        final User user1 = testUtil.getMainUser();
+        final User user1 = testUtil.makeUser();
         final User user2 = testUtil.makeUser();
         final Repo repo = testUtil.addRepo();
 
@@ -99,8 +99,7 @@ public class UserDaoTest {
         final List<UserWithTasks> tmp = userDao.findAllWithTasks();
 
         assertThat(userDao.findAllWithTasks())
-                .hasSize(2)
-                .containsOnlyOnce(
+                .contains(
                         UserWithTasks.builder()
                                 .user(user1)
                                 .tasks(Collections.singletonList(task11))
