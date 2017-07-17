@@ -3,6 +3,7 @@ package com.epam.testsystem.github.web.controller;
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.mail.MailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -56,6 +58,9 @@ public class WebhookRestControllerTest {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserDao userDao;
+
+    @MockBean
+    MailService mailService;
 
     private MockMvc mockMvc;
 
