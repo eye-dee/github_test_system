@@ -67,7 +67,7 @@ public class TestUtil {
     }
 
     public Task addTask(final long repoId, final long userId) {
-        return taskDao.addOrUpdate(userId, repoId, false, "log");
+        return taskDao.addOrUpdate(userId, repoId, false, "{}");
     }
 
     public Task addTask(final long userId, final long repoId, final boolean successful, final String log) {
