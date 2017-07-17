@@ -30,7 +30,7 @@ public class TestConfig {
             flyway.clean();
             flyway.migrate();
 
-            final User user = testUtil.makeUser();
+            final User user = testUtil.makeMainUser();
             if (user != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getAuthorities()));
             }
