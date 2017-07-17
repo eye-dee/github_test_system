@@ -87,7 +87,7 @@ public class TaskDaoTest {
     @Test
     @Transactional
     public void findAllWithCertainCycle() throws Exception{
-        final User user = testUtil.getMainUser();
+        final User user = testUtil.makeUser();
         final Repo repo = testUtil.addRepo();
         final GradleLog gradleLog = new GradleLog();
         gradleLog.getCycles().put("abc", Collections.singletonList("ecd"));
