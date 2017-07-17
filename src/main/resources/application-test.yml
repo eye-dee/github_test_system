@@ -1,3 +1,3 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/testSystem_test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://10.66.128.137:3306/gitTestSystemTest?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false
