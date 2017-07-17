@@ -37,21 +37,12 @@ public class TestUtil {
         return new BigInteger(130, SECURE_RANDOM).toString(32);
     }
 
-    @Transactional
     public User makeUser() {
-        final String email = generateString();
-        final User user = userDao.add(email, generateString(), generateString());
-
-        if (mainUser == null) {
-            mainUser = user;
-        }
-
-        return user;
+        return userDao.add(generateString(), generateString(), generateString());
     }
 
     public User makeUser(final String email, final String githubNick) {
-        userDao.add(email, githubNick, generateString());
-        return userDao.findByEmail(email).get();
+        return userDao.add(email, githubNick, generateString());
     }
 
     public Repo addRepo() {
@@ -67,7 +58,7 @@ public class TestUtil {
     }
 
     public Task addTask(final long repoId, final long userId) {
-        return taskDao.addOrUpdate(userId, repoId, false, "log");
+        return taskDao.addOrUpdate(userId, repoId, false, "{}");
     }
 
     public Task addTask(final long userId, final long repoId, final boolean successful, final String log) {
@@ -76,5 +67,10 @@ public class TestUtil {
 
     public User getMainUser() {
         return mainUser;
+    }
+
+    @Transactional
+    public User makeMainUser() {
+        return (mainUser = userDao.add(generateString(),generateString(),generateString()));
     }
 }

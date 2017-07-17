@@ -2,12 +2,14 @@ package com.epam.testsystem.github.service.travis;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.service.mail.MailService;
 import com.epam.testsystem.github.service.webhook.WebhookParserService;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,6 +41,9 @@ public class TravisParserServiceTest {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private TestUtil testUtil;
+
+    @MockBean
+    MailService mailService;
 
     @Test
     @Transactional

@@ -59,9 +59,9 @@ public class RepoRestControllerTest {
         final User user = testUtil.getMainUser();
         final Repo repo1 = testUtil.addRepo();
         final Repo repo2 = testUtil.addRepo();
-        final Task task1 = testUtil.addTask(user.getId(), repo1.getId(), false, "log1");
-        final Task task2 = testUtil.addTask(user.getId(), repo1.getId(), false, "log2");
-        final Task task3 = testUtil.addTask(user.getId(), repo2.getId(), false, "log3");
+        final Task task1 = testUtil.addTask(user.getId(), repo1.getId(), false, "{}");
+        final Task task2 = testUtil.addTask(user.getId(), repo1.getId(), false, "{}");
+        final Task task3 = testUtil.addTask(user.getId(), repo2.getId(), false, "{}");
 
 
         mockMvc.perform(get("/repo/" + repo1.getId())

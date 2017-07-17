@@ -18,7 +18,7 @@ CREATE TABLE tasks (
   repo_id       INT,
   register_time TIMESTAMP,
   successful    BOOL            DEFAULT FALSE,
-  log           TEXT,
+  log           JSON,
   FOREIGN KEY (repo_id) REFERENCES repos (id)
     ON DELETE CASCADE
 );

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
-import static com.epam.testsystem.github.dao.DaoExtractorUtil.getGradleLog;
 
 /**
  * github_test
@@ -45,13 +44,24 @@ public class TaskDao {
                 .registerTime(registerTime)
                 .successful(false)
                 .repoId(repoId)
-                .log(getGradleLog(log))
+                .log(log)
                 .build();
     }
 
     public List<Task> findAllByUserId(final long userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM tasks WHERE user_id = ?",
+                new Object[]{userId},
+                TASK_ROW_MAPPER
+        );
+    }
+
+    public List<Task> findAllByUserId(final long userId, final String cycleName) {
+        return jdbcTemplate.query(
+                "SELECT id, user_id, repo_id, register_time, successful, log->'$." +
+                        cycleName +
+                        "' AS 'tasks.log'" +
+                        " FROM tasks WHERE user_id = ?",
                 new Object[]{userId},
                 TASK_ROW_MAPPER
         );
