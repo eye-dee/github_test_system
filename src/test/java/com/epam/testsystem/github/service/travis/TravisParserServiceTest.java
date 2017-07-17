@@ -1,12 +1,15 @@
 package com.epam.testsystem.github.service.travis;
 
+import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.service.mail.MailService;
 import com.epam.testsystem.github.service.webhook.WebhookParserService;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class TravisParserServiceTest {
+    private static final int REPO_FROM_JSON = 1771959;
     private static final String AUTHOR_EMAIL = "daniel.buch@gmail.com";
 
     @Autowired
@@ -35,6 +39,11 @@ public class TravisParserServiceTest {
     private UserDao userDao;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private TestUtil testUtil;
+
+    @MockBean
+    MailService mailService;
 
     @Test
     @Transactional
@@ -42,6 +51,7 @@ public class TravisParserServiceTest {
         String payload = FileUtils.readFileToString(
                 new File("src/test/resources/travis_payload.json"), "UTF-8"
         );
+        testUtil.addRepo(REPO_FROM_JSON);
 
         assertThat(travisParserService.parse(payload)).isTrue();
 

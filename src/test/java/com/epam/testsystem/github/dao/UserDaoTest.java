@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
@@ -85,20 +86,20 @@ public class UserDaoTest {
     @Test
     @Transactional
     public void findAllWithTasks() {
-        final User user1 = testUtil.getMainUser();
+        final User user1 = testUtil.makeUser();
         final User user2 = testUtil.makeUser();
+        final Repo repo = testUtil.addRepo();
 
-        final Task task11 = testUtil.addTask(user1.getId());
+        final Task task11 = testUtil.addTask(repo.getId(), user1.getId());
 
-        final Task task21 = testUtil.addTask(user2.getId());
-        final Task task22 = testUtil.addTask(user2.getId());
-        final Task task23 = testUtil.addTask(user2.getId());
+        final Task task21 = testUtil.addTask(repo.getId(), user2.getId());
+        final Task task22 = testUtil.addTask(repo.getId(), user2.getId());
+        final Task task23 = testUtil.addTask(repo.getId(), user2.getId());
 
         final List<UserWithTasks> tmp = userDao.findAllWithTasks();
 
         assertThat(userDao.findAllWithTasks())
-                .hasSize(2)
-                .containsOnlyOnce(
+                .contains(
                         UserWithTasks.builder()
                                 .user(user1)
                                 .tasks(Collections.singletonList(task11))

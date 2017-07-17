@@ -49,7 +49,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .repoId(rs.getLong("tasks.repo_id"))
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
                     .successful(rs.getBoolean("tasks.successful"))
-                    .log(getGradleLog(rs.getString("tasks.log")))
+                    .log(rs.getString("tasks.log"))
                     .build();
 
     @Override

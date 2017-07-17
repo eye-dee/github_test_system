@@ -1,7 +1,9 @@
 package com.epam.testsystem.github.web.controller;
 
+import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.mail.MailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -9,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -38,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class WebhookRestControllerTest {
+    private static final long TRAVIS_REPO_ID = 1771959;
+    private static final long GITLAB_REPO_ID = 380;
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -48,10 +53,14 @@ public class WebhookRestControllerTest {
     private WebApplicationContext context;
 
     @Autowired
+    private TestUtil testUtil;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private UserDao userDao;
+
+    @MockBean
+    MailService mailService;
 
     private MockMvc mockMvc;
 
@@ -65,6 +74,8 @@ public class WebhookRestControllerTest {
     public void newPullTravis() throws Exception {
         final String newPullJson = FileUtils.readFileToString(
                 new File("src/test/resources/travis_payload.json"), "UTF-8");
+
+        testUtil.addRepo(TRAVIS_REPO_ID);
 
         mockMvc.perform(post("/webhook/travisci")
                 .accept(contentType)
@@ -87,6 +98,8 @@ public class WebhookRestControllerTest {
     public void newPullGitlab() throws Exception {
         final String newPullJson = FileUtils.readFileToString(
                 new File("src/test/resources/gitlab_payload.json"), "UTF-8");
+
+        testUtil.addRepo(GITLAB_REPO_ID);
 
         mockMvc.perform(post("/webhook/gitlabci")
                 .accept(contentType)

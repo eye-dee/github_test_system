@@ -1,10 +1,10 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,8 +59,10 @@ public class UserRestControllerTest {
     @Transactional
     public void findAll() throws Exception {
         final User user = testUtil.getMainUser();
-        final Task task1 = testUtil.addTask(user.getId());
-        final Task task2 = testUtil.addTask(user.getId());
+        final Repo repo = testUtil.addRepo();
+
+        final Task task1 = testUtil.addTask(repo.getId(), user.getId());
+        final Task task2 = testUtil.addTask(repo.getId(), user.getId());
 
         mockMvc.perform(get("/user")
                 .accept(contentType)
