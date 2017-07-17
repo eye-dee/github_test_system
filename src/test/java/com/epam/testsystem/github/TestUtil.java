@@ -33,8 +33,6 @@ public class TestUtil {
     private final RepoDao repoDao;
     private User mainUser = null;
 
-    private long defaultRepoId;
-
     public static String generateString() {
         return new BigInteger(130, SECURE_RANDOM).toString(32);
     }
@@ -60,12 +58,16 @@ public class TestUtil {
         return repoDao.add(RANDOM.nextInt(), generateString(), generateString());
     }
 
+    public Repo addRepo(final long repoId) {
+        return repoDao.add(repoId, generateString(), generateString());
+    }
+
     public Repo addRepo(final String name, final String owner) {
         return repoDao.add(RANDOM.nextInt(), name, owner);
     }
 
-    public Task addTask(final long userId) {
-        return taskDao.addOrUpdate(userId, ++defaultRepoId, false, "{}");
+    public Task addTask(final long repoId, final long userId) {
+        return taskDao.addOrUpdate(userId, repoId, false, "log");
     }
 
     public Task addTask(final long userId, final long repoId, final boolean successful, final String log) {
