@@ -1,9 +1,6 @@
 package com.epam.testsystem.github.dao;
 
-import com.epam.testsystem.github.model.GradleLog;
-import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.model.UserWithTasks;
+import com.epam.testsystem.github.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -48,6 +45,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .userId(rs.getLong("tasks.user_id"))
                     .repoId(rs.getLong("tasks.repo_id"))
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
+                    .status(TaskStatus.valueOf(rs.getString("tasks.status")))
                     .successful(rs.getBoolean("tasks.successful"))
                     .log(rs.getString("tasks.log"))
                     .build();

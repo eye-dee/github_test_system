@@ -13,11 +13,12 @@ CREATE TABLE repos (
 );
 
 CREATE TABLE tasks (
-  id            INT PRIMARY KEY AUTO_INCREMENT,
+  id            INT PRIMARY KEY                         AUTO_INCREMENT,
   user_id       INT REFERENCES users (id),
   repo_id       INT,
   register_time TIMESTAMP,
-  successful    BOOL            DEFAULT FALSE,
+  status        ENUM ('PROGRESS', 'CHECKED')            DEFAULT 'PROGRESS',
+  successful    BOOL                                    DEFAULT FALSE,
   log           JSON,
   FOREIGN KEY (repo_id) REFERENCES repos (id)
     ON DELETE CASCADE

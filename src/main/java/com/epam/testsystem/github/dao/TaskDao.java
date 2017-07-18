@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.model.Task;
+import com.epam.testsystem.github.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -43,8 +44,27 @@ public class TaskDao {
                 .userId(userId)
                 .registerTime(registerTime)
                 .successful(false)
+                .status(TaskStatus.PROGRESS)
                 .repoId(repoId)
                 .log(log)
+                .build();
+    }
+
+    public Task add(long userId, long repoId) {
+        final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
+        jdbcTemplate.update(
+                "INSERT INTO tasks(user_id, repo_id, register_time) " +
+                        "VALUES(?, ?, ?)",
+                userId, repoId, registerTime);
+
+        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+
+        return Task.builder()
+                .id(id)
+                .userId(userId)
+                .registerTime(registerTime)
+                .successful(false)
+                .repoId(repoId)
                 .build();
     }
 
@@ -58,7 +78,7 @@ public class TaskDao {
 
     public List<Task> findAllByUserId(final long userId, final String cycleName) {
         return jdbcTemplate.query(
-                "SELECT id, user_id, repo_id, register_time, successful, log->'$." +
+                "SELECT id, user_id, repo_id, register_time, status, successful, log->'$." +
                         cycleName +
                         "' AS 'tasks.log'" +
                         " FROM tasks WHERE user_id = ?",
@@ -89,8 +109,16 @@ public class TaskDao {
                                  final boolean successful,
                                  final String log) {
         return jdbcTemplate.update(
-                "UPDATE tasks SET successful = ?, log = ? WHERE user_id = ? AND id = ?",
-                successful, log, userId, id
+                "UPDATE tasks SET status = ?, successful = ?, log = ? WHERE user_id = ? AND id = ?",
+                TaskStatus.CHECKED.name(), successful, log, userId, id
         ) > 0;
+    }
+
+    public List<Task> findAllInProgress() {
+        return jdbcTemplate.query(
+                "SELECT * FROM tasks WHERE status = ?",
+                new Object[]{TaskStatus.PROGRESS.name()},
+                TASK_ROW_MAPPER
+        );
     }
 }

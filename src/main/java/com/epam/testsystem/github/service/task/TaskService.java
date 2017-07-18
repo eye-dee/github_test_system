@@ -16,4 +16,8 @@ public interface TaskService {
     boolean setResultById(final long userId, final long id, final boolean successful, final String log);
 
     List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, Integer maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful);
+
+    Task add(long id, long repoId);
+
+    List<Task> findAllInProgress();
 }

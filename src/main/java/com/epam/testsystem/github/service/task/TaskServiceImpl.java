@@ -75,4 +75,14 @@ public class TaskServiceImpl implements TaskService {
                 ? taskDao.findByUserIdRepoIdWithAppliedFilters(userId, repoId, maxTasksInResultReturn, false, false)
                 : taskDao.findByUserIdRepoIdWithAppliedFilters(userId, repoId, maxTasksInResultReturn, onlySuccessful, onlyUnsuccessful);
     }
+
+    @Override
+    public Task add(long userId, long repoId) {
+        return taskDao.add(userId, repoId);
+    }
+
+    @Override
+    public List<Task> findAllInProgress() {
+        return taskDao.findAllInProgress();
+    }
 }
