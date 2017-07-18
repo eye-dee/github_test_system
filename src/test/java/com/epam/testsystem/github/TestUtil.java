@@ -41,8 +41,8 @@ public class TestUtil {
         return userDao.add(generateString(), generateString(), generateString());
     }
 
-    public User makeUser(final String email, final String githubNick) {
-        return userDao.add(email, githubNick, generateString());
+    public User makeUser(final String email, final String gitNick) {
+        return userDao.add(email, gitNick, generateString());
     }
 
     public Repo addRepo() {

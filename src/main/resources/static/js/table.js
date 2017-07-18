@@ -10,7 +10,7 @@ $("#getAll").click(() => {
                 if (result[i].tasks.length === 0) {
                     tasks.push({
                             email: result[i].email,
-                            git: result[i].githubNick,
+                            git: result[i].gitNick,
                             time: null,
                             successful: null,
                             log: null
@@ -20,7 +20,7 @@ $("#getAll").click(() => {
                 for (let j = 0; j < result[i].tasks.length; j++) {
                     let task = {
                         email: result[i].email,
-                        git: result[i].githubNick,
+                        git: result[i].gitNick,
                         time: result[i].tasks[j].startTime,
                         successful: result[i].tasks[j].successful,
                         log: result[i].tasks[j].log
