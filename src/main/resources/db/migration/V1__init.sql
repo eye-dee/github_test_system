@@ -1,15 +1,15 @@
 CREATE TABLE users (
-  id          INT PRIMARY KEY AUTO_INCREMENT,
-  email       VARCHAR(100) NOT NULL,
-  github_nick VARCHAR(100) NOT NULL,
-  password    VARCHAR(100) NOT NULL,
+  id       INT PRIMARY KEY AUTO_INCREMENT,
+  email    VARCHAR(100) NOT NULL,
+  git_nick VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
   UNIQUE (email)
 );
 
 CREATE TABLE repos (
-  id    INT PRIMARY KEY,
-  name  VARCHAR(100) NOT NULL,
-  owner VARCHAR(100) NOT NULL
+  id       INT PRIMARY KEY,
+  name     VARCHAR(100) NOT NULL,
+  git_nick VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE tasks (

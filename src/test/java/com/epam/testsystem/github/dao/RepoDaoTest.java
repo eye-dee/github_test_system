@@ -2,6 +2,7 @@ package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.model.Repo;
+import com.epam.testsystem.github.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,15 @@ public class RepoDaoTest {
     @Transactional
     public void add() throws Exception {
         int id = 1;
+        final User user = testUtil.getMainUser();
         final String name = "name";
-        final String owner = "owner";
 
-        assertThat(repoDao.add(id, name, owner))
+        assertThat(repoDao.add(id, name, user.getGitNick()))
                 .satisfies(
                         repo -> {
                             assertThat(repo.getId()).isEqualTo(id);
                             assertThat(repo.getName()).isEqualTo(name);
-                            assertThat(repo.getOwner()).isEqualTo(owner);
+                            assertThat(repo.getGitNick()).isEqualTo(user.getGitNick());
                         }
                 );
     }
@@ -57,12 +58,12 @@ public class RepoDaoTest {
     @Test
     @Transactional
     public void findByOwner() throws Exception {
-        final String owner = "owner";
+        final User user = testUtil.getMainUser();
 
-        final Repo repo1 = testUtil.addRepo(TestUtil.generateString(), owner);
-        final Repo repo2 = testUtil.addRepo(TestUtil.generateString(), owner);
+        final Repo repo1 = testUtil.addRepo(TestUtil.generateString(), user.getGitNick());
+        final Repo repo2 = testUtil.addRepo(TestUtil.generateString(), user.getGitNick());
 
-        assertThat(repoDao.findByOwner(owner))
+        assertThat(repoDao.findByOwner(user.getGitNick()))
                 .containsOnlyOnce(repo1, repo2);
     }
 

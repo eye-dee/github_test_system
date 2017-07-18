@@ -48,7 +48,7 @@ public class UserDaoTest {
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
-                            assertThat(u.getGithubNick()).isEqualTo(githubNick);
+                            assertThat(u.getGitNick()).isEqualTo(githubNick);
                             assertThat(u.getPassword()).isEqualTo(password);
                             assertThat(u.getId()).isGreaterThan(0);
                         }
@@ -58,11 +58,11 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
+            "INSERT INTO users(id, email, git_nick, password) VALUES(1000, 'email', 'gitNick', 'password')"
     })
     public void findById() throws Exception {
-        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
-        assertThat(userDao.findById(user.getId())).contains(user);
+        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").build();
+        assertThat(userDao.findById(user.getId()).get()).isEqualTo(user);
     }
 
     public void findByIdNotExists() {
@@ -72,10 +72,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, github_nick, password) VALUES(1000, 'email', 'githubNick', 'password')"
+            "INSERT INTO users(id, email, git_nick, password) VALUES(1000, 'email', 'gitNick', 'password')"
     })
     public void findByEmail() throws Exception {
-        final User user = User.builder().id(1000).email("email").githubNick("githubNick").password("password").build();
+        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").build();
         assertThat(userDao.findByEmail("email")).contains(user);
     }
 

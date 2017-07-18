@@ -60,7 +60,7 @@ public class TravisParserService implements WebhookParserService {
 
             if (userOptional.isPresent()) {
                 final long userId = userOptional.get().getId();
-                final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGithubNick()).build();
+                final MailInfo mailInfo = MailInfo.builder().userName(userOptional.get().getGitNick()).build();
                 taskService.addOrUpdate(userId, repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
