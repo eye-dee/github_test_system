@@ -7,9 +7,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE repos (
-  id    INT PRIMARY KEY,
-  name  VARCHAR(100) NOT NULL,
-  owner VARCHAR(100) NOT NULL
+  id       INT PRIMARY KEY,
+  name     VARCHAR(100) NOT NULL,
+  owner_id INT,
+  FOREIGN KEY (owner_id) REFERENCES users (id)
 );
 
 CREATE TABLE tasks (

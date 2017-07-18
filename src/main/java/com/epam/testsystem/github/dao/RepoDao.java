@@ -26,20 +26,20 @@ public class RepoDao {
             Repo.builder()
                     .id(rs.getLong("repos.id"))
                     .name(rs.getString("repos.name"))
-                    .owner(rs.getString("repos.owner"))
+                    .owner_id(rs.getLong("repos.owner_id"))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
 
-    public Repo add(final long id, final String name, final String owner) {
+    public Repo add(final long id, final String name, final long owner_id) {
         jdbcTemplate.update(
-                "INSERT INTO repos(id, name, owner) VALUES(?, ?, ?)",
-                id, name, owner);
+                "INSERT INTO repos(id, name, owner_id) VALUES(?, ?, ?)",
+                id, name, owner_id);
 
         return Repo.builder()
                 .id(id)
                 .name(name)
-                .owner(owner)
+                .owner_id(owner_id)
                 .build();
     }
 
@@ -53,10 +53,10 @@ public class RepoDao {
                 ));
     }
 
-    public List<Repo> findByOwner(final String owner) {
+    public List<Repo> findByOwner(final long owner_id) {
         return jdbcTemplate.query(
-                "SELECT * FROM repos WHERE owner = ?",
-                new Object[]{owner},
+                "SELECT * FROM repos WHERE owner_id = ?",
+                new Object[]{owner_id},
                 REPO_ROW_MAPPER
         );
     }

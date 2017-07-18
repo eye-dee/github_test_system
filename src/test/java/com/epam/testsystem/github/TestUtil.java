@@ -46,15 +46,15 @@ public class TestUtil {
     }
 
     public Repo addRepo() {
-        return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), generateString(), generateString());
+        return repoDao.add(RANDOM.nextInt(), generateString(), mainUser.getId());
     }
 
     public Repo addRepo(final long repoId) {
-        return repoDao.add(repoId, generateString(), generateString());
+        return repoDao.add(repoId, generateString(), mainUser.getId());
     }
 
-    public Repo addRepo(final String name, final String owner) {
-        return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), name, owner);
+    public Repo addRepo(final String name, final long owner_id) {
+        return repoDao.add(RANDOM.nextInt(), name, owner_id);
     }
 
     public Task addTask(final long repoId, final long userId) {

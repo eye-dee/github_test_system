@@ -1,16 +1,12 @@
-package com.epam.testsystem.github.model;
+package com.epam.testsystem.github.web.model;
+
 
 import lombok.Builder;
 import lombok.Data;
 
-/**
- * github_test
- * Created on 13.07.17.
- */
-
 @Data
 @Builder
-public class Repo {
+public class NewRepoUI {
     private long id;
     private String name;
     private long owner_id;

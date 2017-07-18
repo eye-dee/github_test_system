@@ -1,9 +1,12 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.dao.RepoDao;
 import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.web.model.NewRepoUI;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,10 +24,13 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.charset.Charset;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * github_test
@@ -48,9 +54,34 @@ public class RepoRestControllerTest {
 
     private MockMvc mockMvc;
 
+    @Autowired
+    private RepoDao repoDao;
+
     @Before
     public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
+
+    @Test
+    @Transactional
+    public void addNewRepo() throws Exception {
+        final User user = testUtil.getMainUser();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String newRepoJson = objectMapper.writeValueAsString(
+                NewRepoUI.builder()
+                        .id(1)
+                        .name("repo")
+                        .owner_id(user.getId())
+                        .build()
+        );
+
+        mockMvc.perform(post("/repo/new")
+                .accept(contentType)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newRepoJson))
+                .andExpect(status().isOk());
+
+        assertThat(repoDao.findByOwner(user.getId())).hasSize(1);
     }
 
     @Test
