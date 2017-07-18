@@ -1,10 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
-import com.epam.testsystem.github.model.GradleLog;
-import com.epam.testsystem.github.model.Repo;
-import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,7 +37,7 @@ public class TaskDaoTest {
 
     @Test
     @Transactional
-    public void add() throws Exception {
+    public void addOrUpdate() throws Exception {
         final User user = testUtil.makeUser();
         final Repo repo = testUtil.addRepo();
         assertThat(taskDao.addOrUpdate(user.getId(), repo.getId(), false, "{}"))
@@ -98,6 +95,23 @@ public class TaskDaoTest {
         final Task task = taskDao.addOrUpdate(user.getId(), repo.getId(), false, log);
         assertThat(taskDao.findAllByUserId(user.getId(),"cycles").get(0).getLog())
                 .isEqualTo("{\"abc\": [\"ecd\"]}");
+    }
+
+    @Test
+    @Transactional
+    public void add() {
+        final User mainUser = testUtil.getMainUser();
+        final Repo repo = testUtil.addRepo();
+
+        assertThat(taskDao.add(mainUser.getId(),repo.getId()))
+                .satisfies(task -> {
+                    assertThat(task.getId()).isGreaterThan(0);
+                    assertThat(task.getLog()).isEqualTo("");
+                    assertThat(task.getRegisterTime()).isAfterOrEqualTo(LocalDateTime.now().withNano(0));
+                    assertThat(task.getStatus()).isEqualTo(TaskStatus.PROGRESS);
+                    assertThat(task.getRepoId()).isEqualTo(repo.getId());
+                    assertThat(task.getUserId()).isEqualTo(mainUser.getId());
+                });
     }
 
     @Test
