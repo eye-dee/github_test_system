@@ -54,7 +54,7 @@ public class TestUtil {
     }
 
     public Repo addRepo(final String name, final String gitNick) {
-        return repoDao.add(RANDOM.nextInt(), name, gitNick);
+        return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), name, gitNick);
     }
 
     public Task addTask(final long repoId, final long userId) {
