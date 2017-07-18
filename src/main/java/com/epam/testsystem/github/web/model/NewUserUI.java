@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @Builder
 public class NewUserUI {
-    private String githubNick;
+    private String gitNick;
     private String email;
     private String password;
 }

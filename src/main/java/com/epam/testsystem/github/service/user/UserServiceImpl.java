@@ -29,10 +29,10 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public User register(String email, String githubNick, String password) {
+    public User register(String email, String gitNick, String password) {
         String encodedPassword = passwordEncoder.encode(password);
 
-        return userDao.add(email, githubNick, encodedPassword);
+        return userDao.add(email, gitNick, encodedPassword);
     }
 
     @Override

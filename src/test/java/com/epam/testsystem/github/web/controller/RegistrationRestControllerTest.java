@@ -67,7 +67,7 @@ public class RegistrationRestControllerTest {
         final String newUserJson = objectMapper.writeValueAsString(
                 NewUserUI.builder()
                         .email("email")
-                        .githubNick("gitNick")
+                        .gitNick("gitNick")
                         .password("password")
                         .build()
         );

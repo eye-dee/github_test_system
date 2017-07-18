@@ -29,7 +29,7 @@ public class RegistrationRestController {
     public boolean register(@RequestBody final NewUserUI newUserUI) {
         final boolean registration = successfulRegistration(newUserUI);
         MailInfo mailInfo = MailInfo.builder()
-                .userName(newUserUI.getGithubNick())
+                .userName(newUserUI.getGitNick())
                 .email(newUserUI.getEmail())
                 .password(newUserUI.getPassword())
                 .build();
@@ -42,7 +42,7 @@ public class RegistrationRestController {
 
     private boolean successfulRegistration(NewUserUI newUserUI) {
         return userService.register(
-                newUserUI.getEmail(), newUserUI.getGithubNick(), newUserUI.getPassword()
+                newUserUI.getEmail(), newUserUI.getGitNick(), newUserUI.getPassword()
         ) != null;
     }
 }

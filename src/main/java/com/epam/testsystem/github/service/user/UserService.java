@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    User register(String email, String githubNick, String password);
+    User register(String email, String gitNick, String password);
 
     Optional<User> findByEmail(String email);
 

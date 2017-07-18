@@ -41,14 +41,14 @@ public class UserDaoTest {
     @Transactional
     public void add() throws Exception {
         final String email = "EMAIL";
-        final String githubNick = "github_nick";
+        final String gitNick = "github_nick";
         final String password = "password";
 
-        assertThat(userDao.add(email, githubNick, password))
+        assertThat(userDao.add(email, gitNick, password))
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
-                            assertThat(u.getGitNick()).isEqualTo(githubNick);
+                            assertThat(u.getGitNick()).isEqualTo(gitNick);
                             assertThat(u.getPassword()).isEqualTo(password);
                             assertThat(u.getId()).isGreaterThan(0);
                         }

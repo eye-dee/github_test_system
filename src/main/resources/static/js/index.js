@@ -7,7 +7,7 @@ $("#startButton").click(() => {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify({
-            githubNick: gitNick,
+            gitNick: gitNick,
             email: $("#email").val()
         }),
         success: function (result) {
@@ -28,7 +28,7 @@ $("#taskButton").click(() => {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify({
-            githubNick: gitNick,
+            gitNick: gitNick,
             email: $("#email").val()
         }),
         success: function (result) {

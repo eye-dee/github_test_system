@@ -42,7 +42,7 @@ public class GitlabParserService implements WebhookParserService {
         try {
             final JsonNode pullPayloadJson = objectMapper.readTree(payload);
 
-            final String githubNick = pullPayloadJson.get("commit").get("author_name").asText();
+            final String gitNick = pullPayloadJson.get("commit").get("author_name").asText();
             final String email = pullPayloadJson.get("commit").get("author_email").asText();
 
             final boolean status = pullPayloadJson.get("build_status").asText().equals("success");
@@ -50,11 +50,11 @@ public class GitlabParserService implements WebhookParserService {
             final long buildId = pullPayloadJson.get("build_id").asLong();
 
             LOGGER.info("user {} with email {} has status {} in project request number {} with build id {}",
-                    githubNick, email, status, repoId, buildId
+                    gitNick, email, status, repoId, buildId
             );
 
             LOGGER.info("try to get logs from gitlab");
-            final String logs = gitlabLogsResolver.getLogs(githubNick, buildId);
+            final String logs = gitlabLogsResolver.getLogs(gitNick, buildId);
 
             final Optional<User> userOptional = userDao.findByEmail(email);
 
@@ -65,10 +65,10 @@ public class GitlabParserService implements WebhookParserService {
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION, mailInfo);
             } else {
-                LOGGER.info("add new user {} with email {}", githubNick, email);
+                LOGGER.info("add new user {} with email {}", gitNick, email);
                 final String password = generatePassword();
-                final User user = userDao.add(email, githubNick, password);
-                final MailInfo mailInfo = MailInfo.builder().userName(githubNick).password(password).build();
+                final User user = userDao.add(email, gitNick, password);
+                final MailInfo mailInfo = MailInfo.builder().userName(gitNick).password(password).build();
                 taskService.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
