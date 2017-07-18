@@ -19,6 +19,6 @@ public class TelegramConfig {
 
     @Bean
     public TelegramBot telegramBot() {
-        return TelegramBotAdapter.build(botToken);
+       return TelegramBotAdapter.build(botToken);
     }
 }
