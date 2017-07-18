@@ -62,7 +62,7 @@ public class TravisParserServiceTest {
     @Test
     @Transactional
     public void parseFailed() throws Exception {
-        String payload = "";
+        final String payload = "";
 
         assertThat(travisParserService.parse(payload)).isFalse();
 

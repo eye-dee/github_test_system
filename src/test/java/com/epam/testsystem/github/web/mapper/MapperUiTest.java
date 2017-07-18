@@ -38,7 +38,7 @@ public class MapperUiTest {
     }
 
     private static UserWithTasks buildSomeUserWithTasks() {
-        final User user = User.builder().id(1).email("email").githubNick("githubNick").build();
+        final User user = User.builder().id(1).email("email").gitNick("gitNick").build();
         final Task task = buildSomeTask();
         return UserWithTasks.builder().user(user).tasks(Collections.singletonList(task)).build();
     }
@@ -65,7 +65,7 @@ public class MapperUiTest {
                 .satisfies(
                         userUI -> {
                             assertThat(userUI.getEmail()).isEqualTo(user.getEmail());
-                            assertThat(userUI.getGithubNick()).isEqualTo(user.getGithubNick());
+                            assertThat(userUI.getGitNick()).isEqualTo(user.getGitNick());
                             assertThat(userUI.getTasks()).hasSize(1);
                         }
                 );

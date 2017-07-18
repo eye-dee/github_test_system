@@ -42,7 +42,7 @@ public class RepoRestController {
 
     private boolean successfulAdd(final NewRepoUI newRepoUI) {
         return repoService.add(
-                newRepoUI.getId(), newRepoUI.getName(), newRepoUI.getOwner_id()
+                newRepoUI.getId(), newRepoUI.getName(), newRepoUI.getGitNick()
         ) != null;
     }
 

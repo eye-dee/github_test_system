@@ -26,20 +26,20 @@ public class RepoDao {
             Repo.builder()
                     .id(rs.getLong("repos.id"))
                     .name(rs.getString("repos.name"))
-                    .owner_id(rs.getLong("repos.owner_id"))
+                    .gitNick(rs.getString("repos.git_nick"))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
 
-    public Repo add(final long id, final String name, final long owner_id) {
+    public Repo add(final long id, final String name, final String gitNick) {
         jdbcTemplate.update(
-                "INSERT INTO repos(id, name, owner_id) VALUES(?, ?, ?)",
-                id, name, owner_id);
+                "INSERT INTO repos(id, name, git_nick) VALUES(?, ?, ?)",
+                id, name, gitNick);
 
         return Repo.builder()
                 .id(id)
                 .name(name)
-                .owner_id(owner_id)
+                .gitNick(gitNick)
                 .build();
     }
 
@@ -53,10 +53,10 @@ public class RepoDao {
                 ));
     }
 
-    public List<Repo> findByOwner(final long owner_id) {
+    public List<Repo> findByOwner(final String gitNick) {
         return jdbcTemplate.query(
-                "SELECT * FROM repos WHERE owner_id = ?",
-                new Object[]{owner_id},
+                "SELECT * FROM repos WHERE git_nick = ?",
+                new Object[]{gitNick},
                 REPO_ROW_MAPPER
         );
     }

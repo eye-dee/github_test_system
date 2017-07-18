@@ -13,5 +13,5 @@ import lombok.Data;
 public class Repo {
     private long id;
     private String name;
-    private long owner_id;
+    private String gitNick;
 }

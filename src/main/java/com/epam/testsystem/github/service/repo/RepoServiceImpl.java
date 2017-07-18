@@ -15,8 +15,8 @@ public class RepoServiceImpl implements RepoService {
     private final RepoDao repoDao;
 
     @Override
-    public Repo add(final long repo_id, final String name, final long owner_id) {
-        LOGGER.info("Add repo {}, from user_id {}", name, owner_id);
-        return repoDao.add(repo_id, name, owner_id);
+    public Repo add(final long repoId, final String name, final String gitNick) {
+        LOGGER.info("Add repo {}, from user {}", name, gitNick);
+        return repoDao.add(repoId, name, gitNick);
     }
 }

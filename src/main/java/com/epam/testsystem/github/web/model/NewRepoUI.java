@@ -9,5 +9,5 @@ import lombok.Data;
 public class NewRepoUI {
     private long id;
     private String name;
-    private long owner_id;
+    private String gitNick;
 }

@@ -36,12 +36,12 @@ public class RepoDaoTest {
         final User user = testUtil.getMainUser();
         final String name = "name";
 
-        assertThat(repoDao.add(id, name, user.getId()))
+        assertThat(repoDao.add(id, name, user.getGitNick()))
                 .satisfies(
                         repo -> {
                             assertThat(repo.getId()).isEqualTo(id);
                             assertThat(repo.getName()).isEqualTo(name);
-                            assertThat(repo.getOwner_id()).isEqualTo(user.getId());
+                            assertThat(repo.getGitNick()).isEqualTo(user.getGitNick());
                         }
                 );
     }
@@ -60,10 +60,10 @@ public class RepoDaoTest {
     public void findByOwner() throws Exception {
         final User user = testUtil.getMainUser();
 
-        final Repo repo1 = testUtil.addRepo(TestUtil.generateString(), user.getId());
-        final Repo repo2 = testUtil.addRepo(TestUtil.generateString(), user.getId());
+        final Repo repo1 = testUtil.addRepo(TestUtil.generateString(), user.getGitNick());
+        final Repo repo2 = testUtil.addRepo(TestUtil.generateString(), user.getGitNick());
 
-        assertThat(repoDao.findByOwner(user.getId()))
+        assertThat(repoDao.findByOwner(user.getGitNick()))
                 .containsOnlyOnce(repo1, repo2);
     }
 

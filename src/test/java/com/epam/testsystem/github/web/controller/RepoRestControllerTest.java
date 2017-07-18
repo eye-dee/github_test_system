@@ -71,7 +71,7 @@ public class RepoRestControllerTest {
                 NewRepoUI.builder()
                         .id(1)
                         .name("repo")
-                        .owner_id(user.getId())
+                        .gitNick(user.getGitNick())
                         .build()
         );
 
@@ -81,7 +81,7 @@ public class RepoRestControllerTest {
                 .content(newRepoJson))
                 .andExpect(status().isOk());
 
-        assertThat(repoDao.findByOwner(user.getId())).hasSize(1);
+        assertThat(repoDao.findByOwner(user.getGitNick())).hasSize(1);
     }
 
     @Test

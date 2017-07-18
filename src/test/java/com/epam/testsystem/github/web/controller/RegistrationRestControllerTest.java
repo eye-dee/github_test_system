@@ -67,7 +67,7 @@ public class RegistrationRestControllerTest {
         final String newUserJson = objectMapper.writeValueAsString(
                 NewUserUI.builder()
                         .email("email")
-                        .githubNick("githubNick")
+                        .githubNick("gitNick")
                         .password("password")
                         .build()
         );
@@ -83,7 +83,7 @@ public class RegistrationRestControllerTest {
                         user -> {
                             assertThat(user.getId()).isGreaterThan(0);
                             assertThat(user.getEmail()).isEqualTo("email");
-                            assertThat(user.getGithubNick()).isEqualTo("githubNick");
+                            assertThat(user.getGitNick()).isEqualTo("gitNick");
                             assertThat(user.getPassword()).isNotEmpty();
                         }
                 );

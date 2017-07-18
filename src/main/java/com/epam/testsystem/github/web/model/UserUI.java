@@ -18,6 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UserUI {
     private String email;
-    private String githubNick;
+    private String gitNick;
     private List<TaskUI> tasks;
 }
