@@ -26,17 +26,17 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final DaoExtractorUtil daoExtractorUtil;
 
-    public User add(final String email, final String githubNick, String password) {
+    public User add(final String email, final String gitNick, final String password) {
         jdbcTemplate.update(
-                "INSERT INTO users(email, github_nick, password) VALUES (?, ?, ?) ",
-                email, githubNick, password);
+                "INSERT INTO users(email, git_nick, password) VALUES (?, ?, ?) ",
+                email, gitNick, password);
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
         return User.builder()
                 .id(id)
                 .email(email)
-                .githubNick(githubNick)
+                .gitNick(gitNick)
                 .password(password)
                 .build();
     }

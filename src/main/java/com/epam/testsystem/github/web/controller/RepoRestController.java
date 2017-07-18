@@ -1,19 +1,18 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.service.repo.RepoService;
 import com.epam.testsystem.github.service.task.TaskService;
 import com.epam.testsystem.github.service.user.UserService;
 import com.epam.testsystem.github.web.mapper.MapperUi;
+import com.epam.testsystem.github.web.model.NewRepoUI;
 import com.epam.testsystem.github.web.model.TaskUI;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
@@ -33,6 +32,19 @@ public class RepoRestController {
     private final UserService userService;
     private final TaskService taskService;
     private final MapperUi mapperUi;
+    private final RepoService repoService;
+
+    @RequestMapping(value = "new", method = RequestMethod.POST)
+    @Transactional
+    public boolean register(@RequestBody final NewRepoUI newRepoUI) {
+        return successfulAdd(newRepoUI);
+    }
+
+    private boolean successfulAdd(final NewRepoUI newRepoUI) {
+        return repoService.add(
+                newRepoUI.getId(), newRepoUI.getName(), newRepoUI.getGitNick()
+        ) != null;
+    }
 
     /**
      * Return tasks in response depends on request parameters

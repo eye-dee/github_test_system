@@ -18,7 +18,7 @@ import java.util.Collections;
 public class User implements UserDetails {
     private long id;
     private String email;
-    private String githubNick;
+    private String gitNick;
     private String password;
 
     @Override
