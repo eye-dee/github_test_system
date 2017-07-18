@@ -26,6 +26,10 @@ spring:
 gitlab:
   private_token: xNNi8mBG_rxUJxsUehUt
 
+telegram:
+  bot:
+    token: 427188274:AAGsdgBUrxGhCYgWyPsQMdbEyz6jngkO4pM
+
 vk:
   group:
     id: 150227212
