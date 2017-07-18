@@ -67,12 +67,21 @@ public class TaskDao {
         );
     }
 
-    public List<Task> findAllByUserIdRepoId(final long userId, final long repoId) {
+    public List<Task> findByUserIdRepoIdWithAppliedFilters(final long userId, final long repoId,
+                                                           final Integer maxTasksInResultReturn, final boolean onlySuccessful,
+                                                           final boolean onlyUnsuccessful) {
+        StringBuilder query = new StringBuilder("SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?");
+        if (onlySuccessful) {
+            query.append(" AND successful = true");
+        }
+        if (onlyUnsuccessful) {
+            query.append(" AND successful = false");
+        }
+        query.append(" ORDER BY register_time DESC LIMIT ?");
         return jdbcTemplate.query(
-                "SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?",
-                new Object[]{userId, repoId},
-                TASK_ROW_MAPPER
-        );
+                query.toString(),
+                new Object[]{userId, repoId, maxTasksInResultReturn},
+                TASK_ROW_MAPPER);
     }
 
     public boolean setResultById(final long userId,
