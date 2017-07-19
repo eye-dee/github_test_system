@@ -75,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task add(long userId, long repoId) {
+        LOGGER.info("add new task for user {} and repo {}", userId, repoId);
         return taskDao.add(userId, repoId);
     }
 
