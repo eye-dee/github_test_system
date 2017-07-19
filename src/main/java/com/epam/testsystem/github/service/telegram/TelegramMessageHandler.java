@@ -1,6 +1,5 @@
 package com.epam.testsystem.github.service.telegram;
 
-import com.epam.testsystem.github.dao.UserDao;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
@@ -30,8 +29,8 @@ public class TelegramMessageHandler implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
-    private SendMessage prepareMessage(Object chatId) {
-        return new SendMessage(chatId, "Your tasks")
+    private SendMessage prepareMessage(Object chatId, String message) {
+        return new SendMessage(chatId, message)
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true)
                 .disableNotification(true);
@@ -43,15 +42,33 @@ public class TelegramMessageHandler implements UpdatesListener {
             final Message message = update.message();
 
             if (message != null) {
-                if (message.text().equals("/tasks")) {
-                    final SendMessage request = prepareMessage(message.chat().id());
-                    SendResponse sendResponse = telegramBot.execute(request);
-                    boolean ok = sendResponse.isOk();
-                    Message m = sendResponse.message();
+                final String text = message.text();
+
+                final Long chatId = message.chat().id();
+                if (text.equals("/tasks")) {
+                    tasksHandler(chatId);
+                } else if (text.equals("/start")) {
+                    startHandler(chatId);
                 }
             }
         }
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+    private void startHandler(Long chatId) {
+        sendMessage(chatId, "Hello my friend");
+    }
+
+    private void tasksHandler(Long chatId) {
+        // TODO: 7/19/2017 get user his tasks 
+        sendMessage(chatId, "Your tasks:");
+    }
+
+    public void sendMessage(Long chatId, String message) {
+        final SendMessage request = prepareMessage(chatId, message);
+        SendResponse sendResponse = telegramBot.execute(request);
+        boolean ok = sendResponse.isOk();
+        Message m = sendResponse.message();
     }
 }
