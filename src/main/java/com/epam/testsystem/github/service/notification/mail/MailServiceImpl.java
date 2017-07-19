@@ -68,7 +68,7 @@ public class MailServiceImpl implements MailService {
             mailSender.send(helper.getMimeMessage());
         } catch (Exception e) {
             LOGGER.error("No mail was sent because of : {}", e.getMessage());
-            throw new BusinessLogicException("No mail was sent because of : {}".concat(e.getMessage()));
+            throw new BusinessLogicException("No mail was sent because of : ".concat(e.getMessage()));
         }
         LOGGER.debug("=== Message was sent ===");
     }
