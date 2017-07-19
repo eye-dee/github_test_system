@@ -62,14 +62,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, Integer maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful) {
-        LOGGER.info("findByUserIdRepoIdWithAppliedFilters with userId={}, repoId={},  maxTasksInResultReturn={}, onlySuccessful={}, onlyUnsuccessful={}",
-                userId, repoId, maxTasksInResultReturn, onlySuccessful, onlyUnsuccessful);
-
+    public List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, int maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful) {
         if (maxTasksInResultReturn <= 0 || maxTasksInResultReturn > MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE) {
             LOGGER.error("maxTasksInResultReturn should be grater than 0 and less than {}", MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE);
-            throw new BusinessLogicException(new StringBuilder("maxTasksInResultReturn should be grater than 0 and less than ")
-                    .append(MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE).toString());
+            throw new BusinessLogicException("maxTasksInResultReturn should be grater than 0 and less than " +
+                    MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE);
         }
         return (onlySuccessful && onlyUnsuccessful)
                 ? taskDao.findByUserIdRepoIdWithAppliedFilters(userId, repoId, maxTasksInResultReturn, false, false)

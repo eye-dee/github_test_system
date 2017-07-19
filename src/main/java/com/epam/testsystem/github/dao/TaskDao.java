@@ -80,7 +80,7 @@ public class TaskDao {
     }
 
     public List<Task> findByUserIdRepoIdWithAppliedFilters(final long userId, final long repoId,
-                                                           final Integer maxTasksInResultReturn, final boolean onlySuccessful,
+                                                           final int maxTasksInResultReturn, final boolean onlySuccessful,
                                                            final boolean onlyUnsuccessful) {
         StringBuilder query = new StringBuilder("SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?");
         if (onlySuccessful) {
