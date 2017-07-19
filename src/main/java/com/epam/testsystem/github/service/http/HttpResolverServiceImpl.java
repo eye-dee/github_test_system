@@ -35,7 +35,7 @@ public class HttpResolverServiceImpl implements HttpResolverService {
     @Override
     public void setCredentials(final String username, final String password) {
         LOGGER.debug("setCredentials with username={} and password=[PROTECTED]", username, password);
-        authorizationHeaderValue = new StringBuilder("Basic ").append(createAuthHeader(username, password)).toString();
+        authorizationHeaderValue = "Basic " + createAuthHeader(username, password);
     }
 
     @Override
@@ -97,19 +97,17 @@ public class HttpResolverServiceImpl implements HttpResolverService {
             final ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
             if (!Objects.equals(out.getStatusCode(), HttpStatus.OK)) {
                 LOGGER.error("Incorrect response status code = {} instead of code = 200", out.getStatusCode().toString());
-                throw new BusinessLogicException(new StringBuilder("Incorrect response status code ")
-                        .append(out.getStatusCode())
-                        .append(" instead of code = 200")
-                        .toString());
+                throw new BusinessLogicException("Incorrect response status code " +
+                        out.getStatusCode() +
+                        " instead of code = 200");
             }
             return out.getBody();
         } catch (Exception e) {
             LOGGER.error("Can't GET to: {} because of {}", url, e.getMessage());
-            throw new BusinessLogicException(new StringBuilder("Can't GET to ")
-                    .append(url)
-                    .append("  because of : ")
-                    .append(e.getMessage())
-                    .toString());
+            throw new BusinessLogicException("Can't GET to " +
+                    url +
+                    "  because of : " +
+                    e.getMessage());
         }
     }
 }

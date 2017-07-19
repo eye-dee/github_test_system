@@ -57,7 +57,7 @@ public class HttpResolverServiceTest {
                 .thenReturn(mockResponse);
     }
 
-    @Test
+    @Test(expected = BusinessLogicException.class)
     public void sendGETRequestWithCredentialsWithNullAuthorizationHeaderValue() {
         httpResolverServiceImpl.sendGETRequestWithCredentials("aaa", String.class);
     }
