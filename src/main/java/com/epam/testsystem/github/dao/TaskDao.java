@@ -70,9 +70,8 @@ public class TaskDao {
 
     public List<Task> findAllByUserId(final long userId, final String cycleName) {
         return jdbcTemplate.query(
-                "SELECT id, user_id, repo_id, register_time, status, successful, log->'$." +
-                        cycleName +
-                        "' AS 'tasks.log'" +
+                "SELECT id, user_id, repo_id, register_time, status, successful, " +
+                        "log->'$." +cycleName + "' AS 'tasks.log'" +
                         " FROM tasks WHERE user_id = ?",
                 new Object[]{userId},
                 TASK_ROW_MAPPER
