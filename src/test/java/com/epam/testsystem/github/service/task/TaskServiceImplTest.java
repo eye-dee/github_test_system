@@ -34,7 +34,7 @@ public class TaskServiceImplTest {
     private static final int ANY_MAX_TASKS_IN_RESULT = 1;
 
     @MockBean
-    TaskDao taskDao;
+    private TaskDao taskDao;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

@@ -1,8 +1,10 @@
 package com.epam.testsystem.github.service.user;
 
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.model.UserWithTasks;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,4 +21,6 @@ public interface UserService extends UserDetailsService {
     User getCurrentUser();
 
     Optional<User> findById(long userId);
+
+    List<UserWithTasks> findAllWithTasks();
 }
