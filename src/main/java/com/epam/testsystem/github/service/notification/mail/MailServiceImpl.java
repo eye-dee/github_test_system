@@ -83,16 +83,21 @@ public class MailServiceImpl implements MailService {
         switch (emailTemplateType) {
             case REGISTRATION_CONFIRMATION:
                 if (!StringUtils.hasText(mailInfo.getEmail()) || !StringUtils.hasText(mailInfo.getPassword())) {
-                    LOGGER.error("Email or password is null or empty. Message with template REGISTRATION_CONFIRMATION cannot be send");
-                    throw new BusinessLogicException("Email or password is null or empty. Message with template REGISTRATION_CONFIRMATION cannot be send");
+                    LOGGER.error("Email or password is null or empty. " +
+                            "Message with template REGISTRATION_CONFIRMATION cannot be send");
+                    throw new BusinessLogicException("Email or password is null or empty. " +
+                            "Message with template REGISTRATION_CONFIRMATION cannot be send");
                 }
                 model.put("email", mailInfo.getEmail());
                 model.put("password", mailInfo.getPassword());
                 break;
             case SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION:
                 if (!StringUtils.hasText(mailInfo.getPassword())) {
-                    LOGGER.error("Password is null or empty. Message with template SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION cannot be send");
-                    throw new BusinessLogicException("Password is null or empty. Message with template SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION cannot be send");
+                    LOGGER.error("Password is null or empty. " +
+                            "Message with template SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION cannot be send");
+
+                    throw new BusinessLogicException("Password is null or empty. " +
+                            "Message with template SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION cannot be send");
                 }
                 model.put("password", mailInfo.getPassword());
                 break;
@@ -103,8 +108,11 @@ public class MailServiceImpl implements MailService {
 
     private void validateDataForEmailSending(String emailTo, String subject, EmailTemplateType emailTemplateType) {
         if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(subject) || Objects.isNull(emailTemplateType)) {
-            LOGGER.error("Destination email or email template or subject is null or empty. No mail with GitHub test tasks link was sent to email={}", emailTo);
-            throw new BusinessLogicException("Destination email or email template or subject is null or empty. . No mail with GitHub test tasks link was sent to email = ".concat(emailTo));
+            LOGGER.error("Destination email or email template or subject is null or empty. " +
+                    "No mail with GitHub test tasks link was sent to email={}", emailTo);
+
+            throw new BusinessLogicException(("Destination email or email template or subject is null or empty. . " +
+                    "No mail with GitHub test tasks link was sent to email = ").concat(emailTo));
         }
     }
 }
