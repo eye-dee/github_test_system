@@ -103,15 +103,21 @@ public class TaskDaoTest {
         final User mainUser = testUtil.getMainUser();
         final Repo repo = testUtil.addRepo();
 
-        assertThat(taskDao.add(mainUser.getId(),repo.getId()))
-                .satisfies(task -> {
-                    assertThat(task.getId()).isGreaterThan(0);
-                    assertThat(task.getLog()).isEqualTo("");
-                    assertThat(task.getRegisterTime()).isAfterOrEqualTo(LocalDateTime.now().withNano(0));
-                    assertThat(task.getStatus()).isEqualTo(TaskStatus.PROGRESS);
-                    assertThat(task.getRepoId()).isEqualTo(repo.getId());
-                    assertThat(task.getUserId()).isEqualTo(mainUser.getId());
+        final Task task = taskDao.add(mainUser.getId(), repo.getId());
+        assertThat(task)
+                .satisfies(t -> {
+                    assertThat(t.getId()).isGreaterThan(0);
+                    assertThat(t.getLog()).isEqualTo("{}");
+                    assertThat(t.getRegisterTime()).isAfterOrEqualTo(LocalDateTime.now().withNano(0));
+                    assertThat(t.getStatus()).isEqualTo(TaskStatus.PROGRESS);
+                    assertThat(t.getRepoId()).isEqualTo(repo.getId());
+                    assertThat(t.getUserId()).isEqualTo(mainUser.getId());
                 });
+
+
+        assertThat(taskDao.findAllByUserId(task.getUserId()))
+                .containsOnly(task);
+
     }
 
     @Test

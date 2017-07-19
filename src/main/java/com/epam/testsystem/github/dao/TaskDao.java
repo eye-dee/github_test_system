@@ -33,9 +33,19 @@ public class TaskDao {
                 "INSERT INTO tasks(user_id, repo_id, register_time, successful, log) " +
                         "VALUES(?, ?, ?, ?, ?) " +
                         "ON DUPLICATE KEY UPDATE " +
-                        "id = LAST_INSERT_ID(id), successful = ?, log = ?",
+                        "id = LAST_INSERT_ID(id), successful = ?, log = ?, status = 'CHECKED'",
                 userId, repoId, registerTime, successful, log,
                 successful, log);
+
+        return jdbcTemplate.queryForObject("SELECT * FROM tasks where id = LAST_INSERT_ID()", TASK_ROW_MAPPER);
+    }
+
+    public Task add(long userId, long repoId) {
+        final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
+        jdbcTemplate.update(
+                "INSERT INTO tasks(user_id, repo_id, register_time, log) " +
+                        "VALUES(?, ?, ?, ?)",
+                userId, repoId, registerTime, "{}");
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -45,25 +55,7 @@ public class TaskDao {
                 .registerTime(registerTime)
                 .successful(false)
                 .status(TaskStatus.PROGRESS)
-                .repoId(repoId)
-                .log(log)
-                .build();
-    }
-
-    public Task add(long userId, long repoId) {
-        final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
-        jdbcTemplate.update(
-                "INSERT INTO tasks(user_id, repo_id, register_time) " +
-                        "VALUES(?, ?, ?)",
-                userId, repoId, registerTime);
-
-        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-
-        return Task.builder()
-                .id(id)
-                .userId(userId)
-                .registerTime(registerTime)
-                .successful(false)
+                .log("{}")
                 .repoId(repoId)
                 .build();
     }

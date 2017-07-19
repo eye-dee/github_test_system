@@ -16,7 +16,7 @@ CREATE TABLE tasks (
   id            INT PRIMARY KEY                         AUTO_INCREMENT,
   user_id       INT REFERENCES users (id),
   repo_id       INT,
-  register_time TIMESTAMP,
+  register_time TIMESTAMP NOT NULL,
   status        ENUM ('PROGRESS', 'CHECKED')            DEFAULT 'PROGRESS',
   successful    BOOL                                    DEFAULT FALSE,
   log           JSON,

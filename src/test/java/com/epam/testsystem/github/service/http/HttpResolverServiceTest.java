@@ -58,6 +58,11 @@ public class HttpResolverServiceTest {
     }
 
     @Test
+    public void sendGETRequestWithCredentialsWithNullAuthorizationHeaderValue() {
+        httpResolverServiceImpl.sendGETRequestWithCredentials("aaa", String.class);
+    }
+
+    @Test
     public void successHttpGetRequest() {
         when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
         when(mockResponse.getBody()).thenReturn("body");
