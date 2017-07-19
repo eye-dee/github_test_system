@@ -63,11 +63,7 @@ public class GitHubStatusResolver {
             final JsonNode allPullRequests = OBJECT_MAPPER.readTree(json);
             final Optional<JsonNode> userPullRequest = getUserPullRequest(allPullRequests, userLogin);
 
-            if (userPullRequest.isPresent()) {
-                return Optional.of(userPullRequest.get().get("statuses_url").asText());
-            } else {
-                return Optional.empty();
-            }
+            return userPullRequest.map(jsonNode -> jsonNode.get("statuses_url").asText());
 
         } catch (final IOException e) {
             LOGGER.error("Can't parse json\nWith error {}", e.getMessage());

@@ -1,16 +1,14 @@
 package com.epam.testsystem.github.dao;
 
-import com.epam.testsystem.github.model.GradleLog;
 import com.epam.testsystem.github.model.Task;
+import com.epam.testsystem.github.model.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,15 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>> {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    static GradleLog getGradleLog(String log) {
-        try {
-            return OBJECT_MAPPER.readValue(log, GradleLog.class);
-        } catch (IOException e) {
-            return new GradleLog();
-        }
-    }
-
     static final RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
             User.builder()
                     .id(rs.getLong("users.id"))
@@ -48,6 +37,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .userId(rs.getLong("tasks.user_id"))
                     .repoId(rs.getLong("tasks.repo_id"))
                     .registerTime(rs.getTimestamp("tasks.register_time").toLocalDateTime())
+                    .status(TaskStatus.valueOf(rs.getString("tasks.status")))
                     .successful(rs.getBoolean("tasks.successful"))
                     .log(rs.getString("tasks.log"))
                     .build();

@@ -17,6 +17,7 @@ public class Task {
     private long userId;
     private long repoId;
     private LocalDateTime registerTime;
+    private TaskStatus status;
     private boolean successful;
     private String log;
 }

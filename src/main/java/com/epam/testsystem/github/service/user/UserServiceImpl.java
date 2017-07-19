@@ -2,6 +2,7 @@ package com.epam.testsystem.github.service.user;
 
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.model.User;
+import com.epam.testsystem.github.model.UserWithTasks;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String email, String gitNick, String password) {
+        LOGGER.info("register new user {} with nick {}", email, gitNick);
         String encodedPassword = passwordEncoder.encode(password);
 
         return userDao.add(email, gitNick, encodedPassword);
@@ -43,6 +46,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @Override
+    public Optional<User> findById(long userId) {
+        return userDao.findById(userId);
+    }
+
+    @Override
+    public List<UserWithTasks> findAllWithTasks() {
+        return userDao.findAllWithTasks();
     }
 
     @Override
