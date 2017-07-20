@@ -48,7 +48,7 @@ public class UserServiceImplTest {
         userService = new UserServiceImpl(mock);
         userService.register(ANY_EMAIL, ANY_NICK, ANY_PASSWORD, UserRoleType.ROLE_USER);
 
-        verify(mock, times(1)).add(eq(ANY_EMAIL), eq(ANY_NICK), anyString(), eq(UserRoleType.ROLE_USER.toString()));
+        verify(mock, times(1)).add(eq(ANY_EMAIL), eq(ANY_NICK), anyString(), eq(UserRoleType.ROLE_USER.name()));
     }
 
     @Test

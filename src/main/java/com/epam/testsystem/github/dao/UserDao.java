@@ -62,7 +62,7 @@ public class UserDao {
 
     public List<UserWithTasks> findAllWithTasks() {
         return jdbcTemplate.query(
-                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id",
+                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id WHERE role = 'ROLE_USER' ORDER BY register_time DESC",
                 daoExtractorUtil
         );
     }

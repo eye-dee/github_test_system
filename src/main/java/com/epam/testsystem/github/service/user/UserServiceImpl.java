@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("register new user {} with nick {}", email, gitNick);
         String encodedPassword = passwordEncoder.encode(password);
 
-        return userDao.add(email, gitNick, encodedPassword, roleType.toString());
+        return userDao.add(email, gitNick, encodedPassword, roleType.name());
     }
 
     @Override

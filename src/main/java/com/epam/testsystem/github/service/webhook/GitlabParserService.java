@@ -68,7 +68,7 @@ public class GitlabParserService implements WebhookParserService {
             } else {
                 LOGGER.info("add new user {} with email {}", gitNick, email);
                 final String password = generatePassword();
-                final User user = userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.toString());
+                final User user = userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.name());
                 final MailInfo mailInfo = MailInfo.builder().userName(gitNick).password(password).build();
                 taskService.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",

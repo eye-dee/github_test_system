@@ -46,7 +46,7 @@ public class UserDaoTest {
         final String password = "password";
         final String userRole = "ROLE_USER";
 
-        assertThat(userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.toString()))
+        assertThat(userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.name()))
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);

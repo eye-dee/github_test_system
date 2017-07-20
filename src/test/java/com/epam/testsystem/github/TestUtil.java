@@ -39,11 +39,11 @@ public class TestUtil {
     }
 
     public User makeUser() {
-        return userDao.add(generateString(), generateString(), generateString(), UserRoleType.ROLE_USER.toString());
+        return userDao.add(generateString(), generateString(), generateString(), UserRoleType.ROLE_USER.name());
     }
 
     public User makeUser(final String email, final String gitNick) {
-        return userDao.add(email, gitNick, generateString(), UserRoleType.ROLE_USER.toString());
+        return userDao.add(email, gitNick, generateString(), UserRoleType.ROLE_USER.name());
     }
 
     public Repo addRepo() {
@@ -72,6 +72,6 @@ public class TestUtil {
 
     @Transactional
     public User makeMainUser() {
-        return (mainUser = userDao.add(generateString(),generateString(),generateString(), UserRoleType.ROLE_USER.toString()));
+        return (mainUser = userDao.add(generateString(),generateString(),generateString(), UserRoleType.ROLE_USER.name()));
     }
 }
