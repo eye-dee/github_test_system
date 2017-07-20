@@ -30,6 +30,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .email(rs.getString("users.email"))
                     .gitNick(rs.getString("users.git_nick"))
                     .password(rs.getString("users.password"))
+                    .role(rs.getString("users.role"))
                     .build();
     static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->
             Task.builder()

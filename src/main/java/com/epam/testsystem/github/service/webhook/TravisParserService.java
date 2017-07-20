@@ -2,6 +2,7 @@ package com.epam.testsystem.github.service.webhook;
 
 import com.epam.testsystem.github.dao.UserDao;
 import com.epam.testsystem.github.enums.EmailTemplateType;
+import com.epam.testsystem.github.enums.UserRoleType;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.service.log.TravisLogsResolver;
 import com.epam.testsystem.github.service.notification.mail.MailService;
@@ -67,7 +68,7 @@ public class TravisParserService implements WebhookParserService {
             } else {
                 LOGGER.info("add new user {} with email {}", gitNick, email);
                 final String password = generatePassword();
-                final User user = userDao.add(email, gitNick, password);
+                final User user = userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.toString());
                 final MailInfo mailInfo = MailInfo.builder().userName(gitNick).password(password).build();
                 taskService.addOrUpdate(user.getId(), repoId, status, logs);
                 mailService.sendMessage(email, "", "Github TestSystem",

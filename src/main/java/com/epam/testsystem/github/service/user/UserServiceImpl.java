@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.service.user;
 
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.enums.UserRoleType;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,11 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public User register(String email, String gitNick, String password) {
+    public User register(String email, String gitNick, String password,  UserRoleType roleType) {
         LOGGER.info("register new user {} with nick {}", email, gitNick);
         String encodedPassword = passwordEncoder.encode(password);
 
-        return userDao.add(email, gitNick, encodedPassword);
+        return userDao.add(email, gitNick, encodedPassword, roleType.toString());
     }
 
     @Override

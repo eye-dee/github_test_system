@@ -3,6 +3,7 @@ package com.epam.testsystem.github;
 import com.epam.testsystem.github.dao.RepoDao;
 import com.epam.testsystem.github.dao.TaskDao;
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.enums.UserRoleType;
 import com.epam.testsystem.github.model.Repo;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
@@ -38,11 +39,11 @@ public class TestUtil {
     }
 
     public User makeUser() {
-        return userDao.add(generateString(), generateString(), generateString());
+        return userDao.add(generateString(), generateString(), generateString(), UserRoleType.ROLE_USER.toString());
     }
 
     public User makeUser(final String email, final String gitNick) {
-        return userDao.add(email, gitNick, generateString());
+        return userDao.add(email, gitNick, generateString(), UserRoleType.ROLE_USER.toString());
     }
 
     public Repo addRepo() {
@@ -71,6 +72,6 @@ public class TestUtil {
 
     @Transactional
     public User makeMainUser() {
-        return (mainUser = userDao.add(generateString(),generateString(),generateString()));
+        return (mainUser = userDao.add(generateString(),generateString(),generateString(), UserRoleType.ROLE_USER.toString()));
     }
 }

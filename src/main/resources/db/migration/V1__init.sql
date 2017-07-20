@@ -3,6 +3,7 @@ CREATE TABLE users (
   email    VARCHAR(100) NOT NULL,
   git_nick VARCHAR(100) NOT NULL,
   password VARCHAR(100) NOT NULL,
+  role     VARCHAR(100) NOT NULL,
   UNIQUE (email)
 );
 
