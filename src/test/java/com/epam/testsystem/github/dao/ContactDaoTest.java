@@ -1,0 +1,73 @@
+package com.epam.testsystem.github.dao;
+
+import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.model.Contact;
+import com.epam.testsystem.github.model.User;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+
+import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ActiveProfiles(SPRING_PROFILE_TEST)
+public class ContactDaoTest {
+    private final static String TEST_INF = "user@mail.ru";
+    @Autowired
+    private ContactDao contactDao;
+
+    @Autowired
+    private TestUtil testUtil;
+
+    @Test
+    @Transactional
+    public void addContact() {
+        final User user = testUtil.getMainUser();
+
+        final Contact contact
+                = contactDao.add(user.getId(), "VK", TEST_INF, true);
+
+        assertThat(contactDao.findByUserId(user.getId()).get(0)).isEqualTo(contact);
+    }
+
+    @Test
+    @Transactional
+    public void findAllUserContacts() {
+        final User user = testUtil.getMainUser();
+
+        contactDao.add(user.getId(), "VK", TEST_INF, true);
+        contactDao.add(user.getId(), "MAIL", TEST_INF, true);
+
+        assertThat(contactDao.findByUserId(user.getId())).hasSize(2);
+    }
+
+    @Test
+    @Transactional
+    public void findUserByContact() {
+        final User user = testUtil.getMainUser();
+
+        final Contact contact
+                = contactDao.add(user.getId(), "VK", TEST_INF, true);
+
+        assertThat(contactDao.findUserIdByInf(contact.getType(), contact.getInf()).get(0))
+                .isEqualTo(user.getId());
+    }
+
+    @Test(expected = SQLException.class)
+    @Transactional
+    public void addRepeatedTelegram() {
+
+        final User user = testUtil.getMainUser();
+
+        contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
+        contactDao.add(user.getId(), "TELEGRAM", "New", true);
+    }
+}

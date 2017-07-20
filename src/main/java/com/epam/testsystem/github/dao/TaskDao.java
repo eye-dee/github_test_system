@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
+import com.epam.testsystem.github.enums.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
