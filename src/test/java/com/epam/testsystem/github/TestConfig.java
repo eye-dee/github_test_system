@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_DEV;
 import static org.mockito.Mockito.mock;
@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
  */
 
 @Configuration
+@TestPropertySource(properties = "app.scheduling.enable=false")
 public class TestConfig {
     @Autowired
     private TestUtil testUtil;
