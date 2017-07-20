@@ -20,10 +20,11 @@ public class User implements UserDetails {
     private String email;
     private String gitNick;
     private String password;
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList((GrantedAuthority) () -> "USER");
+        return Collections.singletonList((GrantedAuthority) () -> role);
     }
 
     @Override

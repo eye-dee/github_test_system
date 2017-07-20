@@ -26,10 +26,10 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final DaoExtractorUtil daoExtractorUtil;
 
-    public User add(final String email, final String gitNick, final String password) {
+    public User add(final String email, final String gitNick, final String password, final String roleName) {
         jdbcTemplate.update(
-                "INSERT INTO users(email, git_nick, password) VALUES (?, ?, ?) ",
-                email, gitNick, password);
+                "INSERT INTO users(email, git_nick, password, role) VALUES (?, ?, ?, ?) ",
+                email, gitNick, password, roleName);
 
         final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -38,6 +38,7 @@ public class UserDao {
                 .email(email)
                 .gitNick(gitNick)
                 .password(password)
+                .role(roleName)
                 .build();
     }
 
@@ -61,7 +62,7 @@ public class UserDao {
 
     public List<UserWithTasks> findAllWithTasks() {
         return jdbcTemplate.query(
-                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id",
+                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id WHERE role = 'ROLE_USER' ORDER BY register_time DESC",
                 daoExtractorUtil
         );
     }

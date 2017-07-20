@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.web.controller;
 
 import com.epam.testsystem.github.enums.EmailTemplateType;
+import com.epam.testsystem.github.enums.UserRoleType;
 import com.epam.testsystem.github.service.notification.mail.MailService;
 import com.epam.testsystem.github.service.user.UserService;
 import com.epam.testsystem.github.util.MailInfo;
@@ -27,7 +28,7 @@ public class RegistrationRestController {
     @RequestMapping(value = "user", method = RequestMethod.POST)
     @Transactional
     public boolean register(@RequestBody final NewUserUI newUserUI) {
-        final boolean registration = successfulRegistration(newUserUI);
+        final boolean registration = successfulRegistration(newUserUI, UserRoleType.ROLE_USER);
         MailInfo mailInfo = MailInfo.builder()
                 .userName(newUserUI.getGitNick())
                 .email(newUserUI.getEmail())
@@ -40,9 +41,9 @@ public class RegistrationRestController {
         return registration;
     }
 
-    private boolean successfulRegistration(NewUserUI newUserUI) {
+    private boolean successfulRegistration(NewUserUI newUserUI, UserRoleType roleType) {
         return userService.register(
-                newUserUI.getEmail(), newUserUI.getGitNick(), newUserUI.getPassword()
+                newUserUI.getEmail(), newUserUI.getGitNick(), newUserUI.getPassword(), roleType
         ) != null;
     }
 }
