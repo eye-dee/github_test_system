@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -28,8 +27,8 @@ public class RegistrationRestController {
 
     @RequestMapping(value = "user", method = RequestMethod.POST)
     @Transactional
-    public boolean register(@RequestBody final NewUserUI newUserUI, @RequestParam(required = false, defaultValue ="ROLE_USER") UserRoleType roleType) {
-        final boolean registration = successfulRegistration(newUserUI, roleType);
+    public boolean register(@RequestBody final NewUserUI newUserUI) {
+        final boolean registration = successfulRegistration(newUserUI, UserRoleType.ROLE_USER);
         MailInfo mailInfo = MailInfo.builder()
                 .userName(newUserUI.getGitNick())
                 .email(newUserUI.getEmail())
