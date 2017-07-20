@@ -35,18 +35,25 @@ CREATE TABLE contacts (
     ON DELETE CASCADE
 );
 
-# CREATE TRIGGER unique_telegram_contact
-# BEFORE INSERT ON contacts
-# FOR EACH ROW
-#   BEGIN
-#         DECLARE flag INT;
-#         SELECT COUNT(*)
-#         INTO flag
-#         FROM contacts
-#         WHERE NEW.type = 'TELEGRAM' AND NEW.type = contacts.type;
-#         IF (flag > 0)
-#         THEN
-#           SIGNAL SQLSTATE '45000'
-#           SET MESSAGE_TEXT = 'Repeated telegram contact';
-#         END IF;
-#   END;
+DELIMITER //
+CREATE TRIGGER unique_telegram_contact
+BEFORE INSERT ON contacts
+FOR EACH ROW
+  BEGIN
+    DECLARE flag INT DEFAULT 0;
+    IF (NEW.type = 'TELEGRAM')
+    THEN
+      SELECT EXISTS(SELECT *
+                    FROM contacts
+                    WHERE type = 'TELEGRAM'
+                          AND NEW.user_id = contacts.user_id)
+      INTO flag;
+    END IF;
+    IF (flag != 0)
+    THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Repeated telegram contact';
+    END IF;
+  END;
+//
+DELIMITER ;

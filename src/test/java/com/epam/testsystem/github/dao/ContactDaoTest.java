@@ -11,8 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
-
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,11 +29,27 @@ public class ContactDaoTest {
     @Transactional
     public void addContact() {
         final User user = testUtil.getMainUser();
+        final boolean enabled = true;
+        final String type = "VK";
 
-        final Contact contact
-                = contactDao.add(user.getId(), "VK", TEST_INF, true);
+        assertThat(contactDao.add(user.getId(), type, TEST_INF, enabled))
+                .satisfies(
+                        c -> {
+                            assertThat(c.getId()).isGreaterThan(0);
+                            assertThat(c.getInf()).isEqualTo(TEST_INF);
+                            assertThat(c.getType()).isEqualTo(type);
+                            assertThat(c.getUserId()).isEqualTo(user.getId());
+                        }
+                );
+    }
 
-        assertThat(contactDao.findByUserId(user.getId()).get(0)).isEqualTo(contact);
+    @Test
+    @Transactional
+    public void findContactById() {
+        final User user = testUtil.getMainUser();
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+
+        assertThat(contactDao.findById(contact.getId()).get()).isEqualTo(contact);
     }
 
     @Test
@@ -61,13 +75,45 @@ public class ContactDaoTest {
                 .isEqualTo(user.getId());
     }
 
-    @Test(expected = SQLException.class)
+    @Test
+    @Transactional
+    public void findAllUserContactsWithType() {
+        final User user = testUtil.getMainUser();
+
+        contactDao.add(user.getId(), "VK", TEST_INF, true);
+        contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
+
+        assertThat(contactDao.findByUserIdType(user.getId(), "VK")).hasSize(1);
+    }
+
+    @Test(expected = Exception.class)
     @Transactional
     public void addRepeatedTelegram() {
-
         final User user = testUtil.getMainUser();
 
         contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
         contactDao.add(user.getId(), "TELEGRAM", "New", true);
+    }
+
+    @Test
+    @Transactional
+    public void enableContact() {
+        final User user = testUtil.getMainUser();
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+
+        contactDao.enableContact(contact.getId());
+
+        assertThat(contactDao.findById(contact.getId()).get().isEnabled()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void updateContact() {
+        final User user = testUtil.getMainUser();
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+
+        contactDao.updateContact(contact.getId(), "new_value");
+
+        assertThat(contactDao.findById(contact.getId()).get().getInf()).isEqualTo("new_value");
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.dao.support.DataAccessUtils.singleResult;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
@@ -58,6 +61,36 @@ public class ContactDao {
                 "SELECT user_id FROM contacts WHERE type = ? AND inf = ?",
                 new Object[]{type, inf},
                 Long.class
+        );
+    }
+
+    public List<Contact> findByUserIdType(final long userId, final String type) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contacts WHERE user_id = ? AND type = ?",
+                new Object[]{userId, type},
+                CONTACT_ROW_MAPPER
+        );
+    }
+
+    public Optional<Contact> findById(final long id) {
+        return Optional.ofNullable(
+                singleResult(jdbcTemplate.query(
+                        "SELECT * FROM contacts WHERE id = ?",
+                        new Object[]{id},
+                        CONTACT_ROW_MAPPER))
+        );
+    }
+
+    public void enableContact(final long id) {
+        jdbcTemplate.update(
+                "UPDATE contacts SET enabled = TRUE WHERE id = ?",
+                id);
+    }
+
+    public void updateContact(final long id, final String inf) {
+        jdbcTemplate.update(
+                "UPDATE contacts SET inf = ? WHERE id = ?",
+                inf, id
         );
     }
 }
