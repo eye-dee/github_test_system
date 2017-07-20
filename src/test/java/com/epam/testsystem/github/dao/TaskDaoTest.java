@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.enums.TaskStatus;
 import com.epam.testsystem.github.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;

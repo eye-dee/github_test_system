@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
+import com.epam.testsystem.github.enums.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
 import org.springframework.dao.DataAccessException;
