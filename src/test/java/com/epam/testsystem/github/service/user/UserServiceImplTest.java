@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.service.user;
 
 import com.epam.testsystem.github.dao.UserDao;
+import com.epam.testsystem.github.enums.UserRoleType;
 import com.epam.testsystem.github.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,12 @@ import java.util.Optional;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * github_test
@@ -40,9 +46,9 @@ public class UserServiceImplTest {
     public void register() throws Exception {
         final UserDao mock = mock(UserDao.class);
         userService = new UserServiceImpl(mock);
-        userService.register(ANY_EMAIL, ANY_NICK, ANY_PASSWORD);
+        userService.register(ANY_EMAIL, ANY_NICK, ANY_PASSWORD, UserRoleType.ROLE_USER);
 
-        verify(mock, times(1)).add(eq(ANY_EMAIL), eq(ANY_NICK), anyString());
+        verify(mock, times(1)).add(eq(ANY_EMAIL), eq(ANY_NICK), anyString(), eq(UserRoleType.ROLE_USER.name()));
     }
 
     @Test

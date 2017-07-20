@@ -23,7 +23,7 @@ import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_PROD
 @Configuration
 @EnableWebSecurity
 @Profile(value = {SPRING_PROFILE_PROD, SPRING_PROFILE_DEV})
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
@@ -41,13 +41,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
                         "/registration/**",
                         "/login.html"
                 ).permitAll()
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/operator/**").access("hasRole('ROLE_OPERATOR') or hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated();
 
         http.formLogin()
                 .loginPage("/login.html")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .permitAll().defaultSuccessUrl("/");
+                .permitAll()
+                .defaultSuccessUrl("/")
+                .failureUrl("/login.html?error");
 
         http.logout()
                 .logoutSuccessUrl("/")
