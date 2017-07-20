@@ -1,3 +1,5 @@
 spring:
   datasource:
+    username: developer
+    password: developer2017
     url: jdbc:mysql://10.66.128.137:3306/gitTestSystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false
