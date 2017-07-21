@@ -49,7 +49,7 @@ public class TravisParserServiceTest {
     @Transactional
     public void parseSuccessful() throws Exception {
         String payload = FileUtils.readFileToString(
-                new File("src/test/resources/travis_payload.json"), "UTF-8"
+                new File("src/test/resources/webhook/travis_payload.json"), "UTF-8"
         );
         testUtil.addRepo(REPO_FROM_JSON);
 
