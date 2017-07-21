@@ -29,7 +29,7 @@ public class TelegramMessageHandler implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
-    private SendMessage prepareMessage(Object chatId, String message) {
+    private SendMessage prepareMessage(final Object chatId, final String message) {
         return new SendMessage(chatId, message)
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true)
@@ -37,8 +37,8 @@ public class TelegramMessageHandler implements UpdatesListener {
     }
 
     @Override
-    public int process(List<Update> updates) {
-        for (Update update : updates) {
+    public int process(final List<Update> updates) {
+        for (final Update update : updates) {
             final Message message = update.message();
 
             if (message != null) {
@@ -56,19 +56,19 @@ public class TelegramMessageHandler implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    private void startHandler(Long chatId) {
+    private void startHandler(final Long chatId) {
         sendMessage(chatId, "Hello my friend");
     }
 
-    private void tasksHandler(Long chatId) {
+    private void tasksHandler(final Long chatId) {
         // TODO: 7/19/2017 get user his tasks 
         sendMessage(chatId, "Your tasks:");
     }
 
-    public void sendMessage(Long chatId, String message) {
+    public void sendMessage(final Long chatId, final String message) {
         final SendMessage request = prepareMessage(chatId, message);
-        SendResponse sendResponse = telegramBot.execute(request);
-        boolean ok = sendResponse.isOk();
-        Message m = sendResponse.message();
+        final SendResponse sendResponse = telegramBot.execute(request);
+        final boolean ok = sendResponse.isOk();
+        final Message m = sendResponse.message();
     }
 }

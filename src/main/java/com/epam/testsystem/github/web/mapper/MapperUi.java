@@ -1,8 +1,10 @@
 package com.epam.testsystem.github.web.mapper;
 
 import com.epam.testsystem.github.TimeConstant;
+import com.epam.testsystem.github.model.Contact;
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.UserWithTasks;
+import com.epam.testsystem.github.web.model.ContactUI;
 import com.epam.testsystem.github.web.model.TaskUI;
 import com.epam.testsystem.github.web.model.UserUI;
 import org.mapstruct.Mapper;
@@ -28,4 +30,7 @@ public interface MapperUi {
     UserUI mapUser(UserWithTasks userWithTasks);
 
     List<UserUI> mapUsers(List<UserWithTasks> userWithTasksList);
+
+    ContactUI mapContact(Contact contact);
+    List<ContactUI> mapContacts(List<Contact> contact);
 }

@@ -41,7 +41,7 @@ public class TaskDao {
         return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE id = LAST_INSERT_ID()", TASK_ROW_MAPPER);
     }
 
-    public Task add(long userId, long repoId) {
+    public Task add(final long userId, final long repoId) {
         final LocalDateTime registerTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
                 "INSERT INTO tasks(user_id, repo_id, register_time, log) " +
@@ -75,7 +75,7 @@ public class TaskDao {
     public List<Task> findByUserIdRepoIdWithAppliedFilters(final long userId, final long repoId,
                                                            final int maxTasksInResultReturn, final boolean onlySuccessful,
                                                            final boolean onlyUnsuccessful) {
-        StringBuilder query = new StringBuilder("SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?");
+        final StringBuilder query = new StringBuilder("SELECT * FROM tasks WHERE user_id = ? AND repo_id = ?");
         if (onlySuccessful) {
             query.append(" AND successful = true");
         }

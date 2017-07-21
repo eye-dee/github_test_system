@@ -32,7 +32,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public Task addOrUpdate(long userId, long repoId, boolean successful, String log) {
+    public Task addOrUpdate(final long userId, final long repoId, final boolean successful, final String log) {
         LOGGER.info("add or update new task for user {} repo {}", userId, repoId);
 
         final GradleLog structedLog = logParser.getStructedLog(log);
@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService {
             final String parsedLogs = OBJECT_MAPPER.writeValueAsString(structedLog);
 
             return taskDao.addOrUpdate(userId, repoId, successful, parsedLogs);
-        } catch (JsonProcessingException e) {
+        } catch (final JsonProcessingException e) {
             LOGGER.warn("can't convert parsed logs. Will user standart\nError = {}", e.getMessage());
             return taskDao.addOrUpdate(userId, repoId, successful, log);
         }
@@ -49,20 +49,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public List<Task> findAllByUserId(long userId) {
+    public List<Task> findAllByUserId(final long userId) {
         return taskDao.findAllByUserId(userId);
     }
 
     @Override
     @Transactional
-    public boolean setResultById(long userId, long id, boolean successful, String log) {
+    public boolean setResultById(final long userId, final long id, final boolean successful, final String log) {
         LOGGER.info("Set result for user {} and id {}", userId, id);
         return taskDao.setResultById(userId, id, successful, log);
     }
 
     @Override
     @Transactional
-    public List<Task> findByUserIdRepoIdWithAppliedFilters(long userId, long repoId, int maxTasksInResultReturn, boolean onlySuccessful, boolean onlyUnsuccessful) {
+    public List<Task> findByUserIdRepoIdWithAppliedFilters(final long userId, final long repoId, final int maxTasksInResultReturn, final boolean onlySuccessful, final boolean onlyUnsuccessful) {
         if (maxTasksInResultReturn <= 0 || maxTasksInResultReturn > MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE) {
             LOGGER.error("maxTasksInResultReturn should be grater than 0 and less than {}", MAX_TASKS_AMOUNT_GETTING_FROM_DATABASE);
             throw new BusinessLogicException("maxTasksInResultReturn should be grater than 0 and less than " +
@@ -74,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task add(long userId, long repoId) {
+    public Task add(final long userId, final long repoId) {
         LOGGER.info("add new task for user {} and repo {}", userId, repoId);
         return taskDao.add(userId, repoId);
     }

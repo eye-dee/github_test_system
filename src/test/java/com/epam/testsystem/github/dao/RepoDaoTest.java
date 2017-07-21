@@ -32,7 +32,7 @@ public class RepoDaoTest {
     @Test
     @Transactional
     public void add() throws Exception {
-        int id = 1;
+        final int id = 1;
         final User user = testUtil.getMainUser();
         final String name = "name";
 

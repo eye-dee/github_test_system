@@ -66,14 +66,14 @@ public class MailServiceImpl implements MailService {
             helper.setText(emailText, true);
 
             mailSender.send(helper.getMimeMessage());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("No mail was sent because of : {}", e.getMessage());
             throw new BusinessLogicException("No mail was sent because of : ".concat(e.getMessage()));
         }
         LOGGER.debug("=== Message was sent ===");
     }
 
-    private Map<String, String> getEmailModelForTemplate(MailInfo mailInfo, EmailTemplateType emailTemplateType) {
+    private Map<String, String> getEmailModelForTemplate(final MailInfo mailInfo, final EmailTemplateType emailTemplateType) {
         if (Objects.isNull(mailInfo) || !StringUtils.hasText(mailInfo.getUserName())) {
             LOGGER.error("MailInfo or userName is null or empty. Message cannot be send");
             throw new BusinessLogicException("MailInfo or userName is null or empty. Message cannot be send");
@@ -106,7 +106,7 @@ public class MailServiceImpl implements MailService {
         return model;
     }
 
-    private void validateDataForEmailSending(String emailTo, String subject, EmailTemplateType emailTemplateType) {
+    private void validateDataForEmailSending(final String emailTo, final String subject, final EmailTemplateType emailTemplateType) {
         if (!StringUtils.hasText(emailTo) || !StringUtils.hasText(subject) || Objects.isNull(emailTemplateType)) {
             LOGGER.error("Destination email or email template or subject is null or empty. " +
                     "No mail with GitHub test tasks link was sent to email={}", emailTo);

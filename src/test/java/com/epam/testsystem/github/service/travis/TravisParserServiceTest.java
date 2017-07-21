@@ -48,7 +48,7 @@ public class TravisParserServiceTest {
     @Test
     @Transactional
     public void parseSuccessful() throws Exception {
-        String payload = FileUtils.readFileToString(
+        final String payload = FileUtils.readFileToString(
                 new File("src/test/resources/travis_payload.json"), "UTF-8"
         );
         testUtil.addRepo(REPO_FROM_JSON);
@@ -69,7 +69,7 @@ public class TravisParserServiceTest {
         assertTaskAmount(0);
     }
 
-    private void assertTaskAmount(int amount) {
+    private void assertTaskAmount(final int amount) {
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM tasks", Integer.class)).isEqualTo(amount);
     }
 }

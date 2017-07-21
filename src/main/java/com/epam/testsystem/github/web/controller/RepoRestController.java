@@ -56,9 +56,9 @@ public class RepoRestController {
      */
     @RequestMapping(value = "{repoId}", method = RequestMethod.GET)
     public List<TaskUI> getTasks(@Min(value = 1, message = "Incorrect repoId value") @PathVariable(value = "repoId") final long repoId,
-                                 @RequestParam(required = false, defaultValue = "300") Integer maxTasksInResultReturn,
-                                 @RequestParam(required = false) boolean onlySuccessful,
-                                 @RequestParam(required = false) boolean onlyUnsuccessful) {
+                                 @RequestParam(required = false, defaultValue = "300") final Integer maxTasksInResultReturn,
+                                 @RequestParam(required = false) final boolean onlySuccessful,
+                                 @RequestParam(required = false) final boolean onlyUnsuccessful) {
         LOGGER.debug("GET /repo/{} with maxTasksInResultReturn = {}, onlySuccessful = {}, onlyUnsuccessful = {}", repoId, maxTasksInResultReturn, onlySuccessful, onlyUnsuccessful);
 
         final User currentUser = userService.getCurrentUser();

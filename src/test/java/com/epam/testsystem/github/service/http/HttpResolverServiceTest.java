@@ -102,7 +102,7 @@ public class HttpResolverServiceTest {
         when(mockResponse.getStatusCode()).thenReturn(HttpStatus.OK);
         when(mockResponse.getBody()).thenReturn("body");
 
-        Map<String, String> headersMap = Collections.singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE);
+        final Map<String, String> headersMap = Collections.singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE);
         assertThat(httpResolverServiceImpl.sendGETRequestWithHeaders(GITHUB_STATUSES_URL,
                 headersMap, String.class), is("body"));
     }
@@ -122,7 +122,7 @@ public class HttpResolverServiceTest {
         when(mockResponse.getBody()).thenReturn("body");
 
         httpResolverServiceImpl.setCredentials("correct", "correct");
-        Map<String, String> headersMap = new HashMap<>();
+        final Map<String, String> headersMap = new HashMap<>();
         headersMap.put("Accept", MediaType.APPLICATION_JSON_VALUE);
         assertThat(httpResolverServiceImpl.sendGETRequestWithHeadersAndCredentials(GITHUB_STATUSES_URL,
                 headersMap, String.class), is("body"));

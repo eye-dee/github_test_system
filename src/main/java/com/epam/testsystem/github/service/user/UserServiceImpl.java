@@ -32,15 +32,15 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public User register(String email, String gitNick, String password,  UserRoleType roleType) {
+    public User register(final String email, final String gitNick, final String password, final UserRoleType roleType) {
         LOGGER.info("register new user {} with nick {}", email, gitNick);
-        String encodedPassword = passwordEncoder.encode(password);
+        final String encodedPassword = passwordEncoder.encode(password);
 
         return userDao.add(email, gitNick, encodedPassword, roleType.name());
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findByEmail(final String email) {
         return userDao.findByEmail(email);
     }
 
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(long userId) {
+    public Optional<User> findById(final long userId) {
         return userDao.findById(userId);
     }
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final Optional<User> userOpt = userDao.findByEmail(email);
         if (userOpt.isPresent()) {
             return userOpt.get();

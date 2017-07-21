@@ -32,16 +32,16 @@ public class ContactDaoTest {
     @Transactional
     public void addContact() {
         final User user = testUtil.getMainUser();
-        final boolean enabled = true;
         final String type = "VK";
 
-        assertThat(contactDao.add(user.getId(), type, TEST_INF, enabled))
+        assertThat(contactDao.add(user.getId(), type, TEST_INF))
                 .satisfies(
                         c -> {
                             assertThat(c.getId()).isGreaterThan(0);
                             assertThat(c.getInf()).isEqualTo(TEST_INF);
                             assertThat(c.getType()).isEqualTo(type);
                             assertThat(c.getUserId()).isEqualTo(user.getId());
+                            assertThat(c.isEnabled()).isTrue();
                         }
                 );
     }
@@ -56,7 +56,7 @@ public class ContactDaoTest {
     @Transactional
     public void findContactById() {
         final User user = testUtil.getMainUser();
-        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
         assertThat(contactDao.findById(contact.getId())).contains(contact);
     }
@@ -66,8 +66,8 @@ public class ContactDaoTest {
     public void findAllUserContacts() {
         final User user = testUtil.getMainUser();
 
-        contactDao.add(user.getId(), "VK", TEST_INF, true);
-        contactDao.add(user.getId(), "MAIL", TEST_INF, true);
+        contactDao.add(user.getId(), "VK", TEST_INF);
+        contactDao.add(user.getId(), "MAIL", TEST_INF);
 
         assertThat(contactDao.findByUserId(user.getId())).hasSize(2);
     }
@@ -77,8 +77,8 @@ public class ContactDaoTest {
     public void findAllUserContactsWithType() {
         final User user = testUtil.getMainUser();
 
-        contactDao.add(user.getId(), "VK", TEST_INF, true);
-        contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
+        contactDao.add(user.getId(), "VK", TEST_INF);
+        contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
         assertThat(contactDao.findByUserIdType(user.getId(), "VK")).hasSize(1);
     }
@@ -88,20 +88,33 @@ public class ContactDaoTest {
     public void addRepeatedTelegram() {
         final User user = testUtil.getMainUser();
 
-        contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
+        contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
         assertThatThrownBy(() ->
-                contactDao.add(user.getId(), "TELEGRAM", "New", true)
+                contactDao.add(user.getId(), "TELEGRAM", "New")
         ).hasCauseExactlyInstanceOf(SQLException.class);
+    }
+
+    @Test
+    @Transactional
+    public void disableContact() {
+        final User user = testUtil.getMainUser();
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
+
+        assertThat(contactDao.disableContact(contact.getId())).isTrue();
+
+        assertThat(contactDao.findById(contact.getId()))
+                .hasValueSatisfying(c -> assertThat(c.isEnabled()).isFalse());
     }
 
     @Test
     @Transactional
     public void enableContact() {
         final User user = testUtil.getMainUser();
-        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
-        contactDao.enableContact(contact.getId());
+        contactDao.disableContact(contact.getId());
+        assertThat(contactDao.enableContact(contact.getId())).isTrue();
 
         assertThat(contactDao.findById(contact.getId()))
                 .hasValueSatisfying(c -> assertThat(c.isEnabled()).isTrue());
@@ -111,10 +124,11 @@ public class ContactDaoTest {
     @Transactional
     public void updateContact() {
         final User user = testUtil.getMainUser();
-        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
+        final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
-        contactDao.updateContact(contact.getId(), "new_value");
+        assertThat(contactDao.updateContact(contact.getId(), "new_value")).isTrue();
 
-        assertThat(contactDao.findById(contact.getId()).get().getInf()).isEqualTo("new_value");
+        assertThat(contactDao.findById(contact.getId()))
+                .hasValueSatisfying(c -> assertThat(c.getInf()).isEqualTo("new_value"));
     }
 }

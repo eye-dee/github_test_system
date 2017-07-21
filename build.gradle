@@ -20,7 +20,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'de.undercouch.download'
 
 ext {
-    mapstructVersion = "1.2.0.Beta1"
+    mapstructVersion = "1.2.0.CR1"
     lombokVersion = "1.16.16"
 }
 

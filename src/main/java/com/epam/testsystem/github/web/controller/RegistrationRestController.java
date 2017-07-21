@@ -29,7 +29,7 @@ public class RegistrationRestController {
     @Transactional
     public boolean register(@RequestBody final NewUserUI newUserUI) {
         final boolean registration = successfulRegistration(newUserUI, UserRoleType.ROLE_USER);
-        MailInfo mailInfo = MailInfo.builder()
+        final MailInfo mailInfo = MailInfo.builder()
                 .userName(newUserUI.getGitNick())
                 .email(newUserUI.getEmail())
                 .password(newUserUI.getPassword())
@@ -41,7 +41,7 @@ public class RegistrationRestController {
         return registration;
     }
 
-    private boolean successfulRegistration(NewUserUI newUserUI, UserRoleType roleType) {
+    private boolean successfulRegistration(final NewUserUI newUserUI, final UserRoleType roleType) {
         return userService.register(
                 newUserUI.getEmail(), newUserUI.getGitNick(), newUserUI.getPassword(), roleType
         ) != null;

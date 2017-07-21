@@ -68,7 +68,7 @@ public class HttpResolverServiceImpl implements HttpResolverService {
     }
 
     @Override
-    public <T> T sendGETRequestWithHeadersAndCredentials(final String url, Map<String, String> headers, final Class<T> type) {
+    public <T> T sendGETRequestWithHeadersAndCredentials(final String url, final Map<String, String> headers, final Class<T> type) {
         LOGGER.debug("sendGETRequestWithHeadersAndCredentials with url={} and headers", url);
         if (StringUtils.hasText(authorizationHeaderValue) && !CollectionUtils.isEmpty(headers)) {
             headers.put(HttpHeaders.AUTHORIZATION, authorizationHeaderValue);
@@ -92,7 +92,7 @@ public class HttpResolverServiceImpl implements HttpResolverService {
         return httpHeaders;
     }
 
-    private <T> T executeGETRequest(String url, HttpEntity entity, Class<T> type) {
+    private <T> T executeGETRequest(final String url, final HttpEntity entity, final Class<T> type) {
         try {
             final ResponseEntity<T> out = restTemplate.exchange(url, HttpMethod.GET, entity, type);
             if (!Objects.equals(out.getStatusCode(), HttpStatus.OK)) {
@@ -102,7 +102,7 @@ public class HttpResolverServiceImpl implements HttpResolverService {
                         " instead of code = 200");
             }
             return out.getBody();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("Can't GET to: {} because of {}", url, e.getMessage());
             throw new BusinessLogicException("Can't GET to " +
                     url +
