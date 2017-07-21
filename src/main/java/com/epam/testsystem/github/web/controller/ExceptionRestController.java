@@ -28,8 +28,6 @@ public class ExceptionRestController {
     public String responseFail(final ConstraintViolationException exception) {
         LOGGER.error("Validation exception: {}", exception.getLocalizedMessage());
         final List<String> errors = exception.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        return new StringBuilder("Validation exception: ")
-                .append(errors.toString())
-                .toString();
+        return "Validation exception: " + errors.toString();
     }
 }

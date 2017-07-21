@@ -11,10 +11,8 @@ import lombok.Data;
 @Data
 @Builder
 public class MailInfo {
-
     private String userName;
     private String email;
     private String password;
-
 }
 

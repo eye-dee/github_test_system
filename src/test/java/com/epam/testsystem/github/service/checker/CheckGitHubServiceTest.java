@@ -46,7 +46,9 @@ public class CheckGitHubServiceTest {
     @MockBean
     private GitHubStatusResolver gitHubStatusResolver;
 
-    private void checkStatusSuccessful(long taskId, TaskStatus statusRequired, boolean successfulRequired) {
+    private void checkStatusSuccessful(final long taskId,
+                                       final TaskStatus statusRequired,
+                                       final boolean successfulRequired) {
         assertThat(jdbcTemplate.queryForObject("SELECT status FROM tasks WHERE id = ?",
                 new Object[]{taskId},
                 String.class)).isEqualTo(statusRequired.name());
@@ -78,7 +80,9 @@ public class CheckGitHubServiceTest {
     @Test
     @Transactional
     public void checkTaskWithException() throws Exception {
-        when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString())).thenReturn(true).thenThrow(new RuntimeException("test"));
+        when(gitHubStatusResolver.getUserResult(anyString(), anyString(), anyString()))
+                .thenReturn(true)
+                .thenThrow(new RuntimeException("test"));
         final Repo repo = testUtil.addRepo();
 
         final User user = testUtil.makeUser();

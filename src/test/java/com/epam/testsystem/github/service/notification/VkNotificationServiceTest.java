@@ -30,7 +30,7 @@ public class VkNotificationServiceTest {
     private NotificationService vkNotificationService;
 
     @MockBean
-    VkApiClient vkApiClient;
+    private VkApiClient vkApiClient;
 
     @Test
     public void sendNotification() throws Exception {
