@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.model;
 
+import com.epam.testsystem.github.enums.TaskStatus;
 import lombok.Builder;
 import lombok.Data;
 
