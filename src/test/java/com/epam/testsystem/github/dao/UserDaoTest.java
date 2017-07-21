@@ -2,10 +2,7 @@ package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
 import com.epam.testsystem.github.enums.UserRoleType;
-import com.epam.testsystem.github.model.Repo;
-import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.model.UserWithTasks;
+import com.epam.testsystem.github.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,9 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private ContactDao contactDao;
 
     @Autowired
     private TestUtil testUtil;
@@ -112,5 +112,16 @@ public class UserDaoTest {
                                 .tasks(Arrays.asList(task21, task22, task23))
                                 .build()
                 );
+    }
+
+    @Test
+    @Transactional
+    public void findUserByContact() {
+        final User user = testUtil.makeUser();
+
+        final Contact contact = contactDao.add(user.getId(), "VK", "inf", false);
+
+        assertThat(userDao.findByContact(contact.getType(), contact.getInf()).get(0))
+                .isEqualTo(user);
     }
 }

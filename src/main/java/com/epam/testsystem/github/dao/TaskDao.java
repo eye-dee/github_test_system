@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
+import static org.springframework.dao.support.DataAccessUtils.singleResult;
 
 /**
  * github_test
@@ -37,7 +38,7 @@ public class TaskDao {
                 userId, repoId, registerTime, successful, log,
                 successful, log);
 
-        return jdbcTemplate.queryForObject("SELECT * FROM tasks where id = LAST_INSERT_ID()", TASK_ROW_MAPPER);
+        return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE id = LAST_INSERT_ID()", TASK_ROW_MAPPER);
     }
 
     public Task add(long userId, long repoId) {
@@ -47,17 +48,10 @@ public class TaskDao {
                         "VALUES(?, ?, ?, ?)",
                 userId, repoId, registerTime, "{}");
 
-        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-
-        return Task.builder()
-                .id(id)
-                .userId(userId)
-                .registerTime(registerTime)
-                .successful(false)
-                .status(TaskStatus.PROGRESS)
-                .log("{}")
-                .repoId(repoId)
-                .build();
+        return singleResult(jdbcTemplate.query(
+                "SELECT * FROM tasks WHERE id = last_insert_id()",
+                TASK_ROW_MAPPER)
+        );
     }
 
     public List<Task> findAllByUserId(final long userId) {
@@ -71,7 +65,7 @@ public class TaskDao {
     public List<Task> findAllByUserId(final long userId, final String cycleName) {
         return jdbcTemplate.query(
                 "SELECT id, user_id, repo_id, register_time, status, successful, " +
-                        "log->'$." +cycleName + "' AS 'tasks.log'" +
+                        "log->'$." + cycleName + "' AS 'tasks.log'" +
                         " FROM tasks WHERE user_id = ?",
                 new Object[]{userId},
                 TASK_ROW_MAPPER

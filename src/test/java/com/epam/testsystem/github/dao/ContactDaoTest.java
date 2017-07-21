@@ -11,8 +11,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -45,11 +48,17 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
+    public void findContactByIdEmpty() {
+        assertThat(contactDao.findById(1)).isEmpty();
+    }
+
+    @Test
+    @Transactional
     public void findContactById() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF, false);
 
-        assertThat(contactDao.findById(contact.getId()).get()).isEqualTo(contact);
+        assertThat(contactDao.findById(contact.getId())).contains(contact);
     }
 
     @Test
@@ -65,18 +74,6 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void findUserByContact() {
-        final User user = testUtil.getMainUser();
-
-        final Contact contact
-                = contactDao.add(user.getId(), "VK", TEST_INF, true);
-
-        assertThat(contactDao.findUserIdByInf(contact.getType(), contact.getInf()).get(0))
-                .isEqualTo(user.getId());
-    }
-
-    @Test
-    @Transactional
     public void findAllUserContactsWithType() {
         final User user = testUtil.getMainUser();
 
@@ -86,13 +83,16 @@ public class ContactDaoTest {
         assertThat(contactDao.findByUserIdType(user.getId(), "VK")).hasSize(1);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     @Transactional
     public void addRepeatedTelegram() {
         final User user = testUtil.getMainUser();
 
         contactDao.add(user.getId(), "TELEGRAM", TEST_INF, true);
-        contactDao.add(user.getId(), "TELEGRAM", "New", true);
+
+        assertThatThrownBy(() ->
+                contactDao.add(user.getId(), "TELEGRAM", "New", true)
+        ).hasCauseExactlyInstanceOf(SQLException.class);
     }
 
     @Test
@@ -103,7 +103,8 @@ public class ContactDaoTest {
 
         contactDao.enableContact(contact.getId());
 
-        assertThat(contactDao.findById(contact.getId()).get().isEnabled()).isTrue();
+        assertThat(contactDao.findById(contact.getId()))
+                .hasValueSatisfying(c -> assertThat(c.isEnabled()).isTrue());
     }
 
     @Test
