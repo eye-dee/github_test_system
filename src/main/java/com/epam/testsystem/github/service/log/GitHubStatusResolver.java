@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.log;
 
 import com.epam.testsystem.github.service.http.HttpResolverService;
 import com.fasterxml.jackson.databind.JsonNode;

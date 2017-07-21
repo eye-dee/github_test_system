@@ -1,8 +1,8 @@
-package com.epam.testsystem.github.service;
+package com.epam.testsystem.github.service.checker;
 
 import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.service.log.LogResolver;
+import com.epam.testsystem.github.service.log.GitHubStatusResolver;
 import com.epam.testsystem.github.service.task.TaskService;
 import com.epam.testsystem.github.service.user.UserService;
 import lombok.RequiredArgsConstructor;

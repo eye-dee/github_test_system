@@ -73,7 +73,7 @@ public class WebhookRestControllerTest {
     @Transactional
     public void newPullTravis() throws Exception {
         final String newPullJson = FileUtils.readFileToString(
-                new File("src/test/resources/travis_payload.json"), "UTF-8");
+                new File("src/test/resources/webhook/travis_payload.json"), "UTF-8");
 
         testUtil.addRepo(TRAVIS_REPO_ID);
 
@@ -97,7 +97,7 @@ public class WebhookRestControllerTest {
     @Transactional
     public void newPullGitlab() throws Exception {
         final String newPullJson = FileUtils.readFileToString(
-                new File("src/test/resources/gitlab_payload.json"), "UTF-8");
+                new File("src/test/resources/webhook/gitlab_payload.json"), "UTF-8");
 
         testUtil.addRepo(GITLAB_REPO_ID);
 
