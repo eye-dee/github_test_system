@@ -36,11 +36,11 @@ public class RepoDao {
                 "INSERT INTO repos(id, name, git_nick) VALUES(?, ?, ?)",
                 id, name, gitNick);
 
-        return Repo.builder()
-                .id(id)
-                .name(name)
-                .gitNick(gitNick)
-                .build();
+        return singleResult(jdbcTemplate.query(
+                "SELECT * FROM repos WHERE id = ?",
+                new Object[]{id},
+                REPO_ROW_MAPPER)
+        );
     }
 
     public Optional<Repo> findById(final long id) {

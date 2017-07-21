@@ -1,4 +1,4 @@
-package com.epam.testsystem.github.model;
+package com.epam.testsystem.github.enums;
 
 /**
  * github_test
