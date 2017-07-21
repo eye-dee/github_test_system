@@ -26,19 +26,15 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final DaoExtractorUtil daoExtractorUtil;
 
-    public User add(final String email, final String gitNick, final String password) {
+    public User add(final String email, final String gitNick, final String password, final String roleName) {
         jdbcTemplate.update(
-                "INSERT INTO users(email, git_nick, password) VALUES (?, ?, ?) ",
-                email, gitNick, password);
+                "INSERT INTO users(email, git_nick, password, role) VALUES (?, ?, ?, ?) ",
+                email, gitNick, password, roleName);
 
-        final Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-
-        return User.builder()
-                .id(id)
-                .email(email)
-                .gitNick(gitNick)
-                .password(password)
-                .build();
+        return singleResult(jdbcTemplate.query(
+                "SELECT * FROM users WHERE id = last_insert_id()",
+                USER_ROW_MAPPER)
+        );
     }
 
     public Optional<User> findByEmail(final String email) {
@@ -61,8 +57,17 @@ public class UserDao {
 
     public List<UserWithTasks> findAllWithTasks() {
         return jdbcTemplate.query(
-                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id",
+                "SELECT * FROM tasks RIGHT JOIN users ON tasks.user_id = users.id WHERE role = 'ROLE_USER' ORDER BY register_time DESC",
                 daoExtractorUtil
+        );
+    }
+
+    public List<User> findByContact(final String type, final String inf) {
+        return jdbcTemplate.query(
+                "SELECT * FROM users WHERE id = " +
+                        "(SELECT user_id FROM contacts WHERE type = ? AND inf = ?)",
+                new Object[]{type, inf},
+                USER_ROW_MAPPER
         );
     }
 }

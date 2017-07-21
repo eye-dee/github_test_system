@@ -1,7 +1,8 @@
 package com.epam.testsystem.github.dao;
 
+import com.epam.testsystem.github.model.Contact;
 import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.TaskStatus;
+import com.epam.testsystem.github.enums.TaskStatus;
 import com.epam.testsystem.github.model.User;
 import com.epam.testsystem.github.model.UserWithTasks;
 import org.springframework.dao.DataAccessException;
@@ -30,6 +31,7 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .email(rs.getString("users.email"))
                     .gitNick(rs.getString("users.git_nick"))
                     .password(rs.getString("users.password"))
+                    .role(rs.getString("users.role"))
                     .build();
     static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->
             Task.builder()
@@ -41,6 +43,16 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .successful(rs.getBoolean("tasks.successful"))
                     .log(rs.getString("tasks.log"))
                     .build();
+
+    static final RowMapper<Contact> CONTACT_ROW_MAPPER = (rs, rowNum) ->
+            Contact.builder()
+                    .id(rs.getLong("contacts.id"))
+                    .userId(rs.getLong("contacts.user_id"))
+                    .type(rs.getString("contacts.type"))
+                    .inf(rs.getString("contacts.inf"))
+                    .enabled(rs.getBoolean("contacts.enabled"))
+                    .build();
+
 
     @Override
     public List<UserWithTasks> extractData(final ResultSet rs) throws SQLException, DataAccessException {

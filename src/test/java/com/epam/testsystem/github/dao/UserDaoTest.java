@@ -1,10 +1,8 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
-import com.epam.testsystem.github.model.Repo;
-import com.epam.testsystem.github.model.Task;
-import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.model.UserWithTasks;
+import com.epam.testsystem.github.enums.UserRoleType;
+import com.epam.testsystem.github.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,9 @@ public class UserDaoTest {
     private UserDao userDao;
 
     @Autowired
+    private ContactDao contactDao;
+
+    @Autowired
     private TestUtil testUtil;
 
     @Test
@@ -43,13 +44,15 @@ public class UserDaoTest {
         final String email = "EMAIL";
         final String gitNick = "github_nick";
         final String password = "password";
+        final String userRole = "ROLE_USER";
 
-        assertThat(userDao.add(email, gitNick, password))
+        assertThat(userDao.add(email, gitNick, password, UserRoleType.ROLE_USER.name()))
                 .satisfies(
                         u -> {
                             assertThat(u.getEmail()).isEqualTo(email);
                             assertThat(u.getGitNick()).isEqualTo(gitNick);
                             assertThat(u.getPassword()).isEqualTo(password);
+                            assertThat(u.getRole()).isEqualTo(userRole);
                             assertThat(u.getId()).isGreaterThan(0);
                         }
                 );
@@ -58,10 +61,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, git_nick, password) VALUES(1000, 'email', 'gitNick', 'password')"
+            "INSERT INTO users(id, email, git_nick, password, role) VALUES(1000, 'email', 'gitNick', 'password', 'ROLE_USER')"
     })
     public void findById() throws Exception {
-        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").build();
+        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").role("ROLE_USER").build();
         assertThat(userDao.findById(user.getId()).get()).isEqualTo(user);
     }
 
@@ -72,10 +75,10 @@ public class UserDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, git_nick, password) VALUES(1000, 'email', 'gitNick', 'password')"
+            "INSERT INTO users(id, email, git_nick, password, role) VALUES(1000, 'email', 'gitNick', 'password', 'ROLE_USER')"
     })
     public void findByEmail() throws Exception {
-        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").build();
+        final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").role("ROLE_USER").build();
         assertThat(userDao.findByEmail("email")).contains(user);
     }
 
@@ -109,5 +112,16 @@ public class UserDaoTest {
                                 .tasks(Arrays.asList(task21, task22, task23))
                                 .build()
                 );
+    }
+
+    @Test
+    @Transactional
+    public void findUserByContact() {
+        final User user = testUtil.makeUser();
+
+        final Contact contact = contactDao.add(user.getId(), "VK", "inf", false);
+
+        assertThat(userDao.findByContact(contact.getType(), contact.getInf()).get(0))
+                .isEqualTo(user);
     }
 }

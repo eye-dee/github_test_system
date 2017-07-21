@@ -1,6 +1,7 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.TestUtil;
+import com.epam.testsystem.github.enums.TaskStatus;
 import com.epam.testsystem.github.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
@@ -71,7 +72,7 @@ public class TaskDaoTest {
     @Test
     @Transactional
     @Sql(statements = {
-            "INSERT INTO users(id, email, git_nick, password) VALUES(1000, 'email', 'github_nick', 'password')",
+            "INSERT INTO users(id, email, git_nick, password, role) VALUES(1000, 'email', 'github_nick', 'password', 'ROLE_USER')",
             "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, '{}')",
             "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, '{}')",
             "INSERT INTO tasks(user_id, register_time, log) VALUES(1000, CURRENT_TIMESTAMP, '{}')"
