@@ -34,7 +34,7 @@ public class LogParserTest {
 
     @Test
     public void parseFailed() throws Exception {
-        final String test_log = readRsFile("test_log_failed");
+        final String test_log = readRsFile("log/test_log_failed");
 
         final GradleLog parsedLog = logParser.getStructedLog(test_log);
 
@@ -51,7 +51,7 @@ public class LogParserTest {
 
     @Test
     public void parseSuccess() throws Exception{
-        final String test_log = readRsFile("test_log_success");
+        final String test_log = readRsFile("log/test_log_success");
 
         final GradleLog parsedLog = logParser.getStructedLog(test_log);
         assertThat(parsedLog.getBuildResult()).startsWith("BUILD SUCCESSFUL");
