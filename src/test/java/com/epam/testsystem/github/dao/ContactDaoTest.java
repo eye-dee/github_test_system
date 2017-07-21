@@ -97,11 +97,22 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
+    public void addLowerCase() {
+        final User user = testUtil.getMainUser();
+
+        final Contact contact = contactDao.add(user.getId(), "vk", TEST_INF);
+
+        assertThat(contactDao.findById(contact.getId()))
+                .hasValueSatisfying(c -> assertThat(c.getType()).isEqualTo("VK"));
+    }
+
+    @Test
+    @Transactional
     public void disableContact() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
-        assertThat(contactDao.disableContact(contact.getId())).isTrue();
+        assertThat(contactDao.disable(contact.getId())).isTrue();
 
         assertThat(contactDao.findById(contact.getId()))
                 .hasValueSatisfying(c -> assertThat(c.isEnabled()).isFalse());
@@ -113,8 +124,8 @@ public class ContactDaoTest {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
-        contactDao.disableContact(contact.getId());
-        assertThat(contactDao.enableContact(contact.getId())).isTrue();
+        contactDao.disable(contact.getId());
+        assertThat(contactDao.enable(contact.getId())).isTrue();
 
         assertThat(contactDao.findById(contact.getId()))
                 .hasValueSatisfying(c -> assertThat(c.isEnabled()).isTrue());
@@ -126,7 +137,7 @@ public class ContactDaoTest {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
-        assertThat(contactDao.updateContact(contact.getId(), "new_value")).isTrue();
+        assertThat(contactDao.update(contact.getId(), "new_value")).isTrue();
 
         assertThat(contactDao.findById(contact.getId()))
                 .hasValueSatisfying(c -> assertThat(c.getInf()).isEqualTo("new_value"));

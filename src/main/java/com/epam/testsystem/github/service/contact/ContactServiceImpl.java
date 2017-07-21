@@ -47,22 +47,22 @@ public class ContactServiceImpl implements ContactService {
 
     @Transactional
     @Override
-    public boolean enableContact(final long id) {
+    public boolean enable(final long id) {
         LOGGER.info("Contact {} enabled", id);
-        return contactDao.enableContact(id);
+        return contactDao.enable(id);
     }
 
     @Transactional
     @Override
-    public boolean disableContact(final long id) {
+    public boolean disable(final long id) {
         LOGGER.info("Contact {} disabled", id);
-        return contactDao.disableContact(id);
+        return contactDao.disable(id);
     }
 
     @Transactional
     @Override
-    public boolean updateContact(final long id, final String inf) {
+    public boolean update(final long id, final String inf) {
         LOGGER.info("Contact {} updated with {}", id, inf);
-        return contactDao.updateContact(id, inf);
+        return contactDao.update(id, inf);
     }
 }
