@@ -25,9 +25,9 @@ public class ExceptionRestController {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public String responseFail(ConstraintViolationException exception) {
+    public String responseFail(final ConstraintViolationException exception) {
         LOGGER.error("Validation exception: {}", exception.getLocalizedMessage());
-        List<String> errors = exception.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        final List<String> errors = exception.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         return new StringBuilder("Validation exception: ")
                 .append(errors.toString())
                 .toString();

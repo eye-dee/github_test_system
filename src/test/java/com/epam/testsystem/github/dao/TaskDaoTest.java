@@ -93,7 +93,7 @@ public class TaskDaoTest {
         final String log = objectMapper.writeValueAsString(gradleLog);
 
 
-        final Task task = taskDao.addOrUpdate(user.getId(), repo.getId(), false, log);
+        taskDao.addOrUpdate(user.getId(), repo.getId(), false, log);
         assertThat(taskDao.findAllByUserId(user.getId(),"cycles").get(0).getLog())
                 .isEqualTo("{\"abc\": [\"ecd\"]}");
     }

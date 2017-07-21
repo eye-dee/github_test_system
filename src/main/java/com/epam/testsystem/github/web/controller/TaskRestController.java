@@ -26,7 +26,7 @@ public class TaskRestController {
     private final UserService userService;
     private final TaskService taskService;
 
-    @RequestMapping(value = "new", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @Transactional
     public boolean addNewTask(@RequestBody final NewTaskUI newTaskUI) {
         final Optional<User> optionalUser = userService.findByEmail(newTaskUI.getEmail());

@@ -69,7 +69,7 @@ public class TravisParserServiceTest {
         assertTaskAmount(0);
     }
 
-    private void assertTaskAmount(int amount) {
+    private void assertTaskAmount(final int amount) {
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM tasks", Integer.class)).isEqualTo(amount);
     }
 }

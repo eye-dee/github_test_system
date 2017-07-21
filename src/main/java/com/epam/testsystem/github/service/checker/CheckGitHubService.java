@@ -33,7 +33,7 @@ public class CheckGitHubService {
     @Scheduled(fixedDelay = 5 * SECOND)
     @Transactional
     public void check() {
-        for (Task t : taskService.findAllInProgress()) {
+        for (final Task t : taskService.findAllInProgress()) {
             final Optional<User> user = userService.findById(t.getUserId());
             if (!user.isPresent()) {
                 LOGGER.info("User with id = {} is no present", t.getUserId());
@@ -44,7 +44,7 @@ public class CheckGitHubService {
                     final boolean userResult = gitHubStatusResolver.getUserResult(presentedUser.getGitNick(), OWNER, REPO);
                     taskService.setResultById(presentedUser.getId(), t.getId(), userResult, "{}");
                     LOGGER.info("Task {} from User {} checked", t.getId(), t.getUserId());
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     taskService.setResultById(presentedUser.getId(), t.getId(), false, "{}");
                     LOGGER.info("Task {} from User {} crashed\n {}", t.getId(), t.getUserId(), e.getMessage());
                 }

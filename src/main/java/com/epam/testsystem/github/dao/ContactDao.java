@@ -18,14 +18,14 @@ import static org.springframework.dao.support.DataAccessUtils.singleResult;
 @RequiredArgsConstructor
 public class ContactDao {
     private final JdbcTemplate jdbcTemplate;
+
     public Contact add(final long userId,
                        final String type,
-                       final String inf,
-                       final boolean enabled) {
+                       final String inf) {
         jdbcTemplate.update(
-                "INSERT INTO contacts(user_id, type, inf, enabled) " +
-                        "VALUE (?, ?, ?, ?)",
-                userId, type, inf, enabled);
+                "INSERT INTO contacts(user_id, type, inf) " +
+                        "VALUE (?, ?, ?)",
+                userId, type, inf);
 
 
         return singleResult(jdbcTemplate.query(
@@ -60,16 +60,24 @@ public class ContactDao {
         );
     }
 
-    public void enableContact(final long id) {
-        jdbcTemplate.update(
+    public boolean enableContact(final long id) {
+        return jdbcTemplate.update(
                 "UPDATE contacts SET enabled = TRUE WHERE id = ?",
-                id);
+                id
+        ) > 0;
     }
 
-    public void updateContact(final long id, final String inf) {
-        jdbcTemplate.update(
+    public boolean disableContact(final long id) {
+        return jdbcTemplate.update(
+                "UPDATE contacts SET enabled = FALSE WHERE id = ?",
+                id
+        ) > 0;
+    }
+
+    public boolean updateContact(final long id, final String inf) {
+        return jdbcTemplate.update(
                 "UPDATE contacts SET inf = ? WHERE id = ?",
                 inf, id
-        );
+        ) > 0;
     }
 }

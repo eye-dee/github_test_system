@@ -24,7 +24,7 @@ public class VkNotificationService implements NotificationService {
     private final GroupActor groupActor;
 
     @Override
-    public void sendNotification(String userId, String message) {
+    public void sendNotification(final String userId, final String message) {
         try {
             final int value = Integer.parseInt(userId);
             LOGGER.info("send message for user {}", value);

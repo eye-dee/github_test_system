@@ -30,7 +30,7 @@ CREATE TABLE contacts (
   user_id INT,
   type    VARCHAR(100) NOT NULL,
   inf     VARCHAR(100) NOT NULL,
-  enabled BOOL,
+  enabled BOOL            DEFAULT TRUE,
   FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE
 );

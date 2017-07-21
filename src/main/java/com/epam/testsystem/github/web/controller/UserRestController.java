@@ -36,7 +36,7 @@ public class UserRestController {
     @RequestMapping(value = "tasks", method = RequestMethod.GET)
     @Transactional
     public UserUI currentUser() {
-        User currentUser = userService.getCurrentUser();
+        final User currentUser = userService.getCurrentUser();
 
         if (currentUser == null) {
             throw new RuntimeException("No user login");

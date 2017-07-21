@@ -39,7 +39,7 @@ public class GitlabParserService implements WebhookParserService {
 
     @Override
     @Transactional
-    public boolean parse(String payload) {
+    public boolean parse(final String payload) {
         try {
             final JsonNode pullPayloadJson = objectMapper.readTree(payload);
 

@@ -65,7 +65,7 @@ public class UserDaoTest {
     })
     public void findById() throws Exception {
         final User user = User.builder().id(1000).email("email").gitNick("gitNick").password("password").role("ROLE_USER").build();
-        assertThat(userDao.findById(user.getId()).get()).isEqualTo(user);
+        assertThat(userDao.findById(user.getId())).contains(user);
     }
 
     public void findByIdNotExists() {
@@ -101,7 +101,7 @@ public class UserDaoTest {
 
         final List<UserWithTasks> tmp = userDao.findAllWithTasks();
 
-        assertThat(userDao.findAllWithTasks())
+        assertThat(tmp)
                 .contains(
                         UserWithTasks.builder()
                                 .user(user1)
@@ -119,7 +119,7 @@ public class UserDaoTest {
     public void findUserByContact() {
         final User user = testUtil.makeUser();
 
-        final Contact contact = contactDao.add(user.getId(), "VK", "inf", false);
+        final Contact contact = contactDao.add(user.getId(), "VK", "inf");
 
         assertThat(userDao.findByContact(contact.getType(), contact.getInf()).get(0))
                 .isEqualTo(user);

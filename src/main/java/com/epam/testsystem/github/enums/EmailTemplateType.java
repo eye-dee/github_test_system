@@ -13,7 +13,7 @@ public enum EmailTemplateType {
 
     private final String emailTemplateTypeName;
 
-    EmailTemplateType(String emailTemplateTypeName) {
+    EmailTemplateType(final String emailTemplateTypeName) {
         this.emailTemplateTypeName = emailTemplateTypeName;
     }
 

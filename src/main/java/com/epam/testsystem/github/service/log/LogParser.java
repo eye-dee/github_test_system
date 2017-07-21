@@ -13,11 +13,11 @@ import java.util.ArrayList;
 @Service
 public class LogParser {
     public GradleLog getStructedLog(final String log) {
-        String[] splitted = log.replace("\r","").split("\n");
-        GradleLog structedLog = new GradleLog();
+        final String[] splitted = log.replace("\r","").split("\n");
+        final GradleLog structedLog = new GradleLog();
         String lastCycle = "";
 
-        for (String aSplitted : splitted) {
+        for (final String aSplitted : splitted) {
             if (aSplitted.contains("git clone")) {
                 structedLog.getClones().add(aSplitted);
             } else if (aSplitted.startsWith(":")) {

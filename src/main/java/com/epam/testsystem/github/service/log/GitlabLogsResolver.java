@@ -33,7 +33,7 @@ public class GitlabLogsResolver implements LogResolver {
             final Document doc = Jsoup.connect(String.format(url, user, buildId, privateToken)).get();
             final Elements select = doc.select("pre.trace");
             return select.text();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOGGER.error("Error while parsing log\n" + e.getMessage());
         }
         return "";

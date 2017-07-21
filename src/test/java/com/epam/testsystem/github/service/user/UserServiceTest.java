@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles(SPRING_PROFILE_TEST)
-public class UserServiceImplTest {
+public class UserServiceTest {
     private static final long ANY_USER_ID = 1;
     private static final String ANY_EMAIL = "a@a.com";
     private static final String ANY_NICK = "git_nick";
@@ -45,6 +45,7 @@ public class UserServiceImplTest {
     @Test
     public void register() throws Exception {
         final UserDao mock = mock(UserDao.class);
+
         userService = new UserServiceImpl(mock);
         userService.register(ANY_EMAIL, ANY_NICK, ANY_PASSWORD, UserRoleType.ROLE_USER);
 

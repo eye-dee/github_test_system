@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
     @Bean
     public Docket api() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        final Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.epam.testsystem.github.web"))
                 .paths(PathSelectors.any())
