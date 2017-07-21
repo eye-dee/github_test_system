@@ -1,6 +1,5 @@
 package com.epam.testsystem.github.service.log;
 
-import com.epam.testsystem.github.service.log.GitlabLogsResolver;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,7 @@ public class GitlabLogsResolverTest {
     public void getLogs() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
         final String expected = FileUtils.readFileToString(
-                new File(classLoader.getResource("test_log_failed").getFile()),
+                new File(classLoader.getResource("log/test_log_failed").getFile()),
                 "UTF-8");
 
         final String logs = gitlabLogsResolver.getLogs("Igor_Drozdov1", BUILD_ID);
