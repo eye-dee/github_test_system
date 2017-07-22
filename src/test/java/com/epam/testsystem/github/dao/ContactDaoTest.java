@@ -108,6 +108,18 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
+    public void triggersPriority() {
+        final User user = testUtil.getMainUser();
+
+        contactDao.add(user.getId(), "telegram", TEST_INF);
+
+        assertThatThrownBy(() ->
+                contactDao.add(user.getId(), "telegram", "New")
+        ).hasCauseExactlyInstanceOf(SQLException.class);
+    }
+
+    @Test
+    @Transactional
     public void disableContact() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
