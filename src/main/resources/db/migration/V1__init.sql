@@ -35,12 +35,24 @@ CREATE TABLE contacts (
     ON DELETE CASCADE
 );
 
+CREATE TABLE approvements (
+  task_id      INT,
+  user_id      INT,
+  mark         ENUM ('GOOD', 'BAD', 'VIEWED') DEFAULT 'VIEWED',
+  approve_time TIMESTAMP NOT NULL,
+  FOREIGN KEY (task_id) REFERENCES tasks (id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE CASCADE,
+  UNIQUE KEY `unique_approv` (task_id, user_id)
+);
+
 DELIMITER //
 CREATE TRIGGER upper_case
 BEFORE INSERT ON contacts
 FOR EACH ROW
   BEGIN
-   SET NEW.type = UPPER(NEW.type);
+    SET NEW.type = UPPER(NEW.type);
   END;
 //
 DELIMITER ;

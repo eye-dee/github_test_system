@@ -1,10 +1,8 @@
 package com.epam.testsystem.github.dao;
 
-import com.epam.testsystem.github.model.Contact;
-import com.epam.testsystem.github.model.Task;
+import com.epam.testsystem.github.enums.ApprovementStatus;
 import com.epam.testsystem.github.enums.TaskStatus;
-import com.epam.testsystem.github.model.User;
-import com.epam.testsystem.github.model.UserWithTasks;
+import com.epam.testsystem.github.model.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,6 +31,15 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .password(rs.getString("users.password"))
                     .role(rs.getString("users.role"))
                     .build();
+
+    static final RowMapper<Approvement> APPROVEMENT_ROW_MAPPER = (rs, rowNum) ->
+            Approvement.builder()
+                    .taskId(rs.getLong("approvements.task_id"))
+                    .userId(rs.getLong("approvements.user_id"))
+                    .mark(ApprovementStatus.valueOf(rs.getString("approvements.mark")))
+                    .approve_time(rs.getTimestamp("approvements.approve_time").toLocalDateTime())
+                    .build();
+
     static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->
             Task.builder()
                     .id(rs.getLong("tasks.id"))
