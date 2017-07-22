@@ -74,7 +74,6 @@ public class TravisParserService implements WebhookParserService {
                 mailService.sendMessage(email, "", "Github TestSystem",
                         EmailTemplateType.SOLUTION_RECEIVING_CONFIRMATION_WITHOUT_REGISTRATION, mailInfo);
             }
-
             return true;
         } catch (final IOException e) {
             LOGGER.error("Can't parse json\nWith error {}", e.getMessage());

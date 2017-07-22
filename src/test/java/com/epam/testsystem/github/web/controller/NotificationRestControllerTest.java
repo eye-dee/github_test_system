@@ -38,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NotificationRestControllerTest {
     final private static String TYPE = "VK";
     final private static String INF = "inf";
-    //todo uppercase
 
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),

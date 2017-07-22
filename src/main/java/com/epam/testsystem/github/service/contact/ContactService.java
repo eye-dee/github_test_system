@@ -14,9 +14,9 @@ public interface ContactService {
 
     Optional<Contact> findById(long id);
 
-    boolean enableContact(long id);
+    boolean enable(long id);
 
-    boolean disableContact(long id);
+    boolean disable(long id);
 
-    boolean updateContact(long id, String inf);
+    boolean update(long id, String inf);
 }

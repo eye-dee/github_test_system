@@ -36,6 +36,16 @@ CREATE TABLE contacts (
 );
 
 DELIMITER //
+CREATE TRIGGER upper_case
+BEFORE INSERT ON contacts
+FOR EACH ROW
+  BEGIN
+   SET NEW.type = UPPER(NEW.type);
+  END;
+//
+DELIMITER ;
+
+DELIMITER //
 CREATE TRIGGER unique_telegram_contact
 BEFORE INSERT ON contacts
 FOR EACH ROW

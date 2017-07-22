@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles(SPRING_PROFILE_TEST)
 public class UserRestControllerTest {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));

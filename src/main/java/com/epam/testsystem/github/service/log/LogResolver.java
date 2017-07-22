@@ -10,5 +10,4 @@ public interface LogResolver {
     }
 
     String getLogs(String user, final long buildId);
-
 }

@@ -43,7 +43,7 @@ public class GitHubStatusResolverTest {
 
     @Before
     public void setUp() throws IOException {
-        String pullsJson = FileUtils.readFileToString(
+        final String pullsJson = FileUtils.readFileToString(
                 new File("src/test/resources/github/github_pulls_response.json"), "UTF-8"
         );
         pulls = objectMapper.readTree(pullsJson);

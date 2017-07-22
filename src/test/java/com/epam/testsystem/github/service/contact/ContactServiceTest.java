@@ -59,22 +59,22 @@ public class ContactServiceTest {
 
     @Test
     public void enableContact() throws Exception {
-        contactService.enableContact(ANY_ID);
+        contactService.enable(ANY_ID);
 
-        verify(contactDao, times(1)).enableContact(ANY_ID);
+        verify(contactDao, times(1)).enable(ANY_ID);
     }
 
     @Test
     public void disableContact() throws Exception {
-        contactService.disableContact(ANY_ID);
+        contactService.disable(ANY_ID);
 
-        verify(contactDao, times(1)).disableContact(ANY_ID);
+        verify(contactDao, times(1)).disable(ANY_ID);
     }
 
     @Test
     public void updateContact() throws Exception {
-        contactService.updateContact(ANY_ID, ANY_INF);
+        contactService.update(ANY_ID, ANY_INF);
 
-        verify(contactDao, times(1)).updateContact(ANY_ID, ANY_INF);
+        verify(contactDao, times(1)).update(ANY_ID, ANY_INF);
     }
 }

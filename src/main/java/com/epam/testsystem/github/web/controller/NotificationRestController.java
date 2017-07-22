@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationRestController {
     private final ContactService contactService;
-
     private final MapperUi mapperUi;
     private final UserService userService;
 
@@ -28,21 +27,21 @@ public class NotificationRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @Transactional
-    public List<ContactUI> getAllContacts() {
+    public List<ContactUI> getAll() {
         return mapperUi.mapContacts(contactService.findByUserId(userService.getCurrentUser().getId()));
     }
 
     @RequestMapping(value = "{contactId}/update", method = RequestMethod.PUT)
     @Transactional
-    public boolean updateContact(@PathVariable(value = "contactId") final long contactId,
-                                 @RequestBody final NewContactUI newContactUI) {
-        return contactService.updateContact(contactId, newContactUI.getInf());
+    public boolean update(@PathVariable(value = "contactId") final long contactId,
+                          @RequestBody final NewContactUI newContactUI) {
+        return contactService.update(contactId, newContactUI.getInf());
     }
 
     @RequestMapping(value = "{contactId}", method = RequestMethod.PUT)
     @Transactional
     public boolean toggle(@PathVariable(value = "contactId") final long contactId,
                           @RequestParam(required = false) final boolean enable) {
-        return enable ? contactService.enableContact(contactId) : contactService.disableContact(contactId);
+        return enable ? contactService.enable(contactId) : contactService.disable(contactId);
     }
 }

@@ -60,21 +60,21 @@ public class ContactDao {
         );
     }
 
-    public boolean enableContact(final long id) {
+    public boolean enable(final long id) {
         return jdbcTemplate.update(
                 "UPDATE contacts SET enabled = TRUE WHERE id = ?",
                 id
         ) > 0;
     }
 
-    public boolean disableContact(final long id) {
+    public boolean disable(final long id) {
         return jdbcTemplate.update(
                 "UPDATE contacts SET enabled = FALSE WHERE id = ?",
                 id
         ) > 0;
     }
 
-    public boolean updateContact(final long id, final String inf) {
+    public boolean update(final long id, final String inf) {
         return jdbcTemplate.update(
                 "UPDATE contacts SET inf = ? WHERE id = ?",
                 inf, id
