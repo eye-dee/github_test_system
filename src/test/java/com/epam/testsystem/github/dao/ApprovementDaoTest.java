@@ -47,7 +47,7 @@ public class ApprovementDaoTest {
     @Test
     @Transactional
     public void add() throws Exception {
-        assertThat(approvementDao.add(task.getId(), operator.getId()))
+        assertThat(approvementDao.add(operator.getId(), task.getId()))
                 .satisfies(
                         a -> {
                             assertThat(a.getUserId()).isEqualTo(operator.getId());
@@ -61,26 +61,36 @@ public class ApprovementDaoTest {
     @Test
     @Transactional
     public void addRepeated() throws Exception {
-        approvementDao.add(task.getId(), operator.getId());
-        assertThatThrownBy(() -> approvementDao.add(task.getId(), operator.getId()))
+        approvementDao.add(operator.getId(), task.getId());
+        assertThatThrownBy(() -> approvementDao.add(operator.getId(), task.getId()))
                 .hasCauseExactlyInstanceOf(SQLIntegrityConstraintViolationException.class);
     }
 
     @Test
     @Transactional
     public void find() throws Exception {
-        final Approvement approvement = approvementDao.add(task.getId(), operator.getId());
+        final Approvement approvement = approvementDao.add(operator.getId(), task.getId());
 
-        assertThat(approvementDao.find(task.getId(), operator.getId()))
+        assertThat(approvementDao.find(operator.getId(), task.getId()))
                 .hasValueSatisfying(c -> assertThat(c).isEqualTo(approvement));
     }
 
     @Test
     @Transactional
-    public void update() throws Exception {
-        approvementDao.add(task.getId(), operator.getId());
+    public void findAll() throws Exception {
+        final User operator2 = testUtil.makeOperator();
+        approvementDao.add(operator.getId(), task.getId());
+        approvementDao.add(operator2.getId(), task.getId());
 
-        assertThat(approvementDao.update(task.getId(), operator.getId(), ApprovementStatus.GOOD))
+        assertThat(approvementDao.find(task.getId())).hasSize(2);
+    }
+
+    @Test
+    @Transactional
+    public void update() throws Exception {
+        approvementDao.add(operator.getId(), task.getId());
+
+        assertThat(approvementDao.update(operator.getId(), task.getId(), ApprovementStatus.GOOD))
                 .satisfies(
                         a -> {
                             assertThat(a.getUserId()).isEqualTo(operator.getId());

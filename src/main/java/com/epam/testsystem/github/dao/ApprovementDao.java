@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.epam.testsystem.github.dao.DaoExtractorUtil.APPROVEMENT_ROW_MAPPER;
@@ -21,17 +22,17 @@ import static org.springframework.dao.support.DataAccessUtils.singleResult;
 public class ApprovementDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public Approvement add(final long taskId, final long userId) {
+    public Approvement add(final long userId, final long taskId) {
         final LocalDateTime approveTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
                 "INSERT INTO approvements (task_id, user_id, approve_time) " +
                         "VALUES (?, ?, ?)",
                 taskId, userId, approveTime);
 
-        return find(taskId, userId).orElseThrow(() -> new BusinessLogicException("Error in approvement add"));
+        return find(userId, taskId).orElseThrow(() -> new BusinessLogicException("Error in approvement add"));
     }
 
-    public Optional<Approvement> find(final long taskId, final long userId) {
+    public Optional<Approvement> find(final long userId, final long taskId) {
         return Optional.ofNullable(
                 singleResult(jdbcTemplate.query(
                         "SELECT * FROM approvements WHERE user_id = ? AND task_id = ?",
@@ -41,12 +42,20 @@ public class ApprovementDao {
         );
     }
 
-    public Approvement update(final long taskId, final long userId, final ApprovementStatus mark) {
+    public List<Approvement> find(final long taskId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM approvements WHERE task_id = ?",
+                new Object[]{taskId},
+                APPROVEMENT_ROW_MAPPER
+        );
+    }
+
+    public Approvement update(final long userId, final long taskId, final ApprovementStatus mark) {
         final LocalDateTime approveTime = LocalDateTime.now().withNano(0);
         jdbcTemplate.update(
                 "UPDATE approvements SET mark = ?, approve_time = ?",
                 mark.name(), approveTime);
 
-        return find(taskId, userId).orElseThrow(() -> new BusinessLogicException("Error in approvement update"));
+        return find(userId, taskId).orElseThrow(() -> new BusinessLogicException("Error in approvement update"));
     }
 }
