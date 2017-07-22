@@ -15,12 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 
 import static com.epam.testsystem.github.EnvironmentConstant.SPRING_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @RunWith(SpringRunner.class)
@@ -60,14 +58,6 @@ public class ApprovementDaoTest {
 
     @Test
     @Transactional
-    public void addRepeated() throws Exception {
-        approvementDao.add(operator.getId(), task.getId());
-        assertThatThrownBy(() -> approvementDao.add(operator.getId(), task.getId()))
-                .hasCauseExactlyInstanceOf(SQLIntegrityConstraintViolationException.class);
-    }
-
-    @Test
-    @Transactional
     public void find() throws Exception {
         final Approvement approvement = approvementDao.add(operator.getId(), task.getId());
 
@@ -83,6 +73,14 @@ public class ApprovementDaoTest {
         approvementDao.add(operator2.getId(), task.getId());
 
         assertThat(approvementDao.find(task.getId())).hasSize(2);
+    }
+
+    @Test
+    @Transactional
+    public void addRepeated() throws Exception {
+        approvementDao.add(operator.getId(), task.getId());
+        approvementDao.add(operator.getId(), task.getId());
+        assertThat(approvementDao.find(task.getId())).hasSize(1);
     }
 
     @Test

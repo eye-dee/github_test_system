@@ -4,6 +4,7 @@ import com.epam.testsystem.github.enums.ApprovementStatus;
 import com.epam.testsystem.github.exception.BusinessLogicException;
 import com.epam.testsystem.github.model.Approvement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,10 +25,13 @@ public class ApprovementDao {
 
     public Approvement add(final long userId, final long taskId) {
         final LocalDateTime approveTime = LocalDateTime.now().withNano(0);
-        jdbcTemplate.update(
-                "INSERT INTO approvements (task_id, user_id, approve_time) " +
-                        "VALUES (?, ?, ?)",
-                taskId, userId, approveTime);
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO approvements (task_id, user_id, approve_time) " +
+                            "VALUES (?, ?, ?)",
+                    taskId, userId, approveTime);
+        } catch (final DataAccessException ignored){
+        }
 
         return find(userId, taskId).orElseThrow(() -> new BusinessLogicException("Error in approvement add"));
     }
