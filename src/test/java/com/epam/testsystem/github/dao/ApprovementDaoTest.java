@@ -35,7 +35,6 @@ public class ApprovementDaoTest {
     private Task task;
 
     @Before
-    @Transactional
     public void setUp() {
         operator = testUtil.makeOperator();
         final Repo repo = testUtil.addRepo();

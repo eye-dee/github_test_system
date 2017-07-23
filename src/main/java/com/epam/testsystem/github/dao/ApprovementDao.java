@@ -1,10 +1,8 @@
 package com.epam.testsystem.github.dao;
 
 import com.epam.testsystem.github.enums.ApprovementStatus;
-import com.epam.testsystem.github.exception.BusinessLogicException;
 import com.epam.testsystem.github.model.Approvement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,16 +22,12 @@ public class ApprovementDao {
     private final JdbcTemplate jdbcTemplate;
 
     public Approvement add(final long userId, final long taskId) {
-        final LocalDateTime approveTime = LocalDateTime.now().withNano(0);
-        try {
-            jdbcTemplate.update(
-                    "INSERT INTO approvements (task_id, user_id, approve_time) " +
-                            "VALUES (?, ?, ?)",
-                    taskId, userId, approveTime);
-        } catch (final DataAccessException ignored){
-        }
+        final LocalDateTime approveTime = LocalDateTime.now();
+        jdbcTemplate.update(
+                "INSERT IGNORE INTO approvements (task_id, user_id, approve_time) VALUES (?, ?, ?)",
+                taskId, userId, approveTime);
 
-        return find(userId, taskId).orElseThrow(() -> new BusinessLogicException("Error in approvement add"));
+        return find(userId, taskId).get();
     }
 
     public Optional<Approvement> find(final long userId, final long taskId) {
@@ -60,6 +54,6 @@ public class ApprovementDao {
                 "UPDATE approvements SET mark = ?, approve_time = ?",
                 mark.name(), approveTime);
 
-        return find(userId, taskId).orElseThrow(() -> new BusinessLogicException("Error in approvement update"));
+        return find(userId, taskId).get();
     }
 }
