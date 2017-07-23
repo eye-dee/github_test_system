@@ -87,15 +87,17 @@ public class ApprovementDaoTest {
     public void update() throws Exception {
         approvementDao.add(operator.getId(), task.getId());
 
-        assertThat(approvementDao.update(operator.getId(), task.getId(), ApprovementStatus.GOOD))
-                .satisfies(
+        approvementDao.update(operator.getId(), task.getId(), ApprovementStatus.GOOD, "comment");
+
+        assertThat(approvementDao.find(operator.getId(), task.getId()))
+                .hasValueSatisfying(
                         a -> {
                             assertThat(a.getUserId()).isEqualTo(operator.getId());
                             assertThat(a.getTaskId()).isEqualTo(task.getId());
                             assertThat(a.getApprove_time()).isBeforeOrEqualTo(LocalDateTime.now());
                             assertThat(a.getMark()).isEqualTo(ApprovementStatus.GOOD);
+                            assertThat(a.getComment()).isEqualTo("comment");
                         }
                 );
     }
-
 }

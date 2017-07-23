@@ -36,10 +36,12 @@ CREATE TABLE contacts (
 );
 
 CREATE TABLE approvements (
+  id           INT PRIMARY KEY                AUTO_INCREMENT,
   task_id      INT,
   user_id      INT,
   mark         ENUM ('GOOD', 'BAD', 'VIEWED') DEFAULT 'VIEWED',
   approve_time TIMESTAMP NOT NULL,
+  comment      VARCHAR(140),
   FOREIGN KEY (task_id) REFERENCES tasks (id)
     ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users (id)

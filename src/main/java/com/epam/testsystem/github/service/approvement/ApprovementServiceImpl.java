@@ -29,15 +29,9 @@ public class ApprovementServiceImpl implements ApprovementService {
     }
 
     @Override
-    public boolean markGood(final long userId, final long taskId) {
-        LOGGER.info("Approvement from {}, task {}, marked good", userId, taskId);
-        return approvementDao.update(userId, taskId, ApprovementStatus.GOOD) != null;
-    }
-
-    @Override
-    public boolean markBad(final long userId, final long taskId) {
-        LOGGER.info("Approvement from {}, task {}, marked bad", userId, taskId);
-        return approvementDao.update(userId, taskId, ApprovementStatus.BAD) != null;
+    public boolean markAs(final long userId, final long taskId, final ApprovementStatus mark, final String comment) {
+        LOGGER.info("Approvement from {}, task {}, marked {}", userId, taskId, mark.name());
+        return approvementDao.update(userId, taskId, mark, comment) != null;
     }
 
     @Override

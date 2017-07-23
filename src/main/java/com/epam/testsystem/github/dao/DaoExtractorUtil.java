@@ -34,10 +34,12 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
 
     static final RowMapper<Approvement> APPROVEMENT_ROW_MAPPER = (rs, rowNum) ->
             Approvement.builder()
+                    .id(rs.getLong("approvements.id"))
                     .taskId(rs.getLong("approvements.task_id"))
                     .userId(rs.getLong("approvements.user_id"))
                     .mark(ApprovementStatus.valueOf(rs.getString("approvements.mark")))
                     .approve_time(rs.getTimestamp("approvements.approve_time").toLocalDateTime())
+                    .comment(rs.getString("approvements.comment"))
                     .build();
 
     static final RowMapper<Task> TASK_ROW_MAPPER = (rs, rowNum) ->

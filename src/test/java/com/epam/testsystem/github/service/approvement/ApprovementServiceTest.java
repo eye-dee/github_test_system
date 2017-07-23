@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 public class ApprovementServiceTest {
     private static final long ANY_TASK_ID = 1;
     private static final long ANY_USER_ID = 1;
+    private static final String ANY_COMMENT = "";
     @Autowired
     private ApprovementService approvementService;
 
@@ -49,16 +50,10 @@ public class ApprovementServiceTest {
     }
 
     @Test
-    public void markGood() throws Exception {
-        approvementService.markGood(ANY_USER_ID, ANY_TASK_ID);
+    public void mark() throws Exception {
+        approvementService.markAs(ANY_USER_ID, ANY_TASK_ID, ApprovementStatus.GOOD, ANY_COMMENT);
 
-        verify(approvementDao, times(1)).update(ANY_USER_ID, ANY_TASK_ID, ApprovementStatus.GOOD);
-    }
-
-    @Test
-    public void markBad() throws Exception {
-        approvementService.markBad(ANY_USER_ID, ANY_TASK_ID);
-
-        verify(approvementDao, times(1)).update(ANY_USER_ID, ANY_TASK_ID, ApprovementStatus.BAD);
+        verify(approvementDao, times(1))
+                .update(eq(ANY_USER_ID), eq(ANY_TASK_ID), eq(ApprovementStatus.GOOD), eq(ANY_COMMENT));
     }
 }

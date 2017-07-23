@@ -1,5 +1,6 @@
 package com.epam.testsystem.github.service.approvement;
 
+import com.epam.testsystem.github.enums.ApprovementStatus;
 import com.epam.testsystem.github.model.Approvement;
 
 import java.util.List;
@@ -10,9 +11,7 @@ public interface ApprovementService {
 
     Optional<Approvement> find(long userId, long taskId);
 
-    boolean markGood(long userId, long taskId);
-
-    boolean markBad(long userId, long taskId);
+    boolean markAs(long userId, long taskId, final ApprovementStatus mark, final String comment);
 
     List<Approvement> find(long taskId);
 }

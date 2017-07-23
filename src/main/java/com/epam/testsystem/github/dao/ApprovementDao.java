@@ -24,10 +24,14 @@ public class ApprovementDao {
     public Approvement add(final long userId, final long taskId) {
         final LocalDateTime approveTime = LocalDateTime.now();
         jdbcTemplate.update(
-                "INSERT IGNORE INTO approvements (task_id, user_id, approve_time) VALUES (?, ?, ?)",
+                "INSERT INTO approvements (task_id, user_id, approve_time) VALUES (?, ?, ?)" +
+                        "ON DUPLICATE KEY UPDATE id = last_insert_id(id)",
                 taskId, userId, approveTime);
 
-        return find(userId, taskId).get();
+        return singleResult(jdbcTemplate.query(
+                "SELECT * FROM approvements WHERE id = last_insert_id()",
+                APPROVEMENT_ROW_MAPPER)
+        );
     }
 
     public Optional<Approvement> find(final long userId, final long taskId) {
@@ -48,12 +52,19 @@ public class ApprovementDao {
         );
     }
 
-    public Approvement update(final long userId, final long taskId, final ApprovementStatus mark) {
-        final LocalDateTime approveTime = LocalDateTime.now().withNano(0);
+    public Approvement update(final long userId,
+                              final long taskId,
+                              final ApprovementStatus mark,
+                              final String comment) {
+        final LocalDateTime approveTime = LocalDateTime.now();
         jdbcTemplate.update(
-                "UPDATE approvements SET mark = ?, approve_time = ?",
-                mark.name(), approveTime);
+                "UPDATE approvements SET id = last_insert_id(id), mark = ?, approve_time = ?, comment = ? " +
+                        "WHERE user_id = ? AND task_id = ?",
+                mark.name(), approveTime, comment, userId, taskId);
 
-        return find(userId, taskId).get();
+        return singleResult(jdbcTemplate.query(
+                "SELECT * FROM approvements WHERE id = last_insert_id()",
+                APPROVEMENT_ROW_MAPPER)
+        );
     }
 }

@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class Approvement {
+    private long id;
     private long taskId;
     private long userId;
     private ApprovementStatus mark;
     private LocalDateTime approve_time;
+    private String comment;
 }
