@@ -31,10 +31,9 @@ public class UserDao {
                 "INSERT INTO users(email, git_nick, password, role) VALUES (?, ?, ?, ?) ",
                 email, gitNick, password, roleName);
 
-        return singleResult(jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE id = last_insert_id()",
-                USER_ROW_MAPPER)
-        );
+                USER_ROW_MAPPER);
     }
 
     public Optional<User> findByEmail(final String email) {
@@ -42,7 +41,8 @@ public class UserDao {
                 singleResult(jdbcTemplate.query(
                         "SELECT * FROM users WHERE email = ?",
                         new Object[]{email},
-                        USER_ROW_MAPPER))
+                        USER_ROW_MAPPER)
+                )
         );
     }
 
@@ -51,7 +51,8 @@ public class UserDao {
                 singleResult(jdbcTemplate.query(
                         "SELECT * FROM users WHERE id = ?",
                         new Object[]{id},
-                        USER_ROW_MAPPER))
+                        USER_ROW_MAPPER)
+                )
         );
     }
 

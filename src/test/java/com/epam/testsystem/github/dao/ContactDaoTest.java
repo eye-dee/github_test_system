@@ -30,7 +30,7 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void addContact() {
+    public void add() {
         final User user = testUtil.getMainUser();
         final String type = "VK";
 
@@ -48,13 +48,13 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void findContactByIdEmpty() {
+    public void findByIdEmpty() {
         assertThat(contactDao.findById(1)).isEmpty();
     }
 
     @Test
     @Transactional
-    public void findContactById() {
+    public void findById() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
@@ -120,7 +120,7 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void disableContact() {
+    public void disable() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
@@ -132,7 +132,7 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void enableContact() {
+    public void enable() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 
@@ -145,7 +145,7 @@ public class ContactDaoTest {
 
     @Test
     @Transactional
-    public void updateContact() {
+    public void update() {
         final User user = testUtil.getMainUser();
         final Contact contact = contactDao.add(user.getId(), "TELEGRAM", TEST_INF);
 

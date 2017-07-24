@@ -46,6 +46,10 @@ public class TestUtil {
         return userDao.add(email, gitNick, generateString(), UserRoleType.ROLE_USER.name());
     }
 
+    public User makeOperator() {
+        return userDao.add(generateString(), generateString(), generateString(), UserRoleType.ROLE_OPERATOR.name());
+    }
+
     public Repo addRepo() {
         return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), generateString(), generateString());
     }
@@ -58,6 +62,7 @@ public class TestUtil {
         return repoDao.add(RANDOM.nextInt(Integer.MAX_VALUE), name, gitNick);
     }
 
+    // TODO: 22.07.17 similar order to params (userId, repoId) (repoId, userId...)
     public Task addTask(final long repoId, final long userId) {
         return taskDao.addOrUpdate(userId, repoId, false, "{}");
     }
