@@ -34,7 +34,6 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
 
     static final RowMapper<Approvement> APPROVEMENT_ROW_MAPPER = (rs, rowNum) ->
             Approvement.builder()
-                    .id(rs.getLong("approvements.id"))
                     .taskId(rs.getLong("approvements.task_id"))
                     .userId(rs.getLong("approvements.user_id"))
                     .mark(ApprovementStatus.valueOf(rs.getString("approvements.mark")))
@@ -62,6 +61,12 @@ public class DaoExtractorUtil implements ResultSetExtractor<List<UserWithTasks>>
                     .enabled(rs.getBoolean("contacts.enabled"))
                     .build();
 
+    static final RowMapper<ApprovementUserTask> AUT_ROW_MAPPER = (rs, rowNum) ->
+            ApprovementUserTask.builder()
+                    .task(TASK_ROW_MAPPER.mapRow(rs, rowNum))
+                    .operator(USER_ROW_MAPPER.mapRow(rs, rowNum))
+                    .approvement(APPROVEMENT_ROW_MAPPER.mapRow(rs, rowNum))
+                    .build();
 
     @Override
     public List<UserWithTasks> extractData(final ResultSet rs) throws SQLException, DataAccessException {

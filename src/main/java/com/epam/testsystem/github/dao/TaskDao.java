@@ -1,7 +1,7 @@
 package com.epam.testsystem.github.dao;
 
-import com.epam.testsystem.github.model.Task;
 import com.epam.testsystem.github.enums.TaskStatus;
+import com.epam.testsystem.github.model.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epam.testsystem.github.dao.DaoExtractorUtil.TASK_ROW_MAPPER;
-import static org.springframework.dao.support.DataAccessUtils.singleResult;
 
 /**
  * github_test
@@ -48,9 +47,9 @@ public class TaskDao {
                         "VALUES(?, ?, ?, ?)",
                 userId, repoId, registerTime, "{}");
 
-        return singleResult(jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 "SELECT * FROM tasks WHERE id = last_insert_id()",
-                TASK_ROW_MAPPER)
+                TASK_ROW_MAPPER
         );
     }
 

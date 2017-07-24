@@ -28,9 +28,9 @@ public class ContactDao {
                 userId, type, inf);
 
 
-        return singleResult(jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 "SELECT * FROM contacts WHERE id = last_insert_id()",
-                CONTACT_ROW_MAPPER)
+                CONTACT_ROW_MAPPER
         );
     }
 

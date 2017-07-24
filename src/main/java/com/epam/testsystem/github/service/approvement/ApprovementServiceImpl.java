@@ -3,6 +3,7 @@ package com.epam.testsystem.github.service.approvement;
 import com.epam.testsystem.github.dao.ApprovementDao;
 import com.epam.testsystem.github.enums.ApprovementStatus;
 import com.epam.testsystem.github.model.Approvement;
+import com.epam.testsystem.github.model.ApprovementUserTask;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class ApprovementServiceImpl implements ApprovementService {
     }
 
     @Override
-    public Optional<Approvement> find(final long userId, final long taskId) {
+    public Optional<ApprovementUserTask> find(final long userId, final long taskId) {
         return approvementDao.find(userId, taskId);
     }
 
@@ -35,7 +36,7 @@ public class ApprovementServiceImpl implements ApprovementService {
     }
 
     @Override
-    public List<Approvement> find(final long taskId) {
+    public List<ApprovementUserTask> find(final long taskId) {
         return approvementDao.find(taskId);
     }
 }

@@ -36,10 +36,10 @@ public class RepoDao {
                 "INSERT INTO repos(id, name, git_nick) VALUES(?, ?, ?)",
                 id, name, gitNick);
 
-        return singleResult(jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 "SELECT * FROM repos WHERE id = ?",
                 new Object[]{id},
-                REPO_ROW_MAPPER)
+                REPO_ROW_MAPPER
         );
     }
 
@@ -50,7 +50,8 @@ public class RepoDao {
                         new Object[]{id},
                         REPO_ROW_MAPPER
                         )
-                ));
+                )
+        );
     }
 
     public List<Repo> findByOwner(final String gitNick) {

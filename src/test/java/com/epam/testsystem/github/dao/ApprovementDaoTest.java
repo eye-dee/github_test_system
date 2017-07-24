@@ -61,7 +61,11 @@ public class ApprovementDaoTest {
         final Approvement approvement = approvementDao.add(operator.getId(), task.getId());
 
         assertThat(approvementDao.find(operator.getId(), task.getId()))
-                .hasValueSatisfying(c -> assertThat(c).isEqualTo(approvement));
+                .hasValueSatisfying(c -> {
+                    assertThat(c.getApprovement()).isEqualTo(approvement);
+                    assertThat(c.getTask()).isEqualTo(task);
+                    assertThat(c.getOperator()).isEqualTo(operator);
+                });
     }
 
     @Test
@@ -91,7 +95,8 @@ public class ApprovementDaoTest {
 
         assertThat(approvementDao.find(operator.getId(), task.getId()))
                 .hasValueSatisfying(
-                        a -> {
+                        aut -> {
+                            final Approvement a = aut.getApprovement();
                             assertThat(a.getUserId()).isEqualTo(operator.getId());
                             assertThat(a.getTaskId()).isEqualTo(task.getId());
                             assertThat(a.getApprove_time()).isBeforeOrEqualTo(LocalDateTime.now());
